@@ -11,5 +11,6 @@ Stephen Sherratt, Matthew Todd, Rebecca Wiley
     
         * the term "piece" has been changed to "pawn" as piece is ambiguous (may be confused with a "wall")
         * the "Move" interface for generic moves has been renamed to "GenericMove" so its meaning is more clear
+        * removed the "Gap" class. A hash set could also be used to constantly check if a wall is placed and seems more elegant.
 
     Eclipse project has been started.

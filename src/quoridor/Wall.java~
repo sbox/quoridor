@@ -1,0 +1,6 @@
+package quoridor;
+
+public interface Wall {
+	public boolean getDirection();
+	public Square topLeft();
+}
