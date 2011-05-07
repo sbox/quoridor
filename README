@@ -1,0 +1,15 @@
+Quoridor
+Stephen Sherratt, Matthew Todd, Rebecca Wiley
+
+0.01 - Prelimanary Design
+    
+    See preldim.pdf
+
+0.02 - Initialisation
+
+    Changes since previous version:
+    
+        * the term "piece" has been changed to "pawn" as piece is ambiguous (may be confused with a "wall")
+        * the "Move" interface for generic moves has been renamed to "GenericMove" so its meaning is more clear
+
+    Eclipse project has been started.
