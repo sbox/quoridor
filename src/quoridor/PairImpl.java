@@ -1,5 +1,7 @@
 package quoridor;
 
+import java.util.Iterator;
+
 public class PairImpl <X> implements Pair <X> {
     //matt
 
@@ -17,7 +19,13 @@ public class PairImpl <X> implements Pair <X> {
     }
 
     public boolean contains(X item) {
-        return null;
+        return false;
     }
+
+	@Override
+	public Iterator <X> iterator() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

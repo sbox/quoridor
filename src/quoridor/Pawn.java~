@@ -1,9 +1,0 @@
-package quoridor;
-
-
-
-public interface Pawn {
-	public Square getSquare();
-	public void makeMove(MovePawn move);
-       	public Player getOwner();	
-}

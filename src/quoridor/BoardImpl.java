@@ -8,7 +8,7 @@ public class BoardImpl implements Board {
     protected HashSet <Wall> walls;
 
     //bec can you write this please
-    @overide
+    @Override 
     public String toString() {
         return null;
     }
@@ -20,4 +20,4 @@ public class BoardImpl implements Board {
 
         return false;
     }
-
+}

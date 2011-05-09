@@ -8,7 +8,7 @@ package quoridor;
  *
  */
 
-public interface Pair <X> extends Iterable {
+public interface Pair <X> extends Iterable <X> {
 
     public X _1(); //the first item in the pair
     public X _2(); //the second item in the pair
