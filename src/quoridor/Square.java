@@ -9,6 +9,8 @@ package quoridor;
  */
 
 public interface Square {
-	int getRow();
-	int getCol();
+	public int getRow();
+	public int getCol();
+	
+
 }

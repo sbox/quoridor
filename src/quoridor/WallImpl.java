@@ -12,7 +12,7 @@ package quoridor;
 public class WallImpl implements Wall {
 	/*
 	 * These constants are the max row and column for the topLeft
-	 * square. Clearly, the bottom row and right-most column cannont
+	 * square. The bottom row and right-most column cannot
 	 * be the topLeft square for any possible wall.
 	 */
 	protected final int MAX_ROW = Board.ROWS - 1;

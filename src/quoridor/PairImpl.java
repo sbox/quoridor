@@ -5,7 +5,10 @@ import java.util.Iterator;
 public class PairImpl <X> implements Pair <X> {
     //matt
 
-    
+    public PairImpl(X _1, X _2) {
+    	
+    }
+	
     public X _1() {
         return null;
     }
