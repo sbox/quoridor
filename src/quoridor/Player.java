@@ -15,4 +15,6 @@ public interface Player {
 	public String getName();
 	public Player getOponent();
 	public boolean goalEnd();
+	
+	
 }
