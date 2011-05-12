@@ -8,6 +8,6 @@ package quoridor;
  *
  */
 
-public interface PlaceWall {
+public interface PlaceWall extends GenericMove {
 	public Wall getTentative();
 }

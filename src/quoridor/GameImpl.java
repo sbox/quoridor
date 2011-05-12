@@ -2,8 +2,10 @@ package quoridor;
 
 public class GameImpl implements Game {
 
+	Pair <Player> players;
+	
 	public GameImpl(Pair <Player> players) {
-		
+		this.players = players;
 	}
 
 	@Override

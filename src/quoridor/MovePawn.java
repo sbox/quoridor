@@ -8,6 +8,6 @@ package quoridor;
  *
  */
 
-public interface MovePawn {
+public interface MovePawn extends GenericMove {
 	public Square getDestination();
 }
