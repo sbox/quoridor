@@ -70,6 +70,7 @@ public class ParserImpl implements Parser {
 		commandBuffer = new LinkedList <CommandEntry> ();
 		scanner = new Scanner(System.in);
 		firstRun = true;
+		this.invalid = invalid;
 		
 		//create the syntax table
 		for (int i = 0;i<commands.length; i++) {
@@ -151,6 +152,13 @@ public class ParserImpl implements Parser {
 		return syntax.get(currentCmd.getCommand()).getToken();
 	}
 	
+	@Override
+	public String currentCommand() {
+		CommandEntry currentCmd = commandBuffer.peek();
+		return syntax.get(currentCmd.getCommand()).getCommand();
+	}
+
+	
 	/**
 	 * Removes the current command from the command buffer to expose
 	 * the next command
@@ -228,6 +236,7 @@ public class ParserImpl implements Parser {
 		return cmdList;
 	}
 	
+
 	
 	/**
 	 * 
@@ -346,7 +355,6 @@ public class ParserImpl implements Parser {
 			return args;
 		}
 	}
-
 
 
 

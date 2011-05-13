@@ -12,6 +12,7 @@ public interface Parser {
 	
 	public boolean hasNextToken();
 	public short currentToken();
+	public String currentCommand();
 	public void progressToken();
 	
 	public boolean hasNextArg();

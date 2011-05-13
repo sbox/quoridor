@@ -22,6 +22,7 @@ public class Manager {
 	static final short EXIT = 0;
 	static final short NEW_GAME = 1;
 	static final short HELP = 2;
+	static final short EMPTY = 3;
 	
 	//this will store the current game being played
 	static Game currentGame = null;
@@ -41,9 +42,9 @@ public class Manager {
 		 * a syntax table and know how many arguments each command
 		 * has.
 		 */
-		String [] commands = {"exit", "newgame", "help"};
-		short [] tokens = {EXIT, NEW_GAME, HELP};
-		short [] argCount = {0, 2, 0};
+		String [] commands = {"exit", "newgame", "help", ""};
+		short [] tokens = {EXIT, NEW_GAME, HELP, EMPTY};
+		short [] argCount = {0, 2, 0, 0};
 		
 		//initialise the input parser
 		inputParser = new ParserImpl(commands, 
@@ -123,6 +124,8 @@ public class Manager {
 			} else if (token == HELP) {
 				//this prints a list of valid commands
 				System.out.print(inputParser);
+			} else if (token == INVALID) {
+				System.out.println("Invalid command!");
 			}
 			
 		}
