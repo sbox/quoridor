@@ -16,14 +16,78 @@ public class BoardImpl implements Board {
     protected Pair <Pawn> pawns;
     protected HashSet <Wall> walls;
     
-    
+    public BoardImpl() {//Pair<Pawn> pawns) {
+    	//this.pawns = pawns;
+    	walls = new HashSet<Wall>();
+    }
 
     //bec can you write this please
     @Override 
     public String toString() {
-        return null;
+    	String board = "  ";
+    	System.out.println("akhsgdfkahdgs");
+    	//int pawn1Row = pawns._1().getSquare().getRow();
+    	//int pawn1Col = pawns._1().getSquare().getCol();
+    	//int pawn2Row = pawns._2().getSquare().getRow();
+    	//int pawn2Col = pawns._2().getSquare().getCol();
+    	
+	    //Adding numbers to the top of the board
+		for (int i = 0; i < 9; i++) {
+			board+= "  "+i+" ";
+		}
+		board+= "\n";
+		
+		for (int i = 0; i < 10*2-1; i++) {
+			//Placing numbers at the beginning of every row
+			if (i%2 == 0) {
+				board+= i/2+" ";
+			} else {
+				board+="  ";
+			}
+			
+			for (int j = 0; j < 9; j++) {
+				//checking whether there is a vertical wall between two squares
+				if (wallBetween(new SquareImpl(j, i%2), new SquareImpl(j+1, i%2)) == true) {
+					board+= "*";
+				} else {
+				    board+= "|";
+				}
+				//checking if there is a pawn at a particular square
+				if (i%2 == 0) {
+					/*if (pawn1Col == j && pawn1Row*2 == i) {
+						board+= " X ";
+					} else if (pawn2Col == j && pawn2Row*2 == i){
+						board+= " O ";
+					} else {*/
+						board+= "   ";
+					//}
+					//board+="   ";
+				} else {
+					//checking if there is a horizontal wall between two squares
+					if (wallBetween(new SquareImpl(j, i%2), new SquareImpl(j, i%2+1)) == true){
+						board+= " * ";
+					} else {
+						board+= " _ ";
+					}
+				}
+			}
+			board+="|\n";
+		}
+		
+		//Adding the bottom of the board
+		board+="  ";
+		for (int i = 0; i < 9; i++) {
+			board+= "| _ ";
+		}
+		board+="|\n";
+    	
+        return board;
     }
-
+    
+    public void addWall(Wall wall) {
+    	walls.add(wall);
+    }
+    
     /**
      * 
      * Searches for a path from a pawn to said pawn's goal.
@@ -127,6 +191,7 @@ public class BoardImpl implements Board {
 	    	
     	return found;
     }
+   
     
     /**
      * 
@@ -144,7 +209,7 @@ public class BoardImpl implements Board {
     	Square result = null;
     
     	if (row >= 0 && row < ROWS && col >= 0 && col < COLS) {
-    		result = new SquareImpl(col, row);
+    			result = new SquareImpl(col, row);
     	}
     	
     	return result;
