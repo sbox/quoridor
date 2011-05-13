@@ -5,4 +5,8 @@ public interface Board {
 	public static final int COLS = 9;
 	
     public boolean pathToGoal(Pawn pawn);
+    public boolean wallBetween(Square a, Square b);
+    public void addWall(Wall wall);
+    
+ 
 }

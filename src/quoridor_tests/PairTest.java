@@ -1,3 +1,4 @@
+package quoridor_tests;
 
 import org.junit.Before;
 import static org.junit.Assert.*;
@@ -8,7 +9,7 @@ import quoridor.*;
 public class PairTest {
 
 	Pair <String> pair;
-	
+
 	@Before
 	public void setUp() throws Exception {
 		pair = new PairImpl<String>("hello", "world");

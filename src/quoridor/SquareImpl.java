@@ -22,7 +22,7 @@ public class SquareImpl implements Square {
 	 * @param col
 	 * 			the column of the square
 	 */
-	public SquareImpl(int row, int col) {
+	public SquareImpl(int col, int row) {
 		this.row = row;
 		this.col = col;
 	}

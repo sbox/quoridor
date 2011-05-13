@@ -45,10 +45,7 @@ public class BoardImpl implements Board {
 			
 		}
 		
-		if (wallBetween(new SquareImpl(3, 4), new SquareImpl(4, 4))){
-			System.out.println("hereeeeeee");
-		}
-		
+
 		for (int i = 0; i < 9*2-1; i++) {
 			//Placing numbers at the beginning of every row
 			if (i%2 == 0) {
@@ -240,7 +237,7 @@ public class BoardImpl implements Board {
      * 			the other square
      * @return True if there is a wall between the two squares
      */
-    private boolean wallBetween(Square a, Square b) {
+    public boolean wallBetween(Square a, Square b) {
     	//the squares must be in line somehow
     	assert(a.getRow() == b.getRow() || a.getCol() == b.getCol());
     	
@@ -266,7 +263,7 @@ public class BoardImpl implements Board {
     	if (a.getRow() == b.getRow()) {
     		//they must be adjacent
     		assert(Math.abs(a.getCol() - b.getCol()) == 1);
-    		
+
     		//store the square with the lower column
     		if (a.getCol() < b.getCol()) {
     			topLeftMost = a;
@@ -278,15 +275,15 @@ public class BoardImpl implements Board {
     		
     		//the other candidate for topLeft
     		other = new SquareImpl(topLeftMost.getCol(), 
-					                      topLeftMost.getRow()+1);
+					                      topLeftMost.getRow()-1);
     		
     	} else {
     	//if the squares are in the same column
     		//they must be adjacent
     		assert(Math.abs(a.getRow() - b.getRow()) == 1);
-    		
+
     		//store the square with the higher row
-    		if (a.getRow() > b.getRow()) {
+    		if (a.getRow() < b.getRow()) {
     			topLeftMost = a;
     		} else {
     			topLeftMost = b;
@@ -300,9 +297,15 @@ public class BoardImpl implements Board {
     		
     	}
     	
+
+    	
     	//make a pair for topLeftCandidate
 		topLeftCandidate = new PairImpl<Square>(topLeftMost, other);
     	
+		//for (Square s : topLeftCandidate) {
+		//	System.out.println(s.getCol() +", "+ s.getRow());
+		//}
+		
 		//make a pair of walls to test
     	candidateWalls = 
     	new PairImpl<Wall>(new WallImpl(topLeftCandidate._1(),
@@ -311,9 +314,12 @@ public class BoardImpl implements Board {
     	    							wallDirection)
     	                   );
     	
+
+
     	//return true if either candidate is on the board
     	return walls.contains(candidateWalls._1()) || 
     		   walls.contains(candidateWalls._2());
     	
     }
+
 }

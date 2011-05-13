@@ -83,5 +83,11 @@ public class WallImpl implements Wall {
 		//now return the key for this wall
 		return key;
 	}
+	
+	@Override
+	public boolean equals(Object w) {
+		boolean wIsWall = w instanceof Wall;
+		return wIsWall && hashCode() == w.hashCode();
+	}
 
 }
