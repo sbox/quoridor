@@ -16,8 +16,8 @@ public class BoardImpl implements Board {
     protected Pair <Pawn> pawns;
     protected HashSet <Wall> walls;
     
-    public BoardImpl() {//Pair<Pawn> pawns) {
-    	//this.pawns = pawns;
+    public BoardImpl(Pair<Pawn> pawns) {
+    	this.pawns = pawns;
     	walls = new HashSet<Wall>();
     }
 
@@ -25,11 +25,10 @@ public class BoardImpl implements Board {
     @Override 
     public String toString() {
     	String board = "  ";
-    	System.out.println("akhsgdfkahdgs");
-    	//int pawn1Row = pawns._1().getSquare().getRow();
-    	//int pawn1Col = pawns._1().getSquare().getCol();
-    	//int pawn2Row = pawns._2().getSquare().getRow();
-    	//int pawn2Col = pawns._2().getSquare().getCol();
+    	int pawn1Row = pawns._1().getSquare().getRow();
+    	int pawn1Col = pawns._1().getSquare().getCol();
+    	int pawn2Row = pawns._2().getSquare().getRow();
+    	int pawn2Col = pawns._2().getSquare().getCol();
     	
 	    //Adding numbers to the top of the board
 		for (int i = 0; i < 9; i++) {
@@ -37,31 +36,46 @@ public class BoardImpl implements Board {
 		}
 		board+= "\n";
 		
-		for (int i = 0; i < 10*2-1; i++) {
+		for(Wall w: walls) {
+			System.out.println(w.topLeft().getRow());
+			System.out.println(w.topLeft().getCol
+					());
+			System.out.println(w.getDirection());
+			
+			
+		}
+		
+		if (wallBetween(new SquareImpl(3, 4), new SquareImpl(4, 4))){
+			System.out.println("hereeeeeee");
+		}
+		
+		for (int i = 0; i < 9*2-1; i++) {
 			//Placing numbers at the beginning of every row
 			if (i%2 == 0) {
 				board+= i/2+" ";
 			} else {
 				board+="  ";
 			}
-			
+
 			for (int j = 0; j < 9; j++) {
 				//checking whether there is a vertical wall between two squares
+				
+				
 				if (wallBetween(new SquareImpl(j, i%2), new SquareImpl(j+1, i%2)) == true) {
+					System.out.println("AKSHDFGAKJHSFKHJS");
 					board+= "*";
 				} else {
 				    board+= "|";
 				}
 				//checking if there is a pawn at a particular square
 				if (i%2 == 0) {
-					/*if (pawn1Col == j && pawn1Row*2 == i) {
+					if (pawn1Col == j && pawn1Row*2 == i) {
 						board+= " X ";
 					} else if (pawn2Col == j && pawn2Row*2 == i){
 						board+= " O ";
-					} else {*/
+					} else {
 						board+= "   ";
-					//}
-					//board+="   ";
+					}
 				} else {
 					//checking if there is a horizontal wall between two squares
 					if (wallBetween(new SquareImpl(j, i%2), new SquareImpl(j, i%2+1)) == true){
