@@ -45,13 +45,37 @@ public class BoardImplTest {
 	
 	@Test
 	public void testPrint() {
-		Square s1 = new SquareImpl(1, 1);
+	
+		Wall w0 = new WallImpl(new SquareImpl(1, 0), Wall.HORIZONTAL);	
+		Wall w1 = new WallImpl(new SquareImpl(1, 2), Wall.HORIZONTAL);
+		Wall w2 = new WallImpl(new SquareImpl(6, 0), Wall.HORIZONTAL);
+		Wall w3 = new WallImpl(new SquareImpl(6, 2), Wall.HORIZONTAL);
+		Wall w4 = new WallImpl(new SquareImpl(0, 1), Wall.VERTICAL);
+		Wall w5 = new WallImpl(new SquareImpl(2, 1), Wall.VERTICAL);
+		Wall w6 = new WallImpl(new SquareImpl(5, 1), Wall.VERTICAL);
+		Wall w7 = new WallImpl(new SquareImpl(7, 1), Wall.VERTICAL);
+		Wall w8 = new WallImpl(new SquareImpl(5, 6), Wall.VERTICAL);
+		Wall w9 = new WallImpl(new SquareImpl(7, 6), Wall.VERTICAL);
+		Wall w10 = new WallImpl(new SquareImpl(6, 7), Wall.HORIZONTAL);
+		Wall w11 = new WallImpl(new SquareImpl(6, 5), Wall.HORIZONTAL);
+		Wall w12 = new WallImpl(new SquareImpl(4, 5), Wall.HORIZONTAL);
+		Wall w13 = new WallImpl(new SquareImpl(2, 5), Wall.HORIZONTAL);
+		Wall w14 = new WallImpl(new SquareImpl(6, 5), Wall.HORIZONTAL);
 		
-		Wall w1 = new WallImpl(s1, Wall.VERTICAL);
-		Wall w2 = new WallImpl(s1, Wall.HORIZONTAL);
-		
-		test.addWall(w1);
+		test.addWall(w0);
+    	test.addWall(w1);
 		test.addWall(w2);
+		test.addWall(w3);
+		test.addWall(w4);
+		test.addWall(w5);
+		test.addWall(w6);
+		test.addWall(w7);
+		test.addWall(w8);
+		test.addWall(w9);
+		test.addWall(w10);
+		test.addWall(w11);
+		test.addWall(w12);
+		test.addWall(w13);
 		
 		System.out.println(test);
 		

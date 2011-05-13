@@ -32,38 +32,48 @@ public class BoardImpl implements Board {
     	
 	    //Adding numbers to the top of the board
 		for (int i = 0; i < 9; i++) {
-			board+= "  "+i+" ";
+			board+= "  "+(i+1)+" "; //sbox: added +1 as per requirements
 		}
 		board+= "\n";
-		
-		for(Wall w: walls) {
-			System.out.println(w.topLeft().getRow());
-			System.out.println(w.topLeft().getCol
-					());
-			System.out.println(w.getDirection());
-			
-			
+
+		board += "  ";
+		for (int i = 0; i < 9; i++) {
+			board+= "| - ";
 		}
+		board+= "|\n";
 		
 
 		for (int i = 0; i < 9*2-1; i++) {
 			//Placing numbers at the beginning of every row
 			if (i%2 == 0) {
-				board+= i/2+" ";
+				board+= (i/2+1)+" "; //sbox: added +1 as per requirements
 			} else {
 				board+="  ";
 			}
 
 			for (int j = 0; j < 9; j++) {
+				
+				//sbox: introducing this flags since this information is needed in multiple places now
+				boolean wallBelow = wallBetween(new SquareImpl(j, i/2), new SquareImpl(j, i/2+1));
+				boolean wallBelowPrev = j > 0 && wallBetween(new SquareImpl(j-1, i/2), new SquareImpl(j-1, i/2+1));
+				
+				boolean wallLeft = j > 0 && wallBetween(new SquareImpl(j-1, i/2), new SquareImpl(j, i/2));
+				boolean wallLeftBelow = j > 0 && wallBetween(new SquareImpl(j-1, i/2+1), new SquareImpl(j, i/2+1));
 				//checking whether there is a vertical wall between two squares
 				
+				/*
+				 * sbox:
+				 * changed mod signs to divide signs
+				 * the first square is now the square to the left, and the second square is the current square
+				 * we must now include the condition j > 0 since there cannot be a wall on the left of column 0
+				 */
 				
-				if (wallBetween(new SquareImpl(j, i%2), new SquareImpl(j+1, i%2)) == true) {
-					System.out.println("AKSHDFGAKJHSFKHJS");
+				if (wallLeft || (i%2 == 1 && (wallBelow || wallBelowPrev || wallLeftBelow))) {
 					board+= "*";
 				} else {
 				    board+= "|";
 				}
+				
 				//checking if there is a pawn at a particular square
 				if (i%2 == 0) {
 					if (pawn1Col == j && pawn1Row*2 == i) {
@@ -75,10 +85,10 @@ public class BoardImpl implements Board {
 					}
 				} else {
 					//checking if there is a horizontal wall between two squares
-					if (wallBetween(new SquareImpl(j, i%2), new SquareImpl(j, i%2+1)) == true){
+					if (wallBelow){ //sbox: replaced condition with flag
 						board+= " * ";
 					} else {
-						board+= " _ ";
+						board+= " - "; //sbox; changed the _'s to -'s
 					}
 				}
 			}
@@ -88,7 +98,7 @@ public class BoardImpl implements Board {
 		//Adding the bottom of the board
 		board+="  ";
 		for (int i = 0; i < 9; i++) {
-			board+= "| _ ";
+			board+= "| - ";
 		}
 		board+="|\n";
     	
