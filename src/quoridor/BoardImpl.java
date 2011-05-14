@@ -25,64 +25,45 @@ public class BoardImpl implements Board {
     @Override 
     public String toString() {
     	String board = "  ";
-    	int pawn1Row = pawns._1().getSquare().getRow();
-    	int pawn1Col = pawns._1().getSquare().getCol();
-    	int pawn2Row = pawns._2().getSquare().getRow();
-    	int pawn2Col = pawns._2().getSquare().getCol();
-    	
+
 	    //Adding numbers to the top of the board
 		for (int i = 0; i < 9; i++) {
 			board+= "  "+(i+1)+" "; //sbox: added +1 as per requirements
 		}
-		board+= "\n";
-
-		board += "  ";
-		for (int i = 0; i < 9; i++) {
-			board+= "| - ";
-		}
-		board+= "|\n";
+		board+= "\n  ";
+		board = addBoarder(board);
 		
-
 		for (int i = 0; i < 9*2-1; i++) {
 			//Placing numbers at the beginning of every row
+			//Mod to so that the number only gets printed once
 			if (i%2 == 0) {
 				board+= (i/2+1)+" "; //sbox: added +1 as per requirements
 			} else {
 				board+="  ";
 			}
-
 			for (int j = 0; j < 9; j++) {
-				
+				//checking whether there is a vertical wall between two squares
 				//sbox: introducing this flags since this information is needed in multiple places now
 				boolean wallBelow = wallBetween(new SquareImpl(j, i/2), new SquareImpl(j, i/2+1));
 				boolean wallBelowPrev = j > 0 && wallBetween(new SquareImpl(j-1, i/2), new SquareImpl(j-1, i/2+1));
 				
 				boolean wallLeft = j > 0 && wallBetween(new SquareImpl(j-1, i/2), new SquareImpl(j, i/2));
 				boolean wallLeftBelow = j > 0 && wallBetween(new SquareImpl(j-1, i/2+1), new SquareImpl(j, i/2+1));
-				//checking whether there is a vertical wall between two squares
-				
+
 				/*
 				 * sbox:
 				 * changed mod signs to divide signs
 				 * the first square is now the square to the left, and the second square is the current square
 				 * we must now include the condition j > 0 since there cannot be a wall on the left of column 0
 				 */
-				
 				if (wallLeft || (i%2 == 1 && (wallBelow || wallBelowPrev || wallLeftBelow))) {
 					board+= "*";
 				} else {
 				    board+= "|";
 				}
-				
-				//checking if there is a pawn at a particular square
+				//Placing the pawns on the board, or a space if no player is on that square
 				if (i%2 == 0) {
-					if (pawn1Col == j && pawn1Row*2 == i) {
-						board+= " X ";
-					} else if (pawn2Col == j && pawn2Row*2 == i){
-						board+= " O ";
-					} else {
-						board+= "   ";
-					}
+					board = addPawn(board, i, j);
 				} else {
 					//checking if there is a horizontal wall between two squares
 					if (wallBelow){ //sbox: replaced condition with flag
@@ -97,14 +78,40 @@ public class BoardImpl implements Board {
 		
 		//Adding the bottom of the board
 		board+="  ";
-		for (int i = 0; i < 9; i++) {
-			board+= "| - ";
-		}
-		board+="|\n";
+		board = addBoarder(board);
     	
         return board;
     }
     
+     private String addBoarder(String board) {
+    	for (int i = 0; i < 9; i++) {
+    		board+= "| - ";
+    	}
+    	board+="|\n";
+    	return board;
+    	
+    }
+    
+     private String addPawn(String board, int row, int col) {
+    	int pawn1Row = pawns._1().getSquare().getRow();
+    	int pawn1Col = pawns._1().getSquare().getCol();
+    	int pawn2Row = pawns._2().getSquare().getRow();
+    	int pawn2Col = pawns._2().getSquare().getCol();
+    	
+    	if (pawn1Col == col && pawn1Row*2 == row) {
+			board+= " X ";
+		} else if (pawn2Col == col && pawn2Row*2 == row){
+			board+= " O ";
+		} else {
+			board+= "   ";
+		}
+    	
+    	return board;
+    }
+    
+    /**
+     * Adds a wall to the hashSet of walls
+     */
     public void addWall(Wall wall) {
     	walls.add(wall);
     }
