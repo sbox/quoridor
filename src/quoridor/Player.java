@@ -9,11 +9,34 @@ package quoridor;
  */
 
 public interface Player {
+	/**
+	 * The return value of goalEnd() if the player's target end of
+	 * the game is the top of the board
+	 */
 	public static final boolean TOP = false;
+	
+	/**
+	 * The return value of goalEnd() if the player's target end of
+	 * the game is the bottom of the board
+	 */
 	public static final boolean BOTTOM = true;
 	
+	/**
+	 * Returns the name of the player
+	 * @return the name of the player
+	 */
 	public String getName();
+	
+	/**
+	 * Returns the player's opponent
+	 * @return the player's opponent
+	 */
 	public Player getOponent();
+	
+	/**
+	 * Returns the end of the board the player is trying to reach
+	 * @return the end of the board the player is trying to reach
+	 */
 	public boolean goalEnd();
 	
 	

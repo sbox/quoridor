@@ -60,7 +60,6 @@ public class BoardImplTest {
 		Wall w11 = new WallImpl(new SquareImpl(6, 5), Wall.HORIZONTAL);
 		Wall w12 = new WallImpl(new SquareImpl(4, 5), Wall.HORIZONTAL);
 		Wall w13 = new WallImpl(new SquareImpl(2, 5), Wall.HORIZONTAL);
-		Wall w14 = new WallImpl(new SquareImpl(6, 5), Wall.HORIZONTAL);
 		
 		test.addWall(w0);
     	test.addWall(w1);
