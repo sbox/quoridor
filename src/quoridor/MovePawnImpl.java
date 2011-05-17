@@ -1,17 +1,27 @@
 package quoridor;
 
-public class MovePawnImpl implements MovePawn {
+public class MovePawnImpl extends AbstractMove implements MovePawn {
 
+	Square destination;
+	
+	public MovePawnImpl(int col, int row) {
+		destination = new SquareImpl(col, row);
+	}
+	
 	@Override
 	public Square getDestination() {
-		// TODO Auto-generated method stub
-		return null;
+		return destination;
 	}
 
 	@Override
-	public boolean isValid() {
+	public boolean isValid(Board board) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public boolean type() {
+		return PAWN;
 	}
 
 
