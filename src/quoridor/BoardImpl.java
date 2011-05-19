@@ -42,25 +42,9 @@ public class BoardImpl implements Board {
 				board+="  ";
 			}
 			for (int j = 0; j < 9; j++) {
-				//checking whether there is a vertical wall between two squares
-				//sbox: introducing this flags since this information is needed in multiple places now
 				boolean wallBelow = wallBetween(new SquareImpl(j, i/2), new SquareImpl(j, i/2+1));
-				boolean wallBelowPrev = j > 0 && wallBetween(new SquareImpl(j-1, i/2), new SquareImpl(j-1, i/2+1));
-				
-				boolean wallLeft = j > 0 && wallBetween(new SquareImpl(j-1, i/2), new SquareImpl(j, i/2));
-				boolean wallLeftBelow = j > 0 && wallBetween(new SquareImpl(j-1, i/2+1), new SquareImpl(j, i/2+1));
-
-				/*
-				 * sbox:
-				 * changed mod signs to divide signs
-				 * the first square is now the square to the left, and the second square is the current square
-				 * we must now include the condition j > 0 since there cannot be a wall on the left of column 0
-				 */
-				if (wallLeft || (i%2 == 1 && (wallBelow || wallBelowPrev || wallLeftBelow))) {
-					board+= "*";
-				} else {
-				    board+= "|";
-				}
+				//Place a horizontal wall
+				board = addWallHorizontal(board, i, j);
 				//Placing the pawns on the board, or a space if no player is on that square
 				if (i%2 == 0) {
 					board = addPawn(board, i, j);
@@ -91,6 +75,31 @@ public class BoardImpl implements Board {
     	return board;
     	
     }
+     
+     private String addWallHorizontal(String board, int i, int j) {
+    	    //checking whether there is a vertical wall between two squares
+			//sbox: introducing this flags since this information is needed in multiple places now
+			boolean wallBelow = wallBetween(new SquareImpl(j, i/2), new SquareImpl(j, i/2+1));
+			boolean wallBelowPrev = j > 0 && wallBetween(new SquareImpl(j-1, i/2), new SquareImpl(j-1, i/2+1));
+			
+			boolean wallLeft = j > 0 && wallBetween(new SquareImpl(j-1, i/2), new SquareImpl(j, i/2));
+			boolean wallLeftBelow = j > 0 && wallBetween(new SquareImpl(j-1, i/2+1), new SquareImpl(j, i/2+1));
+
+			/*
+			 * sbox:
+			 * changed mod signs to divide signs
+			 * the first square is now the square to the left, and the second square is the current square
+			 * we must now include the condition j > 0 since there cannot be a wall on the left of column 0
+			 */
+			
+			if (wallLeft || (i%2 == 1 && (wallBelow || wallBelowPrev || wallLeftBelow))) {
+				board+= "*";
+			} else {
+			    board+= "|";
+			}
+			
+    	 return board;
+     }
     
      private String addPawn(String board, int row, int col) {
     	int pawn1Row = pawns._1().getSquare().getRow();

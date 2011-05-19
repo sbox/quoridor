@@ -1,6 +1,15 @@
 package quoridor;
 
 import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Writer;
 
 /**
  * 
@@ -36,6 +45,19 @@ public class Manager {
 	public static void main(String[] args) {
 		//print a welcome method
 		welcome();
+		
+		String test;
+		//else put a throws exception as the argument
+		try {
+			saveGameState("myfile", null);
+			test = scanFile("myfile");
+			System.out.println("\n\nthe information in this file is: ");
+			System.out.println (test);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		
 		/*
 		 * This is the information required by the parser to create
@@ -157,5 +179,66 @@ public class Manager {
 		return new PairImpl <Player> (p1, p2);
 	}
 	
+	
+	public static String scanFile(String filename) {
+		String retVal = "";
+		try{		
+			filename+=".txt";
+			File getFile = new File(filename);
+			//Get the file in question
+		    getFile.getName();
+		    //Open the file that they want to load 
+		    FileInputStream fstream = new FileInputStream(filename);
+		    DataInputStream datain = new DataInputStream(fstream);
+		    //create a buffer reader to go through the file
+		    BufferedReader br = new BufferedReader(new InputStreamReader(datain));
+			String moves;
+			//Read the file line by line
+		    while ((moves = br.readLine()) != null)  {
+		    	retVal+=moves;
+	  	    }
+		    datain.close();
+	  	} catch (Exception e){ //Catch exception if any
+	      System.err.println("Save name does not exist " + e.getMessage());
+	    }
+	    
+		return retVal;
+	}
+	
+	public static  void saveGameState(String filename, String moves) throws IOException {
+		//add .txt to the end of the filename.. Check with sbox...
+		filename+=".txt";
+		//create a new file to be saved
+		File newFile;
+	    newFile = new File(filename);
+	      
+	    //if the filename already exists delete it before creating a new one
+	    if (newFile.exists()) {
+	    	newFile.delete();
+	    } 
+	    
+	    //create a new file with the filename
+	    newFile.createNewFile();
+  	  	System.out.println("deleted and added\n");
+	    //write the string of moves to the file
+  	  	Writer output = null;
+  	  	String text = "Testing the string file\n\n testing white space\n and more white space!";
+  	  	output = new BufferedWriter(new FileWriter(newFile));
+  	  	output.write(text);
+  	  	output.close(); 
+	    //createFile(newFile, moves);
+	    
+	}
+	
+	public static void createFile(File newFile, String moves) throws IOException {
+		newFile.createNewFile();
+  	  	System.out.println("deleted and added\n");
+  	  	Writer output = null;
+  	  	String text = "Testing the string file\n\n testing white space\n and more white space!";
+  	  	output = new BufferedWriter(new FileWriter(newFile));
+  	  	output.write(text);
+  	  	output.close();
+  	  	System.out.println("Your file has been written");
+	}
 
 }
