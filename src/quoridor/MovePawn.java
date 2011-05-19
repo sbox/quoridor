@@ -10,4 +10,5 @@ package quoridor;
 
 public interface MovePawn extends GenericMove {
 	public Square getDestination();
+	public void makeMove();
 }
