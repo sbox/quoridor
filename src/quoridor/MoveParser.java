@@ -10,8 +10,8 @@ package quoridor;
 public interface MoveParser extends Iterable <GenericMove>{
 	public GenericMove nextMove();
 	public boolean hasNextMove();
-	public String parseMoveString(String moveString);
-	
-	
+	public String parseMoveString(String moveString, Player currentPlayer, Board board) ;
+	public GenericMove parseMove(String move, Player current, Board board);
+	public GenericMove scanMove(Player current, Board board);
 	
 }

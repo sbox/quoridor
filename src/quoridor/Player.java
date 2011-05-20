@@ -31,7 +31,15 @@ public interface Player {
 	 * Returns the player's opponent
 	 * @return the player's opponent
 	 */
-	public Player getOponent();
+	public Player getOpponent();
+	
+	/**
+	 * Sets this player's opponent
+	 * @param opponent
+	 * 			the player's opponent
+	 */
+	public void setOpponent(Player opponent);
+	
 	
 	/**
 	 * Returns the end of the board the player is trying to reach
@@ -39,5 +47,6 @@ public interface Player {
 	 */
 	public boolean goalEnd();
 	
+	public boolean hasWon();
 	
 }

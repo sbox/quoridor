@@ -4,7 +4,7 @@ public class PlaceWallImpl extends AbstractMove implements PlaceWall{
 
 	Wall tentative;
 	
-	public PlaceWallImpl(int col, int row, boolean direction) {
+	public PlaceWallImpl(int col, int row, boolean direction, Player owner, Board setting) {
 		tentative = new WallImpl(new SquareImpl(col, row), direction);
 	}
 	

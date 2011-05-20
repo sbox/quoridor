@@ -13,14 +13,28 @@ public class PlayerImpl implements Player {
 		return name;
 	}
 
+
+
 	@Override
-	public Player getOponent() {
+	public boolean goalEnd() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Player getOpponent() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public boolean goalEnd() {
+	public void setOpponent(Player opponent) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean hasWon() {
 		// TODO Auto-generated method stub
 		return false;
 	}

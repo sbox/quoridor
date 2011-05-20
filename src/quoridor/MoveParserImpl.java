@@ -1,8 +1,9 @@
 package quoridor;
 
-import java.util.Iterator;
+import java.util.Iterator; 
 import java.util.Queue;
 import java.util.LinkedList;
+import java.util.Scanner;
 
 public class MoveParserImpl implements MoveParser {
 
@@ -23,14 +24,14 @@ public class MoveParserImpl implements MoveParser {
 	}
 
 	@Override
-	public String parseMoveString(String moveString) {
+	public String parseMoveString(String moveString, Player currentPlayer, Board board) {
 		String[] eachMove = moveString.split(" ");
 		boolean stillValid = true;
 		String errorMsg = null;
 		
 		for (int i = 0;i<eachMove.length && stillValid;i++) {
-			GenericMove current = parseMove(eachMove[i]);
-			if (current == null) {
+			GenericMove currentMove = parseMove(eachMove[i], currentPlayer, board);
+			if (currentMove == null) {
 				stillValid = false;
 				
 				errorMsg = "Parse error in ".concat(eachMove[i])
@@ -38,7 +39,7 @@ public class MoveParserImpl implements MoveParser {
 				
 			} else {
 				
-				moveBuffer.add(current);
+				moveBuffer.add(currentMove);
 				
 			}
 		}
@@ -47,7 +48,13 @@ public class MoveParserImpl implements MoveParser {
 		
 	}
 	
-	private GenericMove parseMove(String move) {
+
+	public GenericMove scanMove(Player current, Board board) {
+		Scanner s = new Scanner(System.in);
+		return parseMove(s.next(), current, board);
+	}
+	
+	public GenericMove parseMove(String move, Player current, Board board) {
 		
 		int len = move.length();
 		boolean validInput = len == 2 || len == 3;
@@ -91,11 +98,11 @@ public class MoveParserImpl implements MoveParser {
 		
 		if (validInput) {
 			if (type == GenericMove.PAWN) {
-				result = new MovePawnImpl(col, row);
+				result = new MovePawnImpl(col, row, current, board);
 				System.out.println(len);
 			} else if (type == GenericMove.WALL){ 
 				System.out.println(len + "a");
-				result = new PlaceWallImpl(col, row, dir);
+				result = new PlaceWallImpl(col, row, dir, current, board);
 			}
 		}
 		

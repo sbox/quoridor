@@ -4,7 +4,8 @@ public class MovePawnImpl extends AbstractMove implements MovePawn {
 
 	Square destination;
 	
-	public MovePawnImpl(int col, int row) {
+	
+	public MovePawnImpl(int col, int row, Player owner, Board setting) {
 		destination = new SquareImpl(col, row);
 	}
 	
