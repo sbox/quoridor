@@ -2,8 +2,18 @@ package quoridor;
 
 public abstract class AbstractMove implements GenericMove {
 
+	Player owner;
+	Board setting;
+	
+	
+	
+	public AbstractMove(Player owner, Board setting) {
+		this.owner = owner;
+		this.setting = setting;
+	}
+	
 	@Override
-	public abstract boolean isValid(Board board);
+	public abstract boolean isValid();
 
 	@Override
 	public abstract boolean type();

@@ -25,7 +25,7 @@ public interface GenericMove {
 	 * Checks if a move is valid.
 	 * @return true iff a move is valid.
 	 */
-	public boolean isValid(Board board);
+	public boolean isValid();
 	
 	/**
 	 * Returns the type of the move.

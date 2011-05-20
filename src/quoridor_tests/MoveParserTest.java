@@ -19,26 +19,7 @@ public class MoveParserTest {
 		parser = new MoveParserImpl();
 	}
 	
-	@Test
-	public void parse() {
-		String test = parser.parseMoveString("e1 e7 a4h b5v");
-		System.out.print(test);
-		
-		assertTrue(parser.hasNextMove());
-		assertTrue(parser.nextMove().type() == GenericMove.PAWN);
 
-		assertTrue(parser.hasNextMove());
-		assertTrue(parser.nextMove().type() == GenericMove.PAWN);
-		
-		
-		assertTrue(parser.hasNextMove());
-		assertTrue(parser.nextMove().type() == GenericMove.WALL);
-		
-		assertTrue(parser.hasNextMove());
-		assertTrue(parser.nextMove().type() == GenericMove.WALL);
-	
-		assertFalse(parser.hasNextMove());
-	}
 	
 	
 }

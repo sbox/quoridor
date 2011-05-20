@@ -15,11 +15,6 @@ public class PawnImpl implements Pawn {
 		return pawnSquare;
 	}
 
-	@Override
-	public void makeMove(MovePawn move) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public Player getOwner() {

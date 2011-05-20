@@ -3,10 +3,12 @@ package quoridor;
 public class MovePawnImpl extends AbstractMove implements MovePawn {
 
 	Square destination;
-	
+
 	
 	public MovePawnImpl(int col, int row, Player owner, Board setting) {
+		super(owner, setting);
 		destination = new SquareImpl(col, row);
+
 	}
 	
 	@Override
@@ -15,7 +17,7 @@ public class MovePawnImpl extends AbstractMove implements MovePawn {
 	}
 
 	@Override
-	public boolean isValid(Board board) {
+	public boolean isValid() {
 		// TODO Auto-generated method stub
 		return false;
 	}
