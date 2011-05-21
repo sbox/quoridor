@@ -1,3 +1,4 @@
+
 package quoridor;
 
 import java.util.Scanner;
@@ -58,7 +59,6 @@ public class Manager {
 			e.printStackTrace();
 		}
 		
-		
 		/*
 		 * This is the information required by the parser to create
 		 * a syntax table and know how many arguments each command
@@ -75,6 +75,7 @@ public class Manager {
 								     INVALID);
 		//start up the input loop
 		inputLoop(inputParser);
+		
 	}
 	
 	/**
@@ -183,7 +184,7 @@ public class Manager {
 	public static String scanFile(String filename) {
 		String retVal = "";
 		try{		
-			filename+=".txt";
+			filename+=".quoridor";
 			File getFile = new File(filename);
 			//Get the file in question
 		    getFile.getName();
@@ -206,20 +207,34 @@ public class Manager {
 	}
 	
 	public static  void saveGameState(String filename, String moves) throws IOException {
-		//add .txt to the end of the filename.. Check with sbox...
-		filename+=".txt";
+		filename+=".quoridor";
 		//create a new file to be saved
 		File newFile;
 	    newFile = new File(filename);
 	      
 	    //if the filename already exists delete it before creating a new one
-	    if (newFile.exists()) {
+	   /* if (newFile.exists()) {
 	    	newFile.delete();
-	    } 
+	    } */
+	    
+	    boolean exit = false;
+	    while (newFile.exists() && exit == false) {
+	    	System.out.println("File already exists with that name. Would you like to replace? Yes or no?");
+	    	BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+		    String s;
+	    	if ((s = in.readLine()) != null) {
+	    		if (s.contains("no")) {
+	    			System.out.println("Please choose a new name to save as");
+	    			newFile = new File(in.readLine());
+	    		} else if (s.contains("yes")) {
+	    			exit = true;
+	    			newFile.delete();
+	    		}
+	    	}
+	    }
 	    
 	    //create a new file with the filename
 	    newFile.createNewFile();
-  	  	System.out.println("deleted and added\n");
 	    //write the string of moves to the file
   	  	Writer output = null;
   	  	String text = "Testing the string file\n\n testing white space\n and more white space!";
@@ -232,7 +247,6 @@ public class Manager {
 	
 	public static void createFile(File newFile, String moves) throws IOException {
 		newFile.createNewFile();
-  	  	System.out.println("deleted and added\n");
   	  	Writer output = null;
   	  	String text = "Testing the string file\n\n testing white space\n and more white space!";
   	  	output = new BufferedWriter(new FileWriter(newFile));
