@@ -1,5 +1,8 @@
 package quoridor;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class GameImpl implements Game {
 
 	public static final short TOKEN_VOID = -1;
@@ -9,9 +12,11 @@ public class GameImpl implements Game {
 	public static final short TOKEN_SAVE = 3;
 	
 	Pair <Player> players;
+	List<GenericMove> moves;
 	
 	public GameImpl(Pair <Player> players) {
 		this.players = players;
+		moves = new LinkedList<GenericMove>();
 		
 	}
 
@@ -30,13 +35,29 @@ public class GameImpl implements Game {
 		while (!isOver()) {
 			
 			 GenericMove nextMove =  parser.scanMove(current, gameBoard);
-			
+			 moves.add(nextMove);
+			 
 		}
 		
 	}
 	
 	public boolean isOver() {
 		return players._1().hasWon() || players._2().hasWon();
+	}
+	
+	/** Builds and returns a string of the players names
+	 * and the current moves that have happened up to this game
+	 * @return a string of player names and moves so far
+	 */
+	
+	public String formatFile() {
+		String retVal = "";
+		retVal+=players._1().getName();
+		retVal+=players._2().getName();
+		while(!moves.isEmpty()) {
+			retVal+= moves.get(0);
+		}
+		return retVal;
 	}
 	
 }
