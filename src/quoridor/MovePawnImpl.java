@@ -10,7 +10,7 @@ public class MovePawnImpl extends AbstractMove implements MovePawn {
 	public MovePawnImpl(int col, int row, Player owner, Board setting) {
 		super(owner, setting);
 		destination = new SquareImpl(col, row);
-		//start =
+		****START LOCATION HOW I GET??//start =
 	}
 	
 	@Override
