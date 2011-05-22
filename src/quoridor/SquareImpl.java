@@ -12,6 +12,7 @@ public class SquareImpl implements Square {
 
 	protected int row; // the row of this square
 	protected int col; // the column of this square
+	protected boolean pawn = false;
 	
 	/**
 	 * 
@@ -65,5 +66,9 @@ public class SquareImpl implements Square {
 		int key;
 		key = row * Board.COLS + col; 
 		return key;
+	}
+	
+	public boolean hasPawn() {
+		return pawn;
 	}
 }

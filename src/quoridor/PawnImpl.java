@@ -11,14 +11,12 @@ public class PawnImpl implements Pawn {
 
 	@Override
 	public Square getSquare() {
-		
 		return pawnSquare;
 	}
 
 
 	@Override
 	public Player getOwner() {
-
 		return owner;
 	}
 }

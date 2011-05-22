@@ -20,6 +20,8 @@ public interface Square {
 	 * @return the column of the square
 	 */
 	public int getCol();
+
+	public boolean hasPawn();
 	
 
 }
