@@ -27,4 +27,9 @@ public class PlaceWallImpl extends AbstractMove implements PlaceWall{
 		return WALL;
 	}
 
+    @Override
+    public void makeMove() {
+    
+    }
+
 }

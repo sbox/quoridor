@@ -5,13 +5,11 @@ public class MovePawnImpl extends AbstractMove implements MovePawn {
 	Square destination;
 	Square start;
 
-
 	
 	public MovePawnImpl(int col, int row, Player owner, Board setting) {
 		super(owner, setting);
 		destination = new SquareImpl(col, row);
-		****START LOCATION HOW I GET??//start =
-	}
+    }
 	
 	@Override
 	public Square getDestination() {
@@ -32,14 +30,15 @@ public class MovePawnImpl extends AbstractMove implements MovePawn {
 		//check whether square is on the board
 		if(destination_col > 8 || destination_col < 0 ||
 				   destination_row > 8 || destination_row < 0) {
-			valid = false;
-		}
+			
+            valid = false;
+
 		//check the destination is not the start
-		else if(start == destination) {
+		} else if(start == destination) {
 			valid = false;
-		}
+		
 		//check if square is adjacent
-		else if (((destination_col - start_col < 2 || start_col - destination_col < 2)
+		} else if (((destination_col - start_col < 2 || start_col - destination_col < 2)
 						&& start_row == destination_row)||
 					((destination_row - start_row < 2 || start_row - destination_row < 2) 
 						&& start_col == destination_col)) {
@@ -96,5 +95,10 @@ public class MovePawnImpl extends AbstractMove implements MovePawn {
 		return PAWN;
 	}
 
+
+    @Override
+    public void makeMove() {
+        
+    }
 
 }
