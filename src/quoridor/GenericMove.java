@@ -45,4 +45,9 @@ public interface GenericMove {
 	 */
 	public MovePawn asMovePawn();
 	
+	/**
+	 * Applies the move to the board passed to the constructor
+	 */
+	public void makeMove();
+	
 }

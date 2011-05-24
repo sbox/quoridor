@@ -17,6 +17,9 @@ public abstract class AbstractMove implements GenericMove {
 
 	@Override
 	public abstract boolean type();
+	
+	@Override
+	public abstract void makeMove();
 
 	@Override
 	public PlaceWall asPlaceWall() {

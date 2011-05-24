@@ -37,6 +37,11 @@ public class GameImpl implements Game {
 			 GenericMove nextMove =  parser.scanMove(current, gameBoard);
 			 moves.add(nextMove);
 			 
+			 if (nextMove.isValid()) {
+				 nextMove.makeMove();
+				 current = current.getOpponent();
+			 }
+			 
 		}
 		
 	}
