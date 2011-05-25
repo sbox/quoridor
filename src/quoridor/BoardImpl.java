@@ -349,5 +349,15 @@ public class BoardImpl implements Board {
     		   walls.contains(candidateWalls._2());
     	
     }
+    
+    public Pawn getPawn(Player subject, Board setting) {
+    	Pawn value;
+    	if(pawns._1().getOwner() == subject) {
+    		value = pawns._1();
+    	} else {
+    		value = pawns._2();
+    	}
+    	return value;
+    }
 
 }

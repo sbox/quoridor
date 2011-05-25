@@ -46,5 +46,15 @@ public interface Board {
      */
     public void addWall(Wall wall);
     
+    /**
+     * Finds a players pawn and returns it
+     * @param subject
+     * 			the player who's pawn is being accessed
+     * @param setting
+     * 			the board currently being used
+     * @return
+     * 			the pawn being accessed
+     */
+    public Pawn getPawn(Player subject, Board setting); 
  
 }
