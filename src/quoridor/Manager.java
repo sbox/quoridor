@@ -225,7 +225,7 @@ public class Manager {
 	    	if ((s = in.readLine()) != null) {
 	    		if (s.contains("no")) {
 	    			System.out.println("Please choose a new name to save as");
-	    			newFile = new File(in.readLine());
+	    			newFile = new File(in.readLine()+".quoridor");
 	    		} else if (s.contains("yes")) {
 	    			exit = true;
 	    			newFile.delete();

@@ -27,9 +27,11 @@ public class BoardImpl implements Board {
     	String board = "  ";
 
 	    //Adding numbers to the top of the board
-		for (int i = 0; i < 9; i++) {
+		/*for (int i = 0; i < 9; i++) {
 			board+= "  "+(i+1)+" "; //sbox: added +1 as per requirements
-		}
+		}*/
+    	board+= "  a   b   c   d   e   f   g   h   i";
+    	
 		board+= "\n  ";
 		board = addBoarder(board);
 		
