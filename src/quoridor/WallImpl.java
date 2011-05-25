@@ -31,10 +31,6 @@ public class WallImpl implements Wall {
 	 * 			The direction of the line.
 	 */
 	public WallImpl(Square topLeft, boolean direction) {
-		//make sure that the topLeft is possible
-		assert(topLeft.getCol() < MAX_COL && 
-			   topLeft.getRow() < MAX_ROW);
-		
 		this.topLeft = topLeft;
 		this.direction = direction;
 	}

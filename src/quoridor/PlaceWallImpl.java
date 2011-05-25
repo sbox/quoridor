@@ -13,8 +13,21 @@ public class PlaceWallImpl extends AbstractMove implements PlaceWall{
 	
 	@Override
 	public boolean isValid() {
-		// TODO Auto-generated method stub
-		return false;
+		boolean valid = true;
+		Square right = new SquareImpl(tentative.topLeft().getCol() + 1, tentative.topLeft().getRow());
+		Square bottom = new SquareImpl(tentative.topLeft().getCol(), tentative.topLeft().getRow() + 1);
+		if(tentative.topLeft().getCol() < 0) {
+			valid = false;
+		} else if(tentative.topLeft().getRow() < 0) {
+			valid = false;
+		} else if(tentative.topLeft().getCol() > 8) {
+			valid = false;
+		} else if(tentative.topLeft().getRow() > 8) {
+			valid = false;
+		} else {
+			
+		}
+		return valid;
 	}
 
 	@Override
