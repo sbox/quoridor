@@ -33,13 +33,21 @@ public class GameImpl implements Game {
 		MoveParser parser = new MoveParserImpl();
 		
 		while (!isOver()) {
-			
+			if (current.equals(players._1())) {
+				System.out.println("Enter move " +current.getName()+ " (X)");
+			} else {
+				System.out.println("Eneter move "+current.getName()+ " (0)");
+			}
+			//System.out.println("Enter player move (" +current.getSymbol().toUpperCase() +")");
 			 GenericMove nextMove =  parser.scanMove(current, gameBoard);
 			 moves.add(nextMove);
 			 
 			 if (nextMove.isValid()) {
 				 nextMove.makeMove();
 				 current = current.getOpponent();
+				 System.out.println(gameBoard.toString());
+			 } else {
+				 System.out.println("Invalid Move");
 			 }
 			 
 		}
