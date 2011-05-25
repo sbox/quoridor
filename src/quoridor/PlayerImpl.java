@@ -3,17 +3,17 @@ package quoridor;
 public class PlayerImpl implements Player {
 
 	protected String name;
+	//protected String symbol;
 	
 	public PlayerImpl(String name) {
 		this.name = name;
+		//symbol = name.substring(0, 1);
 	}
 	
 	@Override
 	public String getName() {
 		return name;
 	}
-
-
 
 	@Override
 	public boolean goalEnd() {
