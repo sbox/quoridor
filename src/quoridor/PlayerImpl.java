@@ -3,10 +3,12 @@ package quoridor;
 public class PlayerImpl implements Player {
 
 	protected String name;
+	protected Player opponent;
 	//protected String symbol;
 	
 	public PlayerImpl(String name) {
 		this.name = name;
+		
 		//symbol = name.substring(0, 1);
 	}
 	
@@ -24,13 +26,12 @@ public class PlayerImpl implements Player {
 	@Override
 	public Player getOpponent() {
 		// TODO Auto-generated method stub
-		return null;
+		return opponent;
 	}
 
 	@Override
-	public void setOpponent(Player opponent) {
-		// TODO Auto-generated method stub
-		
+	public void setOpponent(Player opponent) {		
+		this.opponent = opponent;		
 	}
 
 	@Override

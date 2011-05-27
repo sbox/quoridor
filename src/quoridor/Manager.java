@@ -106,6 +106,8 @@ public class Manager {
 					Player _2 = new PlayerImpl(inputParser.nextArg());
 
 					players = new PairImpl<Player>(_1, _2);
+					_1.setOpponent(_2);
+					_2.setOpponent(_2);
 
 				} else {
 
