@@ -21,7 +21,7 @@ public interface Square {
 	 */
 	public int getCol();
 
-	public boolean hasPawn();
+	public boolean hasPawn(Pawn pawn);
 	
 
 }

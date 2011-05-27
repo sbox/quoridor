@@ -12,7 +12,7 @@ public class SquareImpl implements Square {
 
 	protected int row; // the row of this square
 	protected int col; // the column of this square
-	protected boolean pawn = false;
+	//protected boolean pawn = false;
 	
 	/**
 	 * 
@@ -68,7 +68,13 @@ public class SquareImpl implements Square {
 		return key;
 	}
 	
-	public boolean hasPawn() {
-		return pawn;
+	public boolean hasPawn(Pawn pawn) {
+		//System.out.println("pawn sqaure row is: " +pawn.getSquare().getRow() +"and col is: " +pawn.getSquare().getCol());
+		//System.out.println("this sqaure row is: " +row +"and col is: " +col);
+		if (pawn.getSquare().getRow() == row && pawn.getSquare().getCol() == col) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }
