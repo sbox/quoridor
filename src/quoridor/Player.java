@@ -53,6 +53,21 @@ public interface Player {
 	 */
 	public boolean goalEnd();
 	
+	/**
+	 * Returns if a player has won the game
+	 * @return if a player has won the game
+	 */
 	public boolean hasWon();
+	
+	/**
+	 * Returns the number of walls a player has left
+	 * @return the number of walls a player has left
+	 */
+	public int wallCount();
+	
+	/**
+	 * Updates the wall count of a player
+	 */
+	public void updateWallCount();
 	
 }
