@@ -25,7 +25,8 @@ public class PlaceWallImpl extends AbstractMove implements PlaceWall{
 		} else if(tentative.topLeft().getRow() > 8) {
 			valid = false;
 		} else {
-			
+			//is there a wall already placed
+			//is there a wall that would intersect the placement
 		}
 		return valid;
 	}

@@ -265,6 +265,7 @@ public class BoardImpl implements Board {
      * 			the other square
      * @return True if there is a wall between the two squares
      */
+
     public boolean wallBetween(Square a, Square b) {
     	//the squares must be in line somehow
     	assert(a.getRow() == b.getRow() || a.getCol() == b.getCol());

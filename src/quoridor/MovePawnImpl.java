@@ -28,6 +28,8 @@ public class MovePawnImpl extends AbstractMove implements MovePawn {
 		int start_col = start.getCol();
 		int start_row = start.getRow();
 		
+		Square between = isTwoAway(start, destination);
+		
 		//check whether square is on the board
 		if(destination_col > 8 || destination_col < 0 ||
 				   destination_row > 8 || destination_row < 0) {
@@ -37,30 +39,21 @@ public class MovePawnImpl extends AbstractMove implements MovePawn {
 		//check the destination is not the start
 		} else if(start == destination) {
 			valid = false;
-		
+		}
 		//check if square is adjacent
-		} else if (((destination_col - start_col < 2 || start_col - destination_col < 2)
-						&& start_row == destination_row)||
-					((destination_row - start_row < 2 || start_row - destination_row < 2) 
-						&& start_col == destination_col)) {
-			//check if the square has a pawn on it
-			if(destination.hasPawn()) {
+		else if(isAdjacent(start, destination)) {
+			if(setting.wallBetween(start, destination) || destination.hasPawn()) {
 				valid = false;
 			}
 		}
 		//check if the square is 2 away in 1 direction
-		else if (destination_col - start_col < 3 && start_row == destination_row) {
-			temp = new SquareImpl(destination_col - 1, destination_row);
-			return temp.hasPawn();
-		} else if (start_col - destination_col < 3 && start_row == destination_row) {
-			temp = new SquareImpl(destination_col + 1, destination_row);
-			return temp.hasPawn();
-		} else if (destination_row - start_row < 3 && start_col == destination_col) {
-			temp = new SquareImpl(destination_row - 1, destination_col);
-			return temp.hasPawn();
-		} else if (start_row - destination_row < 3 && start_col == destination_col) {
-			temp = new SquareImpl(destination_row + 1, destination_col);
-			return temp.hasPawn();
+		else if(between != null) {
+			if(!between.hasPawn()) {
+				valid = false;
+			} else if (setting.wallBetween(start, between) 
+					|| setting.wallBetween(between, destination)) {
+				valid = false;
+			}
 		}
 		//check if the square is a diagonal
 		else if(destination_col - start_col == 1 && destination_row - start_row == 1) {
@@ -91,6 +84,44 @@ public class MovePawnImpl extends AbstractMove implements MovePawn {
 		return valid;
 	}
 
+	private boolean isAdjacent(Square a, Square b) {
+		boolean adjacent = false;
+		int aCol = a.getCol();
+		int aRow = a.getRow();
+		int bCol = b.getCol();
+		int bRow = b.getRow();
+		
+		if(aRow == bRow && (aCol - bCol == 1 || bCol - aCol == 1)) {
+			adjacent = true;
+		} else if(aCol == bCol && (aRow - bRow == 1 || bRow - aRow == 1)) {
+			adjacent = true;
+		}
+		return adjacent;
+	}
+	
+	private Square isTwoAway(Square a, Square b) {
+		Square between = null;
+		int aCol = a.getCol();
+		int aRow = a.getRow();
+		int bCol = b.getCol();
+		int bRow = b.getRow();
+		
+		if(aRow == bRow) {
+			if(aCol - bCol == 2) {
+				between = new SquareImpl(aCol - 1, aRow);
+			} else if(bCol - aCol == 2) {
+				between = new SquareImpl(bCol - 1, bRow);
+			}
+		} else if(aCol == bCol) {
+			if (aRow - bRow == 2) {
+				between = new SquareImpl(aCol, aRow - 1);
+			} else if(bRow - aRow == 2) {
+				between = new SquareImpl(bCol, bRow - 1);
+			}
+		}
+		return between;
+	}
+	
 	@Override
 	public boolean type() {
 		return PAWN;
