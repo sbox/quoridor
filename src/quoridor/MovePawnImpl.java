@@ -35,9 +35,9 @@ public class MovePawnImpl extends AbstractMove implements MovePawn {
 				   destination_row > 8 || destination_row < 0) {
 			
             valid = false;
-
+		}
 		//check the destination is not the start
-		} else if(start == destination) {
+        else if(start == destination) {
 			valid = false;
 		}
 		//check if square is adjacent
@@ -80,6 +80,8 @@ public class MovePawnImpl extends AbstractMove implements MovePawn {
 			if(!temp.hasPawn() && !temp2.hasPawn()) {
 				valid = false;
 			}
+		} else {
+			valid = false;
 		}
 		return valid;
 	}
@@ -130,9 +132,16 @@ public class MovePawnImpl extends AbstractMove implements MovePawn {
 
     @Override
     public void makeMove() {
-    	Pawn player = setting.getPawn(owner, setting);
-    	player.setSquare(destination); 
-    	System.out.println("in pawn move\n" +setting);    
+        //Pair <Player> players = new PairImpl();
+        /*if (players._1().getName().equalsIgnoreCase(owner.getName())) {
+        	System.out.println("name of this player is " +players._1().getName());
+        } else if (players._2().getName().equalsIgnoreCase(owner.getName())) {
+        	System.out.println("name of the other player is: " +players._2().getName());
+        }*/
+    	
+    	System.out.println("in pawn move" +setting);
+    	System.out.println("the name of the player is: " +owner.getName());
+       
     }
 
 }
