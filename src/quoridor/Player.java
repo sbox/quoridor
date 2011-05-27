@@ -27,11 +27,6 @@ public interface Player {
 	 */
 	public String getName();
 	
-	/**
-	 * Returns the symbol of a player
-	 * @return the symbol of a player
-	 */
-	//public String getSymbol();
 	
 	/**
 	 * Returns the player's opponent

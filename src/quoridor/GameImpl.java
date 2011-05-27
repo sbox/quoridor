@@ -65,7 +65,9 @@ public class GameImpl implements Game {
 					 System.out.println(gameBoard.toString());
 					 System.out.println(current.getName() +" walls left: " +current.wallCount());
 					 System.out.println(current.getOpponent().getName() +" walls left: " +current.getOpponent().wallCount());
+					 System.out.println(current.goalEnd());
 					 current = current.getOpponent();
+					 //System.out.println(current.goalEnd());
 				 } else {
 					 System.out.println("Invalid Move");
 				 }
@@ -124,8 +126,7 @@ public class GameImpl implements Game {
 				lastMove.makeMove();
 			}
 			undoMoves.add(lastMove);
-		}
-		
+		}		
 	}
 }
 

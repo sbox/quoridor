@@ -108,7 +108,6 @@ public class Manager {
 					players = new PairImpl<Player>(_1, _2);
 					_1.setOpponent(_2);
 					_2.setOpponent(_1);
-
 				} else {
 
 					/*

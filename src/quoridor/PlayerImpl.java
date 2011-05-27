@@ -5,6 +5,7 @@ public class PlayerImpl implements Player {
 	protected String name;
 	protected Player opponent;
 	protected int wallCount;
+	protected boolean goalEnd;
 	
 	public PlayerImpl(String name) {
 		this.name = name;
@@ -18,8 +19,7 @@ public class PlayerImpl implements Player {
 
 	@Override
 	public boolean goalEnd() {
-		// TODO Auto-generated method stub
-		return false;
+		return goalEnd;
 	}
 
 	@Override
