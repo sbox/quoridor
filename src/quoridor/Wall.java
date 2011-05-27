@@ -31,4 +31,6 @@ public interface Wall {
 	 */
 	public Square topLeft();
 
+
+
 }

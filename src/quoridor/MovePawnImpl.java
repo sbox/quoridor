@@ -130,16 +130,9 @@ public class MovePawnImpl extends AbstractMove implements MovePawn {
 
     @Override
     public void makeMove() {
-        //Pair <Player> players = new PairImpl();
-        /*if (players._1().getName().equalsIgnoreCase(owner.getName())) {
-        	System.out.println("name of this player is " +players._1().getName());
-        } else if (players._2().getName().equalsIgnoreCase(owner.getName())) {
-        	System.out.println("name of the other player is: " +players._2().getName());
-        }*/
-    	
-    	System.out.println("in pawn move" +setting);
-    	System.out.println("the name of the player is: " +owner.getName());
-       
+    	Pawn player = setting.getPawn(owner, setting);
+    	player.setSquare(destination); 
+    	System.out.println("in pawn move\n" +setting);    
     }
 
 }

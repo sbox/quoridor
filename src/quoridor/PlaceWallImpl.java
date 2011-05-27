@@ -43,7 +43,11 @@ public class PlaceWallImpl extends AbstractMove implements PlaceWall{
 
     @Override
     public void makeMove() {
-    
+    	setting.addWall(tentative);
+    	System.out.println("in pawn move\n" +setting);
+    	//tentative.hashCode();
+    	//get the hashset and add the hash code to the hashset of that particular board
+    	//HashSet<Wall> walls;
     }
 
 }

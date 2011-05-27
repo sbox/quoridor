@@ -22,5 +22,11 @@ public interface Pawn {
 	 * @return the owner of the piece
 	 */
     public Player getOwner();	
+    
+    /**
+     * Moves the pawn to a give square
+     * @param moveTo the square you want to move to
+     */
+    public void setSquare(Square newSquare);
 
 }
