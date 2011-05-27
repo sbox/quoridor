@@ -32,6 +32,8 @@ public class GameImpl implements Game {
 		
 		MoveParser parser = new MoveParserImpl();
 		
+		GenericMove nextMove;
+		
 		while (!isOver()) {
 			System.out.println(gameBoard.toString());
 			if (current.equals(players._1())) {
@@ -40,15 +42,21 @@ public class GameImpl implements Game {
 				System.out.println("Eneter move "+current.getName()+ " (O): ");
 			}
 			
-			 GenericMove nextMove =  parser.scanMove(current, gameBoard);
-			 moves.add(nextMove);
- 
-			if (nextMove.isValid()) {
-				 nextMove.makeMove();
-				 current = current.getOpponent();
-			 } else {
-				 System.out.println("Invalid Move");
-			 }
+			nextMove = parser.scanMove(current, gameBoard);
+			
+			if (nextMove == null) {
+				System.out.println("bad input");
+			} else {
+			
+				moves.add(nextMove);
+				 
+				if (nextMove.isValid()) {
+					 nextMove.makeMove();
+					 current = current.getOpponent();
+				 } else {
+					 System.out.println("Invalid Move");
+				 }
+			}
 		}
 		
 	}

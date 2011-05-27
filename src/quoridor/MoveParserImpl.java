@@ -58,8 +58,8 @@ public class MoveParserImpl implements MoveParser {
 		
 		int len = move.length();
 		boolean validInput = len == 2 || len == 3;
-		int row = charNum(move.charAt(0));
-		int col = -1;
+		int col = charNum(move.charAt(0));
+		int row = -1;
 		boolean type = GenericMove.PAWN;
 		
 		boolean dir = false;
@@ -74,7 +74,7 @@ public class MoveParserImpl implements MoveParser {
 			validInput = false;
 		} else if (validInput) {
 			
-			col = parseInt(move.charAt(1));
+			row = parseInt(move.charAt(1)) - 1;
 			
 		}
 		
@@ -101,7 +101,6 @@ public class MoveParserImpl implements MoveParser {
 				result = new MovePawnImpl(col, row, current, board);
 				System.out.println(len);
 			} else if (type == GenericMove.WALL){ 
-				System.out.println(len + "a");
 				result = new PlaceWallImpl(col, row, dir, current, board);
 			}
 		}
