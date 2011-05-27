@@ -107,7 +107,7 @@ public class Manager {
 
 					players = new PairImpl<Player>(_1, _2);
 					_1.setOpponent(_2);
-					_2.setOpponent(_2);
+					_2.setOpponent(_1);
 
 				} else {
 
@@ -155,21 +155,24 @@ public class Manager {
 	 */
 	public static Pair<Player> enterPlayers() {
 
-		Player p1;
-		Player p2;
+		Player _1;
+		Player _2;
 
 		Scanner s = new Scanner(System.in);
 
 		// read player 1's name
 		System.out.print("Player 1 enter your name: ");
-		p1 = new PlayerImpl(s.nextLine());
+		_1 = new PlayerImpl(s.nextLine());
 
 		// read player 2's name
 		System.out.print("Player 2 enter your name: ");
-		p2 = new PlayerImpl(s.nextLine());
+		_2 = new PlayerImpl(s.nextLine());
 
+		_1.setOpponent(_2);
+		_2.setOpponent(_1);
+		
 		// create and return a pair containing those players
-		return new PairImpl<Player>(p1, p2);
+		return new PairImpl<Player>(_1, _2);
 	}
 
 	public static String loadFile( ) throws IOException {

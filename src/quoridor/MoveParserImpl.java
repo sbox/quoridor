@@ -58,7 +58,9 @@ public class MoveParserImpl implements MoveParser {
 		
 		int len = move.length();
 		boolean validInput = len == 2 || len == 3;
-		int col = charNum(move.charAt(0));
+		
+		int col = -1;
+		
 		int row = -1;
 		boolean type = GenericMove.PAWN;
 		
@@ -67,10 +69,10 @@ public class MoveParserImpl implements MoveParser {
 		GenericMove result = null;;
 		
 		
-		
+		col = charNum(move.charAt(0));
 			
 			
-		if (validInput && row == -1) {
+		if (validInput && col == -1) {
 			validInput = false;
 		} else if (validInput) {
 			
