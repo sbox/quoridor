@@ -42,24 +42,16 @@ public class Manager {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// print a welcome method
-		// File dir = new File("E:\\genus\\species");
 		welcome();
 
-		String test;
-		// else put a throws exception as the argument
-		/*
-		 * try { saveGameState("myfile", null); test = scanFile("myfile");
-		 * System.out.println("\n\nthe information in this file is: ");
-		 * System.out.println (test); } catch (IOException e) { // TODO
-		 * Auto-generated catch block e.printStackTrace(); }
-		 */
-		try {
+		System.out.println("newgame or loadgame?");
+		//String test;
+		/*try {
 			loadFile();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 
 		/*
 		 * This is the information required by the parser to create a syntax
@@ -236,8 +228,11 @@ public class Manager {
 		return retVal;
 	}
 
-	public static void saveGameState(String filename, String moves)
+	public static void saveGame()
+	//public static void saveGameState(String filename, String moves)
 			throws IOException {
+		System.out.println("What name would you like to save game as?");
+		String filename="";
 		filename += ".quoridor";
 		// create a new file to be saved
 		File newFile;
@@ -257,7 +252,7 @@ public class Manager {
 			String s;
 			if ((s = in.readLine()) != null) {
 				if (s.contains("no")) {
-					System.out.println("Please choose a new name to save as");
+					System.out.println("Please type a new name to save game as.");
 					newFile = new File(in.readLine() + ".quoridor");
 				} else if (s.contains("yes")) {
 					exit = true;
@@ -270,7 +265,8 @@ public class Manager {
 		newFile.createNewFile();
 		// write the string of moves to the file
 		Writer output = null;
-		String text = "Testing the string file\n\n testing white space\n and more white space!";
+		String text = currentGame.formatFile();
+		//String text = "Testing the string file\n\n testing white space\n and more white space!";
 		output = new BufferedWriter(new FileWriter(newFile));
 		output.write(text);
 		output.close();
@@ -278,15 +274,5 @@ public class Manager {
 
 	}
 
-	public static void createFile(File newFile, String moves)
-			throws IOException {
-		newFile.createNewFile();
-		Writer output = null;
-		String text = "Testing the string file\n\n testing white space\n and more white space!";
-		output = new BufferedWriter(new FileWriter(newFile));
-		output.write(text);
-		output.close();
-		System.out.println("Your file has been written");
-	}
 
 }
