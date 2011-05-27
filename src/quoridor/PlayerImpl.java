@@ -44,8 +44,14 @@ public class PlayerImpl implements Player {
 	}
 
 	@Override
-	public void updateWallCount() {
+	public void decreaseWallCount() {
 		wallCount--;
 	}
+
+	@Override
+	public void addWallCount() {
+		wallCount++;
+	}
+	
 
 }

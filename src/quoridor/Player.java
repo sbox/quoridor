@@ -66,8 +66,13 @@ public interface Player {
 	public int wallCount();
 	
 	/**
-	 * Updates the wall count of a player
+	 * decrease the wall count of a player
 	 */
-	public void updateWallCount();
+	public void decreaseWallCount();
+	
+	/**
+	 * Adds a number to the wall count of a player
+	 */
+	public void addWallCount();
 	
 }

@@ -12,12 +12,14 @@ public class GameImpl implements Game {
 	public static final short TOKEN_SAVE = 3;
 	
 	Pair <Player> players;
-	List<GenericMove> moves;
+	List<GenericMove> undoMoves;
+	List<GenericMove> redoMoves;
 	Board gameBoard;
 	
 	public GameImpl(Pair <Player> players) {
 		this.players = players;
-		moves = new LinkedList<GenericMove>();
+		undoMoves = new LinkedList<GenericMove>();
+		redoMoves = new LinkedList<GenericMove>();
 		
 	}
 
@@ -36,8 +38,10 @@ public class GameImpl implements Game {
 		
 		GenericMove nextMove;
 		
-		//moves.add();
-		//moves.add();
+		//GenericMove beg = new MovePawnImpl(8, 4, current, gameBoard);
+		
+		undoMoves.add(new MovePawnImpl(4, 8, current, gameBoard));
+		undoMoves.add(new MovePawnImpl(4, 0, current, gameBoard));
 		
 		System.out.println(gameBoard.toString());
 		System.out.println(current.getName() +" walls left: " +current.wallCount());
@@ -57,15 +61,11 @@ public class GameImpl implements Game {
 				System.out.println("Invalid input");
 			} else {
 				if (nextMove.isValid()) {
-					 nextMove.makeMove();
-					 current = current.getOpponent();
+					 nextMove.makeMove();					 
 					 System.out.println(gameBoard.toString());
 					 System.out.println(current.getName() +" walls left: " +current.wallCount());
 					 System.out.println(current.getOpponent().getName() +" walls left: " +current.getOpponent().wallCount());
-					 moves.add(nextMove);
-					 System.out.println("undoing the move");
-					 undoMove();
-					 System.out.println(gameBoard);
+					 current = current.getOpponent();
 				 } else {
 					 System.out.println("Invalid Move");
 				 }
@@ -89,9 +89,9 @@ public class GameImpl implements Game {
 		retVal+= " ";
 		retVal+=players._2().getName();
 		int i = 0;
-		while(i < moves.size()) {
+		while(i < undoMoves.size()) {
 			retVal+= " ";
-			retVal+= moves.get(i);
+			retVal+= undoMoves.get(i);
 			i++;
 		}
 		System.out.println("string of moves"+retVal);	
@@ -99,25 +99,33 @@ public class GameImpl implements Game {
 	}
 
 	@Override
-	public void undoMove() {
-		GenericMove lastMove = moves.remove(moves.size()-1);
-		if (lastMove.toString().length() == 3) {
-			gameBoard.removeWall(lastMove.asPlaceWall().getTentative());
-		} else {
-			GenericMove playerMoveBefore = moves.remove(moves.size()-3);
-			playerMoveBefore.makeMove();
+	public void undoMove(Player current) {
+		if (undoMoves.size() >= 2) {
+			GenericMove lastMove = undoMoves.remove(undoMoves.size()-1);
+			if (lastMove.toString().length() == 3) {
+				gameBoard.removeWall(lastMove.asPlaceWall().getTentative());
+				current.addWallCount();
+			} else {
+				GenericMove playerMoveBefore = undoMoves.remove(undoMoves.size()-2);
+				playerMoveBefore.makeMove();
+			}
+			redoMoves.add(lastMove);
 		}
-
 	}
 
-	//@Override
-	/*public void undoMove() {
-		String lastMove = moves.remove(moves.size()-1);
-		if (lastMove.length() == 3) {
-			WallImpl wall = new WallImpl(new SquareImpl(lastMove.valueOf(0), 3), lastMove.valueOf(2));
-		} else if (lastMove.length() == 2) {
-			
+	@Override
+	public void redoMove(Player current) {
+		if (redoMoves.size() > 0) {
+			GenericMove lastMove = redoMoves.remove(undoMoves.size()-2);
+			if (lastMove.toString().length() == 3) {
+				gameBoard.addWall(lastMove.asPlaceWall().getTentative());
+				current.decreaseWallCount();
+			} else {
+				lastMove.makeMove();
+			}
+			undoMoves.add(lastMove);
 		}
-	}	*/
+		
+	}
 }
 

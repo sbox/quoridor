@@ -19,6 +19,16 @@ public interface Game {
 	 */
 	public String formatFile();
 	
-	public void undoMove();
+	/**
+	 * Undo a move of the current player
+	 * @param current player
+	 */
+	public void undoMove(Player current);
+	
+	/**
+	 * Redo the move of the current player
+	 * @param current player
+	 */
+	public void redoMove(Player current);
 	
 }

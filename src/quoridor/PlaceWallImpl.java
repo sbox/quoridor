@@ -47,7 +47,7 @@ public class PlaceWallImpl extends AbstractMove implements PlaceWall{
     @Override
     public void makeMove() {
     	setting.addWall(tentative);
-    	setting.getPawn(owner, setting).getOwner().updateWallCount();
+    	setting.getPawn(owner, setting).getOwner().decreaseWallCount();
     }
 
 	@Override
