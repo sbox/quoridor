@@ -34,16 +34,11 @@ public class GameImpl implements Game {
 		
 		GenericMove nextMove;
 		
-<<<<<<< HEAD
 		
 		
 		while (!isOver()) {
 			System.out.println(gameBoard.toString());
-			if(current == null) {System.out.println("aohushoutnhdoae");}
-=======
-		while (!isOver()) {
-			System.out.println(gameBoard.toString());
->>>>>>> d2bc5b4b494ea561490343ad25c3a61301bb5a0c
+			
 			if (current.equals(players._1())) {
 				System.out.println("Enter move " +current.getName()+ " (X): ");
 			} else {
@@ -89,3 +84,4 @@ public class GameImpl implements Game {
 	}
 	
 }
+
