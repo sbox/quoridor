@@ -26,30 +26,29 @@ public class GameImpl implements Game {
 		Player current = players._1();
 		Pair <Pawn> pawns = new PairImpl<Pawn>(new PawnImpl(
 				new SquareImpl(4, 8), players._1()),
-				new PawnImpl(new SquareImpl(4, 8), players._1()));
+				new PawnImpl(new SquareImpl(4, 0), players._2()));
 		
 		Board gameBoard = new BoardImpl(pawns);
 		
 		MoveParser parser = new MoveParserImpl();
 		
 		while (!isOver()) {
+			System.out.println(gameBoard.toString());
 			if (current.equals(players._1())) {
-				System.out.println("Enter move " +current.getName()+ " (X)");
+				System.out.println("Enter move " +current.getName()+ " (X): ");
 			} else {
-				System.out.println("Eneter move "+current.getName()+ " (0)");
+				System.out.println("Eneter move "+current.getName()+ " (O): ");
 			}
-			//System.out.println("Enter player move (" +current.getSymbol().toUpperCase() +")");
+			
 			 GenericMove nextMove =  parser.scanMove(current, gameBoard);
 			 moves.add(nextMove);
-			 
-			 if (nextMove.isValid()) {
+ 
+			if (nextMove.isValid()) {
 				 nextMove.makeMove();
 				 current = current.getOpponent();
-				 System.out.println(gameBoard.toString());
 			 } else {
 				 System.out.println("Invalid Move");
 			 }
-			 
 		}
 		
 	}
@@ -69,6 +68,7 @@ public class GameImpl implements Game {
 		retVal+=players._2().getName();
 		while(!moves.isEmpty()) {
 			retVal+= moves.get(0);
+			retVal+= " ";
 		}
 		return retVal;
 	}
