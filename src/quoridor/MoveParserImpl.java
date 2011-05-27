@@ -1,6 +1,7 @@
 package quoridor;
 
 import java.util.Iterator; 
+import java.util.List;
 import java.util.Queue;
 import java.util.LinkedList;
 import java.util.Scanner;
@@ -8,6 +9,7 @@ import java.util.Scanner;
 public class MoveParserImpl implements MoveParser {
 
 	Queue <GenericMove> moveBuffer;
+
 	
 	public MoveParserImpl() {
 		moveBuffer = new LinkedList <GenericMove>();
@@ -55,7 +57,6 @@ public class MoveParserImpl implements MoveParser {
 	}
 	
 	public GenericMove parseMove(String move, Player current, Board board) {
-		
 		int len = move.length();
 		boolean validInput = len == 2 || len == 3;
 		
@@ -109,7 +110,6 @@ public class MoveParserImpl implements MoveParser {
 		
 		return result;
 	}
-	
 
 	private int parseInt(char ch) {
 		int num = (int)ch - '0';

@@ -191,7 +191,6 @@ public class Manager {
 			if (listOfFiles[i].isFile()) {
 				System.out.println(listOfFiles[i].getName());
 			}
-			//System.out.println("i is " +i);
 		}
 		
 		while (!file.exists() && exit == false) {
@@ -199,9 +198,6 @@ public class Manager {
 			BufferedReader in = new BufferedReader(new InputStreamReader(
 					System.in));
 			if ((s = in.readLine()) != null) {
-				/*if(!fileName.contains(".quoridor")) {
-					fileName+=".quoridor";
-				} else if (fileName.cont)*/
 				if (s.contains("exit")) {
 					exit = true;
 				} else {
@@ -217,7 +213,6 @@ public class Manager {
 		//Open the file that they want to load 
 		if (exit != true) {
 			file.getName(); 
-			
 			FileInputStream fstream = new FileInputStream(fileName);
 			DataInputStream datain = new DataInputStream(fstream); 
 			//create a buffer reader to go through the file 
@@ -230,6 +225,8 @@ public class Manager {
 			datain.close();
 			System.out.println(retVal);
 		}
+		
+		
 		return retVal;
 	}
 
@@ -242,11 +239,6 @@ public class Manager {
 		// create a new file to be saved
 		File newFile;
 		newFile = new File(filename);
-
-		// if the filename already exists delete it before creating a new one
-		/*
-		 * if (newFile.exists()) { newFile.delete(); }
-		 */
 
 		boolean exit = false;
 		while (newFile.exists() && exit == false) {
@@ -271,12 +263,9 @@ public class Manager {
 		// write the string of moves to the file
 		Writer output = null;
 		String text = currentGame.formatFile();
-		//String text = "Testing the string file\n\n testing white space\n and more white space!";
 		output = new BufferedWriter(new FileWriter(newFile));
 		output.write(text);
 		output.close();
-		// createFile(newFile, moves);
-
 	}
 
 

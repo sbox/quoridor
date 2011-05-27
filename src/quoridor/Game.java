@@ -19,4 +19,6 @@ public interface Game {
 	 */
 	public String formatFile();
 	
+	public void undoMove();
+	
 }

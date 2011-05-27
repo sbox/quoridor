@@ -56,4 +56,6 @@ public interface GenericMove {
 	 */
 	public String getMessage();
 	
+	
+	
 }

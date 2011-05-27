@@ -47,6 +47,12 @@ public interface Board {
     public void addWall(Wall wall);
     
     /**
+     * Removes a wall from the hashSet
+     * @param wall you want to remove
+     */
+    public void removeWall(Wall wall);
+    
+    /**
      * Finds a players pawn and returns it
      * @param subject
      * 			the player who's pawn is being accessed

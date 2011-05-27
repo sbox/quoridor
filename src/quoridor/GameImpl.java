@@ -13,6 +13,7 @@ public class GameImpl implements Game {
 	
 	Pair <Player> players;
 	List<GenericMove> moves;
+	Board gameBoard;
 	
 	public GameImpl(Pair <Player> players) {
 		this.players = players;
@@ -28,38 +29,48 @@ public class GameImpl implements Game {
 				new SquareImpl(4, 8), players._1()),
 				new PawnImpl(new SquareImpl(4, 0), players._2()));
 		
-		Board gameBoard = new BoardImpl(pawns);
+		gameBoard = new BoardImpl(pawns);
+		//Board gameBoard = new BoardImpl(pawns);
 		
 		MoveParser parser = new MoveParserImpl();
 		
 		GenericMove nextMove;
 		
+		//moves.add();
+		//moves.add();
 		
+		System.out.println(gameBoard.toString());
+		System.out.println(current.getName() +" walls left: " +current.wallCount());
+		System.out.println(current.getOpponent().getName() +" walls left: " +current.getOpponent().wallCount());
 		
 		while (!isOver()) {
-			System.out.println(gameBoard.toString());
-			
+
 			if (current.equals(players._1())) {
 				System.out.println("Enter move " +current.getName()+ " (X): ");
 			} else {
-				System.out.println("Eneter move "+current.getName()+ " (O): ");
+				System.out.println("Enter move "+current.getName()+ " (O): ");
 			}
 			
 			nextMove = parser.scanMove(current, gameBoard);
 			
 			if (nextMove == null) {
-				System.out.println("bad input");
+				System.out.println("Invalid input");
 			} else {
-			
-				moves.add(nextMove);
-				 
 				if (nextMove.isValid()) {
 					 nextMove.makeMove();
 					 current = current.getOpponent();
+					 System.out.println(gameBoard.toString());
+					 System.out.println(current.getName() +" walls left: " +current.wallCount());
+					 System.out.println(current.getOpponent().getName() +" walls left: " +current.getOpponent().wallCount());
+					 moves.add(nextMove);
+					 System.out.println("undoing the move");
+					 undoMove();
+					 System.out.println(gameBoard);
 				 } else {
 					 System.out.println("Invalid Move");
 				 }
 			}
+			formatFile();
 		}
 	}
 	
@@ -75,13 +86,38 @@ public class GameImpl implements Game {
 	public String formatFile() {
 		String retVal = "";
 		retVal+=players._1().getName();
+		retVal+= " ";
 		retVal+=players._2().getName();
-		while(!moves.isEmpty()) {
-			retVal+= moves.get(0);
+		int i = 0;
+		while(i < moves.size()) {
 			retVal+= " ";
+			retVal+= moves.get(i);
+			i++;
 		}
+		System.out.println("string of moves"+retVal);	
 		return retVal;
 	}
-	
+
+	@Override
+	public void undoMove() {
+		GenericMove lastMove = moves.remove(moves.size()-1);
+		if (lastMove.toString().length() == 3) {
+			gameBoard.removeWall(lastMove.asPlaceWall().getTentative());
+		} else {
+			GenericMove playerMoveBefore = moves.remove(moves.size()-3);
+			playerMoveBefore.makeMove();
+		}
+
+	}
+
+	//@Override
+	/*public void undoMove() {
+		String lastMove = moves.remove(moves.size()-1);
+		if (lastMove.length() == 3) {
+			WallImpl wall = new WallImpl(new SquareImpl(lastMove.valueOf(0), 3), lastMove.valueOf(2));
+		} else if (lastMove.length() == 2) {
+			
+		}
+	}	*/
 }
 

@@ -61,5 +61,19 @@ public class PlaceWallImpl extends AbstractMove implements PlaceWall{
 		
 		return retVal;
 	}
+	
+	public String toString() {
+		String retVal = "";
+		
+		retVal+= (char)(tentative.topLeft().getCol() + (int) 'a');
+		retVal+= tentative.topLeft().getRow()+1;
+		if (tentative.getDirection() == Wall.HORIZONTAL) {
+			retVal += "h";
+		} else {
+			retVal+= "v";
+		}
+		
+		return retVal;
+	}
 
 }

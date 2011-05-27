@@ -120,6 +120,13 @@ public class BoardImpl implements Board {
     	return board;
     }
     
+     /**
+      * Removes a wall from the hashSet
+      */
+     public void removeWall(Wall wall) {
+    	 walls.remove(wall);
+     }
+     
     /**
      * Adds a wall to the hashSet of walls
      */

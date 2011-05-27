@@ -133,10 +133,6 @@ public class MovePawnImpl extends AbstractMove implements MovePawn {
     @Override
     public void makeMove() {
         setting.getPawn(owner, setting).setSquare(destination);
-    	
-    	System.out.println("in pawn move" +setting);
-    	System.out.println("the name of the player is: " +owner.getName());
-       
     }
 
 	@Override
@@ -144,4 +140,10 @@ public class MovePawnImpl extends AbstractMove implements MovePawn {
 		return "Invalid move";
 	}
 
+	public String toString() {
+		String retVal = "";
+		retVal+= (char)(destination.getCol() + (int) 'a');
+		retVal+= destination.getRow()+1;
+		return retVal;
+	}
 }
