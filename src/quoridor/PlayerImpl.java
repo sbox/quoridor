@@ -4,12 +4,11 @@ public class PlayerImpl implements Player {
 
 	protected String name;
 	protected Player opponent;
-	//protected String symbol;
+	protected int wallCount;
 	
 	public PlayerImpl(String name) {
 		this.name = name;
-		
-		//symbol = name.substring(0, 1);
+		wallCount = 10;
 	}
 	
 	@Override
@@ -25,7 +24,6 @@ public class PlayerImpl implements Player {
 
 	@Override
 	public Player getOpponent() {
-		// TODO Auto-generated method stub
 		return opponent;
 	}
 
@@ -38,6 +36,16 @@ public class PlayerImpl implements Player {
 	public boolean hasWon() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public int wallCount() {
+		return wallCount;
+	}
+
+	@Override
+	public void updateWallCount() {
+		wallCount--;
 	}
 
 }

@@ -14,6 +14,9 @@ public class PlaceWallImpl extends AbstractMove implements PlaceWall{
 	@Override
 	public boolean isValid() {
 		boolean valid = true;
+		if (setting.getPawn(owner, setting).getOwner().wallCount() <= 0) {
+			valid = false;
+		}
 		Square right = new SquareImpl(tentative.topLeft().getCol() + 1, tentative.topLeft().getRow());
 		Square bottom = new SquareImpl(tentative.topLeft().getCol(), tentative.topLeft().getRow() + 1);
 		if(tentative.topLeft().getCol() < 0) {
@@ -44,10 +47,19 @@ public class PlaceWallImpl extends AbstractMove implements PlaceWall{
     @Override
     public void makeMove() {
     	setting.addWall(tentative);
-    	System.out.println("in pawn move\n" +setting);
-    	//tentative.hashCode();
-    	//get the hashset and add the hash code to the hashset of that particular board
-    	//HashSet<Wall> walls;
+    	setting.getPawn(owner, setting).getOwner().updateWallCount();
     }
+
+	@Override
+	public String getMessage() {
+		String retVal;
+		if (setting.getPawn(owner, setting).getOwner().wallCount() <= 0) {
+			retVal = "Invalid move: Player has no walls left";
+		} else {
+			retVal = "Invalid wall placement";
+		}
+		
+		return retVal;
+	}
 
 }

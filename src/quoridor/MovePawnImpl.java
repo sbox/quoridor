@@ -139,4 +139,9 @@ public class MovePawnImpl extends AbstractMove implements MovePawn {
        
     }
 
+	@Override
+	public String getMessage() {
+		return "Invalid move";
+	}
+
 }

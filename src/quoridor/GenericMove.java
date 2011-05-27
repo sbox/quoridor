@@ -50,4 +50,10 @@ public interface GenericMove {
 	 */
 	public void makeMove();
 	
+	/**
+	 * Returns a error message
+	 * @return
+	 */
+	public String getMessage();
+	
 }
