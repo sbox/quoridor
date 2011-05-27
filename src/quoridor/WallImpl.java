@@ -85,5 +85,6 @@ public class WallImpl implements Wall {
 		boolean wIsWall = w instanceof Wall;
 		return wIsWall && hashCode() == w.hashCode();
 	}
+	
 
 }

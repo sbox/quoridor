@@ -19,4 +19,8 @@ public class PawnImpl implements Pawn {
 	public Player getOwner() {
 		return owner;
 	}
+	
+	public void setSquare(Square newSquare) {
+		pawnSquare = newSquare;
+	}
 }
