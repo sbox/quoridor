@@ -15,8 +15,8 @@ public class BoardImplTest {
 	@Before
 	public void setUp() throws Exception {
 	
-		Player pl1 = new PlayerImpl("steve");
-		Player pl2 = new PlayerImpl("bec");
+		Player pl1 = new PlayerImpl("steve", Player.TOP);
+		Player pl2 = new PlayerImpl("bec", Player.BOTTOM);
 		
 		pn1 = new PawnImpl(new SquareImpl(3, 3), pl1);
 		pn2 = new PawnImpl(new SquareImpl(3, 4), pl2);	

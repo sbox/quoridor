@@ -45,7 +45,7 @@ public class PlaceWallImpl extends AbstractMove implements PlaceWall{
 			setting.addWall(tentative);
 			if (setting.pathToGoal(setting.getPawn(owner, setting)) == false) {
 				valid = false;
-			}
+			} 
 			setting.removeWall(tentative);
 		}
 		

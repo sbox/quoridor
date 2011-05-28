@@ -31,6 +31,7 @@ public class Manager {
 	static final short NEW_GAME = 1;
 	static final short HELP = 2;
 	static final short EMPTY = 3;
+	static final short LOAD_GAME = 4;
 
 	// this will store the current game being played
 	static Game currentGame = null;
@@ -43,8 +44,22 @@ public class Manager {
 	 */
 	public static void main(String[] args) {
 		welcome();
-
+		Pair<Player> players;
+		
+		Player _1 = new PlayerImpl("b", Player.TOP);
+		Player _2 = new PlayerImpl("t", Player.BOTTOM);
+		System.out.println("heher");
+		players = new PairImpl<Player>(_1, _2);
+		_1.setOpponent(_2);
+		_2.setOpponent(_1);
+		currentGame = new GameImpl(players);
 		System.out.println("newgame or loadgame?");
+		/*try {
+			saveGame();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
 		//String test;
 		/*try {
 			loadFile();
@@ -57,9 +72,9 @@ public class Manager {
 		 * This is the information required by the parser to create a syntax
 		 * table and know how many arguments each command has.
 		 */
-		String[] commands = { "exit", "newgame", "help", "" };
-		short[] tokens = { EXIT, NEW_GAME, HELP, EMPTY };
-		short[] argCount = { 0, 2, 0, 0 };
+		String[] commands = { "exit", "newgame", "loadgame" ,"help", "" };
+		short[] tokens = { EXIT, NEW_GAME, LOAD_GAME, HELP, EMPTY };
+		short[] argCount = { 0, 2, 0, 0, 0 };
 
 		// initialise the input parser
 		inputParser = new ParserImpl(commands, tokens, argCount, INVALID);
@@ -102,8 +117,8 @@ public class Manager {
 				 * prompting for more input
 				 */
 				if (inputParser.hasRequiredArgs()) {
-					Player _1 = new PlayerImpl(inputParser.nextArg());
-					Player _2 = new PlayerImpl(inputParser.nextArg());
+					Player _1 = new PlayerImpl(inputParser.nextArg(), Player.TOP);
+					Player _2 = new PlayerImpl(inputParser.nextArg(), Player.BOTTOM);
 
 					players = new PairImpl<Player>(_1, _2);
 					_1.setOpponent(_2);
@@ -135,6 +150,13 @@ public class Manager {
 				// play the game
 				currentGame.play();
 
+			} else if (token == LOAD_GAME) {
+				
+				try {
+					loadFile();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			} else if (token == HELP) {
 				// this prints a list of valid commands
 				System.out.print(inputParser);
@@ -161,11 +183,11 @@ public class Manager {
 
 		// read player 1's name
 		System.out.print("Player 1 enter your name: ");
-		_1 = new PlayerImpl(s.nextLine());
+		_1 = new PlayerImpl(s.nextLine(), Player.TOP);
 
 		// read player 2's name
 		System.out.print("Player 2 enter your name: ");
-		_2 = new PlayerImpl(s.nextLine());
+		_2 = new PlayerImpl(s.nextLine(), Player.BOTTOM);
 
 		_1.setOpponent(_2);
 		_2.setOpponent(_1);
@@ -174,9 +196,10 @@ public class Manager {
 		return new PairImpl<Player>(_1, _2);
 	}
 
-	public static String loadFile( ) throws IOException {
-		String retVal = "";
+	public static String[] loadFile( ) throws IOException {
+		String fileMove = "";
 		String fileName = "";
+		String[] retVal = null;
 		File file = new File(fileName);
 		String path = ".";
 		File folder = new File(path);
@@ -186,18 +209,18 @@ public class Manager {
 		
 		//Print out a list of all the current saved game states
 		System.out.println("Saved game states:");
-		for (int i = 4; i < listOfFiles.length-4; i++) {
+		for (int i = 4; i < listOfFiles.length; i++) {
 			if (listOfFiles[i].isFile()) {
 				System.out.println(listOfFiles[i].getName());
 			}
 		}
 		
 		while (!file.exists() && exit == false) {
-			System.out.println("Which game state would you like to load? Type exit to not load any.");
+			System.out.println("Which game state would you like to load? Type bye to not load any.");
 			BufferedReader in = new BufferedReader(new InputStreamReader(
 					System.in));
 			if ((s = in.readLine()) != null) {
-				if (s.contains("exit")) {
+				if (s.contains("bye")) {
 					exit = true;
 				} else {
 					fileName = s;
@@ -219,12 +242,30 @@ public class Manager {
 			String moves; 
 			//Read the file line by line 
 			while ((moves = br.readLine()) != null) {
-				retVal+=moves; 
+				fileMove+=moves; 
 			}
 			datain.close();
-			System.out.println(retVal);
+			System.out.println(fileMove);
 		}
-		
+
+	    String splitAt = " ";
+	    String[] moves = null;
+	    moves = fileMove.split(splitAt);
+	    
+	    Pair<Player> players;
+	    Player _1 = new PlayerImpl(moves[0], Player.TOP);
+		Player _2 = new PlayerImpl(moves[1], Player.BOTTOM);
+
+		players = new PairImpl<Player>(_1, _2);
+		_1.setOpponent(_2);
+		_2.setOpponent(_1);
+		System.out.println("player 1" +_1.getName());
+		System.out.println("player 2" +_2.getName());
+
+		int j = 0;
+		for (int i = 2; i < moves.length; i++) {
+			retVal[j] = moves[i];
+		}
 		
 		return retVal;
 	}
@@ -232,20 +273,24 @@ public class Manager {
 	public static void saveGame()
 	//public static void saveGameState(String filename, String moves)
 			throws IOException {
-		System.out.println("What name would you like to save game as?");
+		BufferedReader in = new BufferedReader(new InputStreamReader(
+													System.in));
+		String s;
 		String filename="";
+		System.out.println("What name would you like to save game as?");
+		if ((s = in.readLine()) != null) {
+			
+			filename+=s;
+			
+		}		
 		filename += ".quor";
 		// create a new file to be saved
 		File newFile;
 		newFile = new File(filename);
-
+		System.out.println("filename is s: " +filename);
 		boolean exit = false;
 		while (newFile.exists() && exit == false) {
-			System.out
-					.println("File already exists with that name. Would you like to replace? Yes or no?");
-			BufferedReader in = new BufferedReader(new InputStreamReader(
-					System.in));
-			String s;
+			System.out.println("File already exists with that name. Would you like to replace? Yes or no?");
 			if ((s = in.readLine()) != null) {
 				if (s.contains("no")) {
 					System.out.println("Please type a new name to save game as.");

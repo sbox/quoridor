@@ -20,6 +20,14 @@ public class GameImpl implements Game {
 		this.players = players;
 		undoMoves = new LinkedList<GenericMove>();
 		redoMoves = new LinkedList<GenericMove>();
+		Player current = players._1();
+		Pair <Pawn> pawns = new PairImpl<Pawn>(new PawnImpl(
+				new SquareImpl(4, 8), players._1()),
+				new PawnImpl(new SquareImpl(4, 0), players._2()));
+		
+		gameBoard = new BoardImpl(pawns);
+		undoMoves.add(new MovePawnImpl(4, 8, current, gameBoard));
+		undoMoves.add(new MovePawnImpl(4, 0, current, gameBoard));
 		
 	}
 
@@ -39,9 +47,6 @@ public class GameImpl implements Game {
 		GenericMove nextMove;
 		
 		//GenericMove beg = new MovePawnImpl(8, 4, current, gameBoard);
-		
-		undoMoves.add(new MovePawnImpl(4, 8, current, gameBoard));
-		undoMoves.add(new MovePawnImpl(4, 0, current, gameBoard));
 		
 		System.out.println(gameBoard.toString());
 		System.out.println(current.getName() +" walls left: " +current.wallCount());
