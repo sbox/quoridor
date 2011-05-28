@@ -45,7 +45,11 @@ public class PlaceWallImpl extends AbstractMove implements PlaceWall{
 			setting.addWall(tentative);
 			if (setting.pathToGoal(setting.getPawn(owner, setting)) == false) {
 				valid = false;
-			} 
+			} else if (setting.pathToGoal(setting.getPawn(owner.getOpponent(), setting)) == false) {
+				System.out.println("op name" +owner.getOpponent().getName());
+				System.out.println("place a wall by op is not val");
+				valid = false;
+			}
 			setting.removeWall(tentative);
 		}
 		

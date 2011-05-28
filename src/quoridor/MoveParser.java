@@ -13,5 +13,6 @@ public interface MoveParser extends Iterable <GenericMove>{
 	public String parseMoveString(String moveString, Player currentPlayer, Board board) ;
 	public GenericMove parseMove(String move, Player current, Board board);
 	public GenericMove scanMove(Player current, Board board);
+	public GenericMove loadMove(Player current, Board board, String move);
 	
 }

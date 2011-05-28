@@ -41,33 +41,25 @@ public class Manager {
 
 	/**
 	 * @param args
+	 * @throws IOException 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		welcome();
-		Pair<Player> players;
-		
-		Player _1 = new PlayerImpl("b", Player.TOP);
-		Player _2 = new PlayerImpl("t", Player.BOTTOM);
-		System.out.println("heher");
-		players = new PairImpl<Player>(_1, _2);
-		_1.setOpponent(_2);
-		_2.setOpponent(_1);
-		currentGame = new GameImpl(players);
-		System.out.println("newgame or loadgame?");
-		/*try {
-			saveGame();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
-		//String test;
-		/*try {
-			loadFile();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
 
+		System.out.println("newgame or loadgame?");
+		
+		/*String filename="test";	
+		filename += ".quor";
+		File newFile;
+		newFile = new File(filename);
+		newFile.createNewFile();
+		// write the string of moves to the file
+		Writer output = null;
+		String text = "bec steve e8 e2 e7 e3 e6 e4 e5";
+		output = new BufferedWriter(new FileWriter(newFile));
+		output.write(text);
+		output.close();*/
+		
 		/*
 		 * This is the information required by the parser to create a syntax
 		 * table and know how many arguments each command has.
@@ -196,10 +188,9 @@ public class Manager {
 		return new PairImpl<Player>(_1, _2);
 	}
 
-	public static String[] loadFile( ) throws IOException {
+	public static void loadFile( ) throws IOException {
 		String fileMove = "";
 		String fileName = "";
-		String[] retVal = null;
 		File file = new File(fileName);
 		String path = ".";
 		File folder = new File(path);
@@ -215,6 +206,7 @@ public class Manager {
 			}
 		}
 		
+		//While loop for making sure they choose to load a game that already exists
 		while (!file.exists() && exit == false) {
 			System.out.println("Which game state would you like to load? Type bye to not load any.");
 			BufferedReader in = new BufferedReader(new InputStreamReader(
@@ -232,7 +224,7 @@ public class Manager {
 			}
 		}
 		
-		//Open the file that they want to load 
+		//Opening and obtaining data from the file they want to load
 		if (exit != true) {
 			file.getName(); 
 			FileInputStream fstream = new FileInputStream(fileName);
@@ -247,27 +239,30 @@ public class Manager {
 			datain.close();
 			System.out.println(fileMove);
 		}
-
+		
+		//splitting the string into an array of moves
 	    String splitAt = " ";
 	    String[] moves = null;
 	    moves = fileMove.split(splitAt);
-	    
+	    //Creating the two players
 	    Pair<Player> players;
 	    Player _1 = new PlayerImpl(moves[0], Player.TOP);
 		Player _2 = new PlayerImpl(moves[1], Player.BOTTOM);
-
 		players = new PairImpl<Player>(_1, _2);
 		_1.setOpponent(_2);
 		_2.setOpponent(_1);
-		System.out.println("player 1" +_1.getName());
-		System.out.println("player 2" +_2.getName());
-
+		//Setting the list of moves to go through
+		String[] retVal = new String[moves.length-2];		
 		int j = 0;
 		for (int i = 2; i < moves.length; i++) {
 			retVal[j] = moves[i];
+			j++;
 		}
+		// initialise a game
+		currentGame = new GameImpl(players);
 		
-		return retVal;
+		//Plays a current game 
+		currentGame.loadGamePlay(retVal);
 	}
 
 	public static void saveGame()
@@ -279,16 +274,14 @@ public class Manager {
 		String filename="";
 		System.out.println("What name would you like to save game as?");
 		if ((s = in.readLine()) != null) {
-			
 			filename+=s;
-			
 		}		
 		filename += ".quor";
 		// create a new file to be saved
 		File newFile;
 		newFile = new File(filename);
-		System.out.println("filename is s: " +filename);
 		boolean exit = false;
+		//loop for if they choose to save a file as something that already exists
 		while (newFile.exists() && exit == false) {
 			System.out.println("File already exists with that name. Would you like to replace? Yes or no?");
 			if ((s = in.readLine()) != null) {

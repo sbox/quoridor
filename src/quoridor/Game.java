@@ -14,6 +14,11 @@ public interface Game {
 	public void play();
 	
 	/**
+	 * Plays a game from a saved state
+	 */
+	public void loadGamePlay(String[] savedMoves);
+	
+	/**
 	 * Return the string of moves made in the current game
 	 * @return string of moves made in the current game
 	 */
