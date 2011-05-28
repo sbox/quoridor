@@ -32,6 +32,8 @@ public class BoardImplTest {
 		
 		assertTrue(test.pathToGoal(pn1));
 		
+		test.addWall(new WallImpl(new SquareImpl(0, 3), Wall.HORIZONTAL));
+		System.out.println(test);
 	}
 
 }

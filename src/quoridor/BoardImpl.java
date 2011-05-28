@@ -203,10 +203,7 @@ public class BoardImpl implements Board {
 	    	
 	    	//found is false here
 	    	
-	    	for (Square s : seen) {
-	    		System.out.print(s + "   ");
-	    	}
-	    	System.out.println("");
+	   
 	    	
 	    	//start checking neighbors that are on the board, not yet
 	        //  visited and not separated from current by a wall
