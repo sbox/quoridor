@@ -38,6 +38,10 @@ public class BoardImplTest {
 		test.addWall(new WallImpl(new SquareImpl(4, 3), Wall.HORIZONTAL));
 		test.addWall(new WallImpl(new SquareImpl(6, 3), Wall.HORIZONTAL));
 		test.addWall(new WallImpl(new SquareImpl(7, 2), Wall.HORIZONTAL));
+		
+		assertTrue(test.pathToGoal(pn1));
+		assertTrue(test.pathToGoal(pn2));
+		
 		test.addWall(new WallImpl(new SquareImpl(6, 2), Wall.VERTICAL));
 		
 		System.out.println(test);
@@ -46,4 +50,37 @@ public class BoardImplTest {
 		assertFalse(test.pathToGoal(pn2));
 	}
 
+	
+	@Test
+	public void testPathToGoal2() {
+		
+		assertTrue(test.pathToGoal(pn1));
+		assertTrue(test.pathToGoal(pn2));
+		
+		test.addWall(new WallImpl(new SquareImpl(0, 3), Wall.HORIZONTAL));
+		test.addWall(new WallImpl(new SquareImpl(2, 3), Wall.HORIZONTAL));
+		test.addWall(new WallImpl(new SquareImpl(4, 3), Wall.HORIZONTAL));
+		test.addWall(new WallImpl(new SquareImpl(6, 3), Wall.HORIZONTAL));
+		test.addWall(new WallImpl(new SquareImpl(7, 2), Wall.HORIZONTAL));
+		
+		assertTrue(test.pathToGoal(pn1));
+		assertTrue(test.pathToGoal(pn2));
+		
+		test.addWall(new WallImpl(new SquareImpl(3, 2), Wall.VERTICAL));
+		test.addWall(new WallImpl(new SquareImpl(2, 2), Wall.VERTICAL));
+		assertTrue(test.pathToGoal(pn1));
+		assertTrue(test.pathToGoal(pn2));
+		
+		
+		
+		test.addWall(new WallImpl(new SquareImpl(2, 1), Wall.HORIZONTAL));
+		
+		
+		System.out.println(test);
+		
+		assertFalse(test.pathToGoal(pn1));
+		assertTrue(test.pathToGoal(pn2));
+	}
+	
+	
 }
