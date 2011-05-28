@@ -201,8 +201,8 @@ public class Manager {
 					exit = true;
 				} else {
 					fileName = s;
-					if (!fileName.contains(".quoridor")) {
-						fileName+=".quoridor";
+					if (!fileName.contains(".quor")) {
+						fileName+=".quor";
 					}
 					file = new File(fileName);
 				}
@@ -234,7 +234,7 @@ public class Manager {
 			throws IOException {
 		System.out.println("What name would you like to save game as?");
 		String filename="";
-		filename += ".quoridor";
+		filename += ".quor";
 		// create a new file to be saved
 		File newFile;
 		newFile = new File(filename);
@@ -249,7 +249,7 @@ public class Manager {
 			if ((s = in.readLine()) != null) {
 				if (s.contains("no")) {
 					System.out.println("Please type a new name to save game as.");
-					newFile = new File(in.readLine() + ".quoridor");
+					newFile = new File(in.readLine() + ".quor");
 				} else if (s.contains("yes")) {
 					exit = true;
 					newFile.delete();

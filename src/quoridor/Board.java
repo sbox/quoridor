@@ -48,9 +48,18 @@ public interface Board {
     
     /**
      * Removes a wall from the hashSet
-     * @param wall you want to remove
+     * @param wall 
+     * 			you want to remove
      */
     public void removeWall(Wall wall);
+    
+    /**
+     * Returns if the wall is already in the hashSet
+     * @param wall 
+     * 			that you want to check is in the hashSet 
+     * @return if the wall is in the hashSet
+     */
+    public boolean containsWall(Wall wall);
     
     /**
      * Finds a players pawn and returns it

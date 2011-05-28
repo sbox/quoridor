@@ -358,6 +358,11 @@ public class BoardImpl implements Board {
     	
     }
     
+
+    public boolean containsWall(Wall wall) {
+    	return walls.contains(wall);
+    }
+    
     public Pawn getPawn(Player subject, Board setting) {
     	Pawn value;
     	if(pawns._1().getOwner() == subject) {

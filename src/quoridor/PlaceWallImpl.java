@@ -14,6 +14,16 @@ public class PlaceWallImpl extends AbstractMove implements PlaceWall{
 	@Override
 	public boolean isValid() {
 		boolean valid = true;
+		Wall test = new WallImpl(new SquareImpl(tentative.topLeft().getCol(), tentative.topLeft().getRow()),
+									tentative.getDirection());
+		boolean direction = tentative.getDirection();
+		if (direction == Wall.HORIZONTAL) {
+			direction = Wall.VERTICAL;
+		} else {
+			direction = Wall.HORIZONTAL;
+		}
+		Wall opposite = new WallImpl(new SquareImpl(tentative.topLeft().getCol(), tentative.topLeft().getRow()), direction);		
+		
 		if (setting.getPawn(owner, setting).getOwner().wallCount() <= 0) {
 			valid = false;
 		}
@@ -27,10 +37,20 @@ public class PlaceWallImpl extends AbstractMove implements PlaceWall{
 			valid = false;
 		} else if(tentative.topLeft().getRow() > 8) {
 			valid = false;
+		} else if (setting.containsWall(test) == true) {
+				valid = false;
+		} else if (setting.containsWall(opposite) == true) {
+				valid = false;
 		} else {
-			//is there a wall already placed
-			//is there a wall that would intersect the placement
+			setting.addWall(tentative);
+			if (setting.pathToGoal(setting.getPawn(owner, setting)) == false) {
+				valid = false;
+			}
+			setting.removeWall(tentative);
 		}
+		
+		
+		
 		return valid;
 	}
 

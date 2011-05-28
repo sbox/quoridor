@@ -112,6 +112,8 @@ public class GameImpl implements Game {
 				playerMoveBefore.makeMove();
 			}
 			redoMoves.add(lastMove);
+		} else {
+			System.out.println("No moves left to undo!");
 		}
 	}
 
@@ -126,7 +128,9 @@ public class GameImpl implements Game {
 				lastMove.makeMove();
 			}
 			undoMoves.add(lastMove);
-		}		
+		} else {
+			System.out.println("No moves to redo!");
+		}
 	}
 }
 
