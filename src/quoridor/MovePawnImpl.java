@@ -231,4 +231,9 @@ public class MovePawnImpl extends AbstractMove implements MovePawn {
 		retVal+= destination.getRow()+1;
 		return retVal;
 	}
+
+	@Override
+	public Player getPlayer() {
+		return owner;
+	}
 }

@@ -1,7 +1,9 @@
 package quoridor;
 
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Scanner;
 
 public class GameImpl implements Game {
 
@@ -10,13 +12,17 @@ public class GameImpl implements Game {
 	public static final short TOKEN_MOVE = 1;
 	public static final short TOKEN_LOAD = 2;
 	public static final short TOKEN_SAVE = 3;
+	public static final short TOKEN_UNDO = 4;
+	public static final short TOKEN_REDO = 5;
 	
 	Pair <Player> players;
 	List<GenericMove> undoMoves;
 	List<GenericMove> redoMoves;
 	Board gameBoard;
 	Player current;
+	Parser inputParser;
 	
+
 	public GameImpl(Pair <Player> players) {
 		this.players = players;
 		undoMoves = new LinkedList<GenericMove>();
@@ -29,12 +35,16 @@ public class GameImpl implements Game {
 		gameBoard = new BoardImpl(pawns);
 		
 		undoMoves.add(new MovePawnImpl(4, 8, current, gameBoard));
-		undoMoves.add(new MovePawnImpl(4, 0, current, gameBoard));		
+		undoMoves.add(new MovePawnImpl(4, 0, current.getOpponent(), gameBoard));		
 	}
 
 	@Override
 	public void play() {
-		
+		String[] commands = { "savegame", "undo", "redo", "quit"};
+		short[] tokens = { TOKEN_SAVE, TOKEN_UNDO, TOKEN_REDO, TOKEN_QUIT};
+		short[] argCount = { 0, 0, 0, 0 };
+		short invalid = -1;
+		inputParser = new ParserImpl(commands, tokens, argCount, invalid);
 		/*Player current = players._1();
 		Pair <Pawn> pawns = new PairImpl<Pawn>(new PawnImpl(
 				new SquareImpl(4, 8), players._1()),
@@ -44,44 +54,74 @@ public class GameImpl implements Game {
 		//Board gameBoard = new BoardImpl(pawns);
 		
 		MoveParser parser = new MoveParserImpl();
+		Scanner s = new Scanner(System.in);
+		short token; // holds the token of the command just read
+		// read the next token
 		
 		GenericMove nextMove;
 		
 		//GenericMove beg = new MovePawnImpl(8, 4, current, gameBoard);
 		
-		System.out.println(gameBoard.toString());
+		/*System.out.println(gameBoard.toString());
 		System.out.println(current.getName() +" walls left: " +current.wallCount());
-		System.out.println(current.getOpponent().getName() +" walls left: " +current.getOpponent().wallCount());
+		System.out.println(current.getOpponent().getName() +" walls left: " +current.getOpponent().wallCount());*/
+		printBoard();
 		
 		while (!isOver()) {
-
 			if (current.equals(players._1())) {
 				System.out.println("Enter move " +current.getName()+ " (X): ");
 			} else {
 				System.out.println("Enter move "+current.getName()+ " (O): ");
 			}
-			
-			nextMove = parser.scanMove(current, gameBoard);
-			
-			if (nextMove == null) {
-				System.out.println("Invalid input");
-			} else {
-				if (nextMove.isValid()) {
-					 nextMove.makeMove();					 
-					 System.out.println(gameBoard.toString());
-					 System.out.println(current.getName() +" walls left: " +current.wallCount());
-					 System.out.println(current.getOpponent().getName() +" walls left: " +current.getOpponent().wallCount());
-					 System.out.println(current.goalEnd());
-					 current = current.getOpponent();
-				 } else {
-					 System.out.println("Invalid Move");
-				 }
+			String command = s.next();
+			token = inputParser.ensureString(command);
+			//nextMove = parser.scanMove(current, gameBoard);
+			if (token == TOKEN_SAVE) {
+				try {
+					Manager.saveGame();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			} else if (token == TOKEN_UNDO) {
+				//current = current.getOpponent();
+				undoMove();
+				printBoard();
+				current = current.getOpponent();
+			} else if (token == TOKEN_REDO) {
+				redoMove();
+				printBoard();
+				current = current.getOpponent();
+			} else{
+				nextMove = parser.loadMove(current, gameBoard, command);
+				if (nextMove == null) {
+					System.out.println("Invalid input");
+				} else {
+					if (nextMove.isValid()) {
+						 nextMove.makeMove();
+						 //System.out.println("player here is: "+nextMove.getPlayer().getName() + ", " + current.getName());
+						 /*System.out.println(gameBoard.toString());
+						 System.out.println(current.getName() +" walls left: " +current.wallCount());
+						 System.out.println(current.getOpponent().getName() +" walls left: " 
+								 				+current.getOpponent().wallCount());*/
+						 printBoard();
+						 //System.out.println(current.goalEnd());
+						 undoMoves.add(nextMove);
+						 redoMoves = new LinkedList<GenericMove>();
+						 current = current.getOpponent();
+					 } else {
+						 System.out.println("Invalid Move");
+					 }
+				}
 			}
-			formatFile();
 		}
 	}
 	
-	
+	public void printBoard() {
+		 System.out.println(gameBoard.toString());
+		 System.out.println(current.getName() +" walls left: " +current.wallCount());
+		 System.out.println(current.getOpponent().getName() +" walls left: " 
+				 				+current.getOpponent().wallCount());
+	}
 	
 	public boolean isOver() {
 		return players._1().hasWon() || players._2().hasWon();
@@ -108,15 +148,26 @@ public class GameImpl implements Game {
 	}
 
 	@Override
-	public void undoMove(Player current) {
-		if (undoMoves.size() >= 2) {
-			GenericMove lastMove = undoMoves.remove(undoMoves.size()-1);
+	public void undoMove() {
+		
+		if (undoMoves.size() >= 1) {
+			/*for (int i = 0; i < undoMoves.size(); i++) {
+				System.out.println("undoMoves: " +undoMoves.get(i) +"size is: "+undoMoves.size());	
+			}*/
+			GenericMove lastMove = undoMoves.remove(undoMoves.size() -1);
+			//System.out.println("last move " +lastMove);
 			if (lastMove.toString().length() == 3) {
 				gameBoard.removeWall(lastMove.asPlaceWall().getTentative());
 				current.addWallCount();
 			} else {
-				GenericMove playerMoveBefore = undoMoves.remove(undoMoves.size()-2);
-				playerMoveBefore.makeMove();
+				//current = current.getOpponent();
+				GenericMove playerMoveBefore = undoMoves.get(undoMoves.size() -2);
+				//System.out.println("previous move " +playerMoveBefore);
+				//System.out.println("currenat " +playerMoveBefore.getPlayer().getName());
+				//if (current.) {
+					playerMoveBefore.makeMove();
+					//playerMoveBefore.makeMove();
+				//}
 			}
 			redoMoves.add(lastMove);
 		} else {
@@ -125,9 +176,9 @@ public class GameImpl implements Game {
 	}
 
 	@Override
-	public void redoMove(Player current) {
-		if (redoMoves.size() > 0) {
-			GenericMove lastMove = redoMoves.remove(undoMoves.size()-2);
+	public void redoMove() {
+		if (redoMoves.size() >= 0) {
+			GenericMove lastMove = redoMoves.remove(redoMoves.size()-1);
 			if (lastMove.toString().length() == 3) {
 				gameBoard.addWall(lastMove.asPlaceWall().getTentative());
 				current.decreaseWallCount();

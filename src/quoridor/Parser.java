@@ -54,12 +54,17 @@ public interface Parser {
 	 */
 	public boolean scanLine();
 	
+	public boolean scanString(String arg);
+	
 	/**
 	 * Returns the token of the next command on the buffer or scans
 	 * for new input.
 	 * @return the token of a command entered by the user
 	 */
 	public short ensureCommand();
+	
+	public short ensureString(String arg);
+	
 	
 	/**
 	 * Checks if the current command has been given its required

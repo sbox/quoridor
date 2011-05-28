@@ -26,14 +26,12 @@ public interface Game {
 	
 	/**
 	 * Undo a move of the current player
-	 * @param current player
 	 */
-	public void undoMove(Player current);
+	public void undoMove();
 	
 	/**
 	 * Redo the move of the current player
-	 * @param current player
 	 */
-	public void redoMove(Player current);
+	public void redoMove();
 	
 }
