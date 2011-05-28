@@ -34,9 +34,20 @@ public class PlayerImpl implements Player {
 	}
 
 	@Override
-	public boolean hasWon() {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean hasWon(Board board) {
+		int curRow = board.getPawn(this, board).getSquare().getRow();
+		boolean retVal = false;
+		if (goalEnd == TOP) {
+			if (curRow == 0) {
+				retVal = true;
+			}
+		} else if (goalEnd == BOTTOM) {
+			if (curRow == 8) {
+				retVal = true;
+			}
+		}
+		
+		return retVal;
 	}
 
 	@Override

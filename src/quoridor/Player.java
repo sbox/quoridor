@@ -52,7 +52,7 @@ public interface Player {
 	 * Returns if a player has won the game
 	 * @return if a player has won the game
 	 */
-	public boolean hasWon();
+	public boolean hasWon(Board board);
 	
 	/**
 	 * Returns the number of walls a player has left

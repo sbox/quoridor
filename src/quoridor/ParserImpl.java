@@ -197,6 +197,28 @@ public class ParserImpl implements Parser {
 	}
 
 
+	@Override
+	public short ensureString(String arg) {
+
+		short token = invalid;
+		
+		if (firstRun) {
+			firstRun = false;
+		} else if (hasNextToken()){
+			progressToken();
+		}
+		//System.out.println("String is: " +arg);
+		if (!hasNextToken()) {
+			//System.out.println("String is: " +arg);
+			if (scanString(arg)) {
+				//System.out.println("String is: " +arg);
+				token = currentToken();
+			}
+		}
+		
+		return token;
+	}
+	
 
 	/**
 	 * Scans a line of input and returns true iff it contained a
@@ -212,6 +234,26 @@ public class ParserImpl implements Parser {
 		
 		if (syntax.containsKey(tmp.getCommand())) {
 			commandBuffer.add(tmp);
+			success = true;
+		} else {
+			success = false;
+		}
+		
+		return success;
+		
+	}
+	
+	@Override
+	public boolean scanString(String arg) {
+		
+		boolean success;
+		
+		CommandEntry tmp = new CommandEntry(arg);
+		
+		//System.out.println("get command:" +tmp.getCommand());
+		if (syntax.containsKey(tmp.getCommand())) {
+			commandBuffer.add(tmp);
+			//System.out.println("in here");
 			success = true;
 		} else {
 			success = false;
@@ -329,6 +371,7 @@ public class ParserImpl implements Parser {
 			
 			//if there is a first word, store it as the command
 			if (broken.length > 0) {
+				//System.out.println("heree" +broken[0]);
 				command  = broken[0];
 			}
 			

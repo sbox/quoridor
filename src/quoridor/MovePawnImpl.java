@@ -79,6 +79,8 @@ public class MovePawnImpl extends AbstractMove implements MovePawn {
 				} else if(setting.wallBetween(temp2, destination)) {
 					valid = false;
 				}
+			} else {
+				valid = false;
 			}
 		} else if(destination_col - start_col == 1 && start_row - destination_row == 1) {
 			//System.out.println("diag 2");
@@ -107,6 +109,8 @@ public class MovePawnImpl extends AbstractMove implements MovePawn {
 					//System.out.println("number3");
 					valid = false;
 				}
+			} else {
+				valid = false;
 			}
 		} else if(destination_col - start_col == 1 && destination_row - start_row == 1) {
 			//System.out.println("diag 3");
@@ -134,6 +138,8 @@ public class MovePawnImpl extends AbstractMove implements MovePawn {
 				} else if(setting.wallBetween(temp2, destination)) {
 					valid = false;
 				}
+			} else {
+				valid = false;
 			}
 			//System.out.println("not even in pawn");
 		} else if(start_col - destination_col == 1 && destination_row - start_row == 1) {
@@ -164,6 +170,8 @@ public class MovePawnImpl extends AbstractMove implements MovePawn {
 					//System.out.println("third");
 					valid = false;
 				}
+			} else {
+				valid = false;
 			}
 		} else {
 			valid = false;
@@ -230,5 +238,10 @@ public class MovePawnImpl extends AbstractMove implements MovePawn {
 		retVal+= (char)(destination.getCol() + (int) 'a');
 		retVal+= destination.getRow()+1;
 		return retVal;
+	}
+
+	@Override
+	public Player getPlayer() {
+		return owner;
 	}
 }
