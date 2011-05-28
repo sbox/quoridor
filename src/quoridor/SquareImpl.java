@@ -51,9 +51,15 @@ public class SquareImpl implements Square {
 	 * @return
 	 * True iff the two squares are equal
 	 */
-	public boolean equals(Square s) {
+	@Override
+	public boolean equals(Object o) {
+		Square s = (Square) o;
 		return this.getRow() == s.getRow() &&
 			   this.getCol() == s.getCol();
+	}
+	
+	public String toString() {
+		return col + ", " + row;
 	}
 	
 	/**

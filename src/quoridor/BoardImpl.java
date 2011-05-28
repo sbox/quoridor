@@ -148,7 +148,7 @@ public class BoardImpl implements Board {
         assert(pawns.contains(pawn));  
         
         //keeps track of which squares have been visited before
-        HashSet <Square> seen = new HashSet <Square> (ROWS * COLS);
+        HashSet <Square> seen = new HashSet <Square> ();
         
         //the row to which there is required to be a path
         int goalRow;
@@ -203,6 +203,11 @@ public class BoardImpl implements Board {
 	    	
 	    	//found is false here
 	    	
+	    	for (Square s : seen) {
+	    		System.out.print(s + "   ");
+	    	}
+	    	System.out.println("");
+	    	
 	    	//start checking neighbors that are on the board, not yet
 	        //  visited and not separated from current by a wall
 	    	if (left != null && !seen.contains(left) && 
@@ -216,11 +221,17 @@ public class BoardImpl implements Board {
 	    	 * searching.
 	    	 */
 	    	
+	    	boolean test = seen.contains(right);
+	    	
 	    	if (!found && right != null && !seen.contains(right) && 
 	    			!wallBetween(current, right)) {
 	    		
+	    		
+	    		
 	    		found = localPathToGoal(right, seen, goalRow);
 	    	}
+	    	
+	    	
 	    	
 	    	if (!found && up != null && !seen.contains(up) && 
 	    			!wallBetween(current, up)) {
@@ -234,7 +245,7 @@ public class BoardImpl implements Board {
 	    		found = localPathToGoal(down, seen, goalRow);
 	    	}
     	}
-	    	
+	    
     	return found;
     }
    
@@ -257,6 +268,8 @@ public class BoardImpl implements Board {
     	if (row >= 0 && row < ROWS && col >= 0 && col < COLS) {
     			result = new SquareImpl(col, row);
     	}
+    	
+    	
     	
     	return result;
     }
