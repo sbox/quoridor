@@ -15,31 +15,32 @@ public class GameImpl implements Game {
 	List<GenericMove> undoMoves;
 	List<GenericMove> redoMoves;
 	Board gameBoard;
+	Player current;
 	
 	public GameImpl(Pair <Player> players) {
 		this.players = players;
 		undoMoves = new LinkedList<GenericMove>();
 		redoMoves = new LinkedList<GenericMove>();
-		Player current = players._1();
+		current = players._1();
+		
 		Pair <Pawn> pawns = new PairImpl<Pawn>(new PawnImpl(
 				new SquareImpl(4, 8), players._1()),
-				new PawnImpl(new SquareImpl(4, 0), players._2()));
-		
+				new PawnImpl(new SquareImpl(4, 0), players._2()));		
 		gameBoard = new BoardImpl(pawns);
-		undoMoves.add(new MovePawnImpl(4, 8, current, gameBoard));
-		undoMoves.add(new MovePawnImpl(4, 0, current, gameBoard));
 		
+		undoMoves.add(new MovePawnImpl(4, 8, current, gameBoard));
+		undoMoves.add(new MovePawnImpl(4, 0, current, gameBoard));		
 	}
 
 	@Override
 	public void play() {
 		
-		Player current = players._1();
+		/*Player current = players._1();
 		Pair <Pawn> pawns = new PairImpl<Pawn>(new PawnImpl(
 				new SquareImpl(4, 8), players._1()),
 				new PawnImpl(new SquareImpl(4, 0), players._2()));
 		
-		gameBoard = new BoardImpl(pawns);
+		gameBoard = new BoardImpl(pawns);*/
 		//Board gameBoard = new BoardImpl(pawns);
 		
 		MoveParser parser = new MoveParserImpl();
@@ -72,7 +73,6 @@ public class GameImpl implements Game {
 					 System.out.println(current.getOpponent().getName() +" walls left: " +current.getOpponent().wallCount());
 					 System.out.println(current.goalEnd());
 					 current = current.getOpponent();
-					 //System.out.println(current.goalEnd());
 				 } else {
 					 System.out.println("Invalid Move");
 				 }
@@ -80,6 +80,8 @@ public class GameImpl implements Game {
 			formatFile();
 		}
 	}
+	
+	
 	
 	public boolean isOver() {
 		return players._1().hasWon() || players._2().hasWon();
@@ -136,6 +138,19 @@ public class GameImpl implements Game {
 		} else {
 			System.out.println("No moves to redo!");
 		}
+	}
+
+	@Override
+	public void loadGamePlay(String[] savedMoves) {
+		MoveParser parser = new MoveParserImpl();
+		GenericMove nextMove;
+		for (int i = 0; i < savedMoves.length; i++) {
+			nextMove = parser.loadMove(current, gameBoard, savedMoves[i]);
+			nextMove.makeMove();
+			undoMoves.add(nextMove);
+			current = current.getOpponent();
+		}
+		play();
 	}
 }
 

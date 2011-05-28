@@ -56,6 +56,10 @@ public class MoveParserImpl implements MoveParser {
 		return parseMove(s.next(), current, board);
 	}
 	
+	public GenericMove loadMove(Player current, Board board, String move) {
+		return parseMove(move, current, board);
+	}
+	
 	public GenericMove parseMove(String move, Player current, Board board) {
 		int len = move.length();
 		boolean validInput = len == 2 || len == 3;
