@@ -218,8 +218,6 @@ public class BoardImpl implements Board {
 	    	 * searching.
 	    	 */
 	    	
-	    	boolean test = seen.contains(right);
-	    	
 	    	if (!found && right != null && !seen.contains(right) && 
 	    			!wallBetween(current, right)) {
 	    		

@@ -27,8 +27,6 @@ public class PlaceWallImpl extends AbstractMove implements PlaceWall{
 		if (setting.getPawn(owner, setting).getOwner().wallCount() <= 0) {
 			valid = false;
 		}
-		Square right = new SquareImpl(tentative.topLeft().getCol() + 1, tentative.topLeft().getRow());
-		Square bottom = new SquareImpl(tentative.topLeft().getCol(), tentative.topLeft().getRow() + 1);
 		if(tentative.topLeft().getCol() < 0) {
 			valid = false;
 		} else if(tentative.topLeft().getRow() < 0) {

@@ -1,9 +1,8 @@
 package quoridor;
 
-import java.util.Iterator; 
-import java.util.List;
-import java.util.Queue;
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Scanner;
 
 public class MoveParserImpl implements MoveParser {
