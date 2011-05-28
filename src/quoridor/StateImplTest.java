@@ -16,8 +16,8 @@ public class StateImplTest {
 	
 
 	
-	Pawn pn1 = new PawnImpl(new SquareImpl(4, 0), pl1);
-	Pawn pn2 = new PawnImpl(new SquareImpl(4, 8), pl2);	
+	Pawn pn1 = new PawnImpl(new SquareImpl(4, 4), pl1);
+	Pawn pn2 = new PawnImpl(new SquareImpl(4, 5), pl2);	
 
 	Pair <Pawn> pawns = new PairImpl<Pawn>(pn1, pn2);
 	Board testBoard = new BoardImpl(pawns);
@@ -44,15 +44,9 @@ public class StateImplTest {
 	@Test
 	public void minimaxTester() {
 		
-		StateImpl alpha = new StateImpl(null, null);
-		StateImpl beta = new StateImpl(null, null);
+
+		System.out.println(test.nextBestMove());
 		
-		alpha.score = -10000;
-		beta.score = 10000;
-		
-		StateImpl nextMove = test.alphabeta(test, alpha, beta, 2);
-		
-		System.out.println(nextMove.nextMove);
 	}
 
 }
