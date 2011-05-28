@@ -38,6 +38,102 @@ public class GameImpl implements Game {
 		undoMoves.add(new MovePawnImpl(4, 0, current.getOpponent(), gameBoard));		
 	}
 
+	/* (non-Javadoc)
+	 * @see quoridor.Game#play()
+	 */
+	/* (non-Javadoc)
+	 * @see quoridor.Game#play()
+	 */
+	/* (non-Javadoc)
+	 * @see quoridor.Game#play()
+	 */
+	/* (non-Javadoc)
+	 * @see quoridor.Game#play()
+	 */
+	/* (non-Javadoc)
+	 * @see quoridor.Game#play()
+	 */
+	/* (non-Javadoc)
+	 * @see quoridor.Game#play()
+	 */
+	/* (non-Javadoc)
+	 * @see quoridor.Game#play()
+	 */
+	/* (non-Javadoc)
+	 * @see quoridor.Game#play()
+	 */
+	/* (non-Javadoc)
+	 * @see quoridor.Game#play()
+	 */
+	/* (non-Javadoc)
+	 * @see quoridor.Game#play()
+	 */
+	/* (non-Javadoc)
+	 * @see quoridor.Game#play()
+	 */
+	/* (non-Javadoc)
+	 * @see quoridor.Game#play()
+	 */
+	/* (non-Javadoc)
+	 * @see quoridor.Game#play()
+	 */
+	/* (non-Javadoc)
+	 * @see quoridor.Game#play()
+	 */
+	/* (non-Javadoc)
+	 * @see quoridor.Game#play()
+	 */
+	/* (non-Javadoc)
+	 * @see quoridor.Game#play()
+	 */
+	/* (non-Javadoc)
+	 * @see quoridor.Game#play()
+	 */
+	/* (non-Javadoc)
+	 * @see quoridor.Game#play()
+	 */
+	/* (non-Javadoc)
+	 * @see quoridor.Game#play()
+	 */
+	/* (non-Javadoc)
+	 * @see quoridor.Game#play()
+	 */
+	/* (non-Javadoc)
+	 * @see quoridor.Game#play()
+	 */
+	/* (non-Javadoc)
+	 * @see quoridor.Game#play()
+	 */
+	/* (non-Javadoc)
+	 * @see quoridor.Game#play()
+	 */
+	/* (non-Javadoc)
+	 * @see quoridor.Game#play()
+	 */
+	/* (non-Javadoc)
+	 * @see quoridor.Game#play()
+	 */
+	/* (non-Javadoc)
+	 * @see quoridor.Game#play()
+	 */
+	/* (non-Javadoc)
+	 * @see quoridor.Game#play()
+	 */
+	/* (non-Javadoc)
+	 * @see quoridor.Game#play()
+	 */
+	/* (non-Javadoc)
+	 * @see quoridor.Game#play()
+	 */
+	/* (non-Javadoc)
+	 * @see quoridor.Game#play()
+	 */
+	/* (non-Javadoc)
+	 * @see quoridor.Game#play()
+	 */
+	/* (non-Javadoc)
+	 * @see quoridor.Game#play()
+	 */
 	@Override
 	public void play() {
 		String[] commands = { "savegame", "undo", "redo", "quit"};
@@ -45,13 +141,6 @@ public class GameImpl implements Game {
 		short[] argCount = { 0, 0, 0, 0 };
 		short invalid = -1;
 		inputParser = new ParserImpl(commands, tokens, argCount, invalid);
-		/*Player current = players._1();
-		Pair <Pawn> pawns = new PairImpl<Pawn>(new PawnImpl(
-				new SquareImpl(4, 8), players._1()),
-				new PawnImpl(new SquareImpl(4, 0), players._2()));
-		
-		gameBoard = new BoardImpl(pawns);*/
-		//Board gameBoard = new BoardImpl(pawns);
 		
 		MoveParser parser = new MoveParserImpl();
 		Scanner s = new Scanner(System.in);
@@ -59,12 +148,6 @@ public class GameImpl implements Game {
 		// read the next token
 		
 		GenericMove nextMove;
-		
-		//GenericMove beg = new MovePawnImpl(8, 4, current, gameBoard);
-		
-		/*System.out.println(gameBoard.toString());
-		System.out.println(current.getName() +" walls left: " +current.wallCount());
-		System.out.println(current.getOpponent().getName() +" walls left: " +current.getOpponent().wallCount());*/
 		printBoard();
 		
 		while (!isOver()) {
@@ -75,7 +158,6 @@ public class GameImpl implements Game {
 			}
 			String command = s.next();
 			token = inputParser.ensureString(command);
-			//nextMove = parser.scanMove(current, gameBoard);
 			if (token == TOKEN_SAVE) {
 				try {
 					Manager.saveGame();
@@ -83,7 +165,6 @@ public class GameImpl implements Game {
 					e.printStackTrace();
 				}
 			} else if (token == TOKEN_UNDO) {
-				//current = current.getOpponent();
 				undoMove();
 				printBoard();
 				current = current.getOpponent();
@@ -98,13 +179,7 @@ public class GameImpl implements Game {
 				} else {
 					if (nextMove.isValid()) {
 						 nextMove.makeMove();
-						 //System.out.println("player here is: "+nextMove.getPlayer().getName() + ", " + current.getName());
-						 /*System.out.println(gameBoard.toString());
-						 System.out.println(current.getName() +" walls left: " +current.wallCount());
-						 System.out.println(current.getOpponent().getName() +" walls left: " 
-								 				+current.getOpponent().wallCount());*/
 						 printBoard();
-						 //System.out.println(current.goalEnd());
 						 undoMoves.add(nextMove);
 						 redoMoves = new LinkedList<GenericMove>();
 						 current = current.getOpponent();
@@ -151,23 +226,13 @@ public class GameImpl implements Game {
 	public void undoMove() {
 		
 		if (undoMoves.size() >= 1) {
-			/*for (int i = 0; i < undoMoves.size(); i++) {
-				System.out.println("undoMoves: " +undoMoves.get(i) +"size is: "+undoMoves.size());	
-			}*/
 			GenericMove lastMove = undoMoves.remove(undoMoves.size() -1);
-			//System.out.println("last move " +lastMove);
 			if (lastMove.toString().length() == 3) {
 				gameBoard.removeWall(lastMove.asPlaceWall().getTentative());
-				current.addWallCount();
+				current.getOpponent().addWallCount();
 			} else {
-				//current = current.getOpponent();
 				GenericMove playerMoveBefore = undoMoves.get(undoMoves.size() -2);
-				//System.out.println("previous move " +playerMoveBefore);
-				//System.out.println("currenat " +playerMoveBefore.getPlayer().getName());
-				//if (current.) {
-					playerMoveBefore.makeMove();
-					//playerMoveBefore.makeMove();
-				//}
+				playerMoveBefore.makeMove();
 			}
 			redoMoves.add(lastMove);
 		} else {
