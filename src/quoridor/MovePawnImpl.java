@@ -60,17 +60,25 @@ public class MovePawnImpl extends AbstractMove implements MovePawn {
 		}
 		//check if the square is a diagonal
 		else if(start_col - destination_col == 1 && start_row - destination_row == 1) {
+			//temp and temp2 are the squares adjacent to both start and destination
 			temp  = new SquareImpl(destination_col, start_row);
 			temp2 = new SquareImpl(start_col, destination_row);
+			//if the pawn is on temp
 			if(temp.hasPawn(setting.getPawn(owner.getOpponent(),setting))) {
+				//temp2 does not need to keep track of the other adjacent square
+				//so it is the square which has the pawn between start and itself
 				temp2 = new SquareImpl(destination_col - 1, start_row);
+				//if there are no walls between the two pawns
 				if(!setting.wallBetween(temp, temp2)) {
 					valid = false;
+				//if there are no walls between the opponent and the destination
 				} else if(setting.wallBetween(start, temp)) {
 					valid = false;
+				//if there is a wall on the opposite side of the opponent
 				} else if(setting.wallBetween(temp, destination)) {
 					valid = false;
 				}
+			//if the pawn is on temp2
 			} else if(temp2.hasPawn(setting.getPawn(owner.getOpponent(),setting))) {
 				temp = new SquareImpl(start_col, destination_row - 1);
 				if(!setting.wallBetween(temp, temp2)) {
