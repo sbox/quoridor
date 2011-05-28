@@ -7,9 +7,10 @@ public class PlayerImpl implements Player {
 	protected int wallCount;
 	protected boolean goalEnd;
 	
-	public PlayerImpl(String name) {
+	public PlayerImpl(String name, boolean goalEnd) {
 		this.name = name;
 		wallCount = 10;
+		this.goalEnd = goalEnd;
 	}
 	
 	@Override
