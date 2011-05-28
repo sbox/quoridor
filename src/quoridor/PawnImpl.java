@@ -23,4 +23,5 @@ public class PawnImpl implements Pawn {
 	public void setSquare(Square newSquare) {
 		pawnSquare = newSquare;
 	}
+	
 }

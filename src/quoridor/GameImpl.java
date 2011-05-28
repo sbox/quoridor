@@ -124,7 +124,7 @@ public class GameImpl implements Game {
 	}
 	
 	public boolean isOver() {
-		return players._1().hasWon() || players._2().hasWon();
+		return players._1().hasWon(gameBoard) || players._2().hasWon(gameBoard);
 	}
 	
 	/** Builds and returns a string of the players names
