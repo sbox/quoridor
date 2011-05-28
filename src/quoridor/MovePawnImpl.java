@@ -17,9 +17,11 @@ public class MovePawnImpl extends AbstractMove implements MovePawn {
 		return destination;
 	}
 
+	/* (non-Javadoc)
+	 * @see quoridor.AbstractMove#isValid()
+	 */
 	@Override
 	public boolean isValid() {
-		//Pair<PawnImpl> test = new Pair<PawnImpl>(setting.getPawn(subject, setting))
 		
 		Square temp;
 		Square temp2;
@@ -58,18 +60,25 @@ public class MovePawnImpl extends AbstractMove implements MovePawn {
 		}
 		//check if the square is a diagonal
 		else if(start_col - destination_col == 1 && start_row - destination_row == 1) {
-			//System.out.println("diag 1");
+			//temp and temp2 are the squares adjacent to both start and destination
 			temp  = new SquareImpl(destination_col, start_row);
 			temp2 = new SquareImpl(start_col, destination_row);
+			//if the pawn is on temp
 			if(temp.hasPawn(setting.getPawn(owner.getOpponent(),setting))) {
+				//temp2 does not need to keep track of the other adjacent square
+				//so it is the square which has the pawn between start and itself
 				temp2 = new SquareImpl(destination_col - 1, start_row);
+				//if there are no walls between the two pawns
 				if(!setting.wallBetween(temp, temp2)) {
 					valid = false;
+				//if there are no walls between the opponent and the destination
 				} else if(setting.wallBetween(start, temp)) {
 					valid = false;
+				//if there is a wall on the opposite side of the opponent
 				} else if(setting.wallBetween(temp, destination)) {
 					valid = false;
 				}
+			//if the pawn is on temp2
 			} else if(temp2.hasPawn(setting.getPawn(owner.getOpponent(),setting))) {
 				temp = new SquareImpl(start_col, destination_row - 1);
 				if(!setting.wallBetween(temp, temp2)) {
@@ -83,12 +92,10 @@ public class MovePawnImpl extends AbstractMove implements MovePawn {
 				valid = false;
 			}
 		} else if(destination_col - start_col == 1 && start_row - destination_row == 1) {
-			//System.out.println("diag 2");
 			temp  = new SquareImpl(destination_col, start_row);
 			temp2 = new SquareImpl(start_col, destination_row);
 			if(temp.hasPawn(setting.getPawn(owner.getOpponent(),setting))) {
 				temp2 = new SquareImpl(destination_col + 1, start_row);
-				//System.out.println("temp");
 				if(!setting.wallBetween(temp, temp2)) {
 					valid = false;
 				} else if(setting.wallBetween(start, temp)) {
@@ -98,30 +105,23 @@ public class MovePawnImpl extends AbstractMove implements MovePawn {
 				}
 			} else if(temp2.hasPawn(setting.getPawn(owner.getOpponent(),setting))) {
 				temp = new SquareImpl(start_col, destination_row - 1);
-				//System.out.println("temp2");
 				if(!setting.wallBetween(temp, temp2)) {
-				//	System.out.println("in here");
 					valid = false;
 				} else if(setting.wallBetween(start, temp2)) {
-					//System.out.println("number2 ");
 					valid = false;
 				} else if(setting.wallBetween(temp2, destination)) {
-					//System.out.println("number3");
 					valid = false;
 				}
 			} else {
 				valid = false;
 			}
 		} else if(destination_col - start_col == 1 && destination_row - start_row == 1) {
-			//System.out.println("diag 3");
 			temp  = new SquareImpl(destination_col, start_row);
 			temp2 = new SquareImpl(start_col, destination_row);
 			
 			if(temp.hasPawn(setting.getPawn(owner.getOpponent(),setting))) {
 				temp2 = new SquareImpl(destination_col + 1, start_row);
-				//System.out.println("temp1 has pawn?");
 				if(!setting.wallBetween(temp, temp2)) {
-					//System.out.println("valid is false!");
 					valid = false;
 				} else if(setting.wallBetween(start, temp)) {
 					valid = false;
@@ -129,7 +129,6 @@ public class MovePawnImpl extends AbstractMove implements MovePawn {
 					valid = false;
 				}
 			} else if(temp2.hasPawn(setting.getPawn(owner.getOpponent(),setting))) {
-				//System.out.println("temp2 has pawn");
 				temp = new SquareImpl(start_col, destination_row + 1);
 				if(!setting.wallBetween(temp, temp2)) {
 					valid = false;
@@ -141,15 +140,12 @@ public class MovePawnImpl extends AbstractMove implements MovePawn {
 			} else {
 				valid = false;
 			}
-			//System.out.println("not even in pawn");
 		} else if(start_col - destination_col == 1 && destination_row - start_row == 1) {
-			//System.out.println("diag 4");
 			temp  = new SquareImpl(destination_col, start_row);
 			temp2 = new SquareImpl(start_col, destination_row);
 			
 			if(temp.hasPawn(setting.getPawn(owner.getOpponent(),setting))) {
 				temp2 = new SquareImpl(destination_col - 1, start_row);
-				//System.out.println("temp");
 				if(!setting.wallBetween(temp, temp2)) {
 					valid = false;
 				} else if(setting.wallBetween(start, temp)) {
@@ -159,15 +155,11 @@ public class MovePawnImpl extends AbstractMove implements MovePawn {
 				}
 			} else if(temp2.hasPawn(setting.getPawn(owner.getOpponent(),setting))) {
 				temp = new SquareImpl(start_col, destination_row + 1);
-				//System.out.println("temp2");
 				if(!setting.wallBetween(temp, temp2)) {
-					//System.out.println("first");
 					valid = false;
 				} else if(setting.wallBetween(start, temp2)) {
-					//System.out.println("second");
 					valid = false;
 				} else if(setting.wallBetween(temp2, destination)) {
-					//System.out.println("third");
 					valid = false;
 				}
 			} else {
