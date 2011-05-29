@@ -14,7 +14,7 @@ public class StateImpl implements State {
 
 	private static final boolean MAX = true;
 	private static final boolean MIN = false;
-	private static final int DEPTH =0;
+	private static final int DEPTH = 0;
 	
 	protected Board setting;
 	protected Player currentTurn;
