@@ -144,7 +144,6 @@ public class MovePawnImpl extends AbstractMove implements MovePawn {
 		} else if(start_col - destination_col == 1 && destination_row - start_row == 1) {
 			temp  = new SquareImpl(destination_col, start_row);
 			temp2 = new SquareImpl(start_col, destination_row);
-			
 			if(temp.hasPawn(setting.getPawn(owner.getOpponent(),setting))) {
 				temp2 = new SquareImpl(destination_col - 1, start_row);
 				if(!setting.wallBetween(temp, temp2)) {

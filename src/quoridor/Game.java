@@ -26,11 +26,13 @@ public interface Game {
 	
 	/**
 	 * Undo a move of the current player
+	 * (two if you are playing against the AI)
 	 */
 	public void undoMove();
 	
 	/**
 	 * Redo the move of the current player
+	 * (two if you are playing against the AI)
 	 */
 	public void redoMove();
 	

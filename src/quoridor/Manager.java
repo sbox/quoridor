@@ -45,20 +45,6 @@ public class Manager {
 	 */
 	public static void main(String[] args) throws IOException {
 		welcome();
-
-		System.out.println("newgame or loadgame?");
-		
-		/*String filename="test";	
-		filename += ".quor";
-		File newFile;
-		newFile = new File(filename);
-		newFile.createNewFile();
-		// write the string of moves to the file
-		Writer output = null;
-		String text = "bec steve e8 e2 e7 e3 e6 e4 e5";
-		output = new BufferedWriter(new FileWriter(newFile));
-		output.write(text);
-		output.close();*/
 		
 		/*
 		 * This is the information required by the parser to create a syntax
@@ -91,51 +77,21 @@ public class Manager {
 	public static void inputLoop(Parser inputParser) {
 		boolean exit = false; // flag that tells the loop to terminate
 		short token; // holds the token of the command just read
-
+		System.out.println("newgame or loadgame?");
 		while (!exit) {
 			System.out.print(PROMPT); // print the prompt
-
 			// read the next token
 			token = inputParser.ensureCommand();
-
 			if (token == EXIT) {
 				exit = true;
 			} else if (token == NEW_GAME) {
-
 				Pair<Player> players;
-
-				/*
-				 * If the user gave arguments, we can create the players without
-				 * prompting for more input
-				 */
-				if (inputParser.hasRequiredArgs()) {
-					Player _1 = new PlayerImpl(inputParser.nextArg(), Player.TOP);
-					Player _2 = new PlayerImpl(inputParser.nextArg(), Player.BOTTOM);
-
-					players = new PairImpl<Player>(_1, _2);
-					_1.setOpponent(_2);
-					_2.setOpponent(_1);
-				} else {
-
-					/*
-					 * Give the user an error if they tried to give arguments
-					 * but gave the wrong amount.
-					 */
-					if (inputParser.hasErroneousArgs()) {
-						System.out
-								.println("Warning: Incorrect number of arguments");
-					}
-
-					// prompt for the user to enter player names
-					players = enterPlayers();
-
-				}
-
+				players = initNewGame();
 				// initialise a game
 				currentGame = new GameImpl(players);
 
 				// tell the user the game is starting
-				System.out.println("Starting game: "
+				System.out.println("\nStarting game: "
 						.concat(players._1().getName()).concat(" vs ")
 						.concat(players._2().getName()));
 
@@ -143,7 +99,6 @@ public class Manager {
 				currentGame.play();
 
 			} else if (token == LOAD_GAME) {
-				
 				try {
 					loadFile();
 				} catch (IOException e) {
@@ -160,6 +115,87 @@ public class Manager {
 
 	}
 
+	private static Pair<Player> initNewGame(){
+		Pair<Player> players = null;
+		Player _1 = null;
+		Player _2 = null;
+		String tmp;
+		System.out.println("What type of game would you like to play? \n 1. Human vs Human \n" +
+								" 2. Human vs Computer\n 3. Computer vs Computer \n (type number choice)");
+		
+		
+		Scanner in = new Scanner(System.in);
+		//BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+		String s;
+		if ((s = in.nextLine()) != null) {
+			if (s.contains("1")) {
+				/*
+				 * If the user gave arguments, we can create the players without
+				 * prompting for more input
+				 */
+				if (inputParser.hasRequiredArgs()) {
+					_1 = new PlayerImpl(inputParser.nextArg(), Player.TOP);
+					_2 = new PlayerImpl(inputParser.nextArg(), Player.BOTTOM);
+				} else {
+					/*
+					 * Give the user an error if they tried to give arguments
+					 * but gave the wrong amount.
+					 */
+					if (inputParser.hasErroneousArgs()) {
+						System.out
+								.println("Warning: Incorrect number of arguments");
+					}
+					// prompt for the user to enter player names
+					players = enterPlayers();
+				}
+			} else if (s.contains("2")) {
+				
+				if (inputParser.hasRequiredArgs()) {
+					_1 = new PlayerImpl(inputParser.nextArg(), Player.TOP);
+				} else {
+					System.out.println("Player 1 eneter your name: ");
+					if ((s = in.nextLine()) != null) {
+						_1 = new PlayerImpl(s, Player.TOP);
+					}
+				}
+				System.out.println("Which AI would you like to play against? \n 1. MinMax \n 2. Random");
+				tmp = chooseAI();
+				_2 = new PlayerImpl(Player.BOTTOM, tmp);
+			} else if (s.contains("3")) {
+				System.out.println("Which AI would you like to play against? \n 1. MinMax \n 2. Random");
+				tmp = chooseAI();
+				_1 = new PlayerImpl(Player.BOTTOM, tmp);
+				System.out.println("Which AI would you like to play against? \n 1. MinMax \n 2. Random");
+				tmp = chooseAI();
+				_2 = new PlayerImpl(Player.BOTTOM, tmp);		
+			}
+		}
+		
+		players = new PairImpl<Player>(_1, _2);
+		_1.setOpponent(_2);
+		_2.setOpponent(_1);	
+		
+		return players;
+	}
+	
+	private static String chooseAI() {
+		String retVal = "";
+		
+		Scanner in = new Scanner(System.in);
+		String s;
+		if ((s = in.nextLine()) != null) {
+			if (s.contains("1") || s.contains("minmax")) {
+				System.out.println("in here?");
+				retVal = "minmax";
+			} else if (s.contains("2") || s.contains("random")){
+				retVal = "random";
+			}
+		} 
+		System.out.println("string is: " +retVal);
+		
+		return retVal;
+	}
+	
 	/**
 	 * Prompts the user to enter player names, then creates and returns a pair
 	 * of players with those names.
@@ -179,7 +215,8 @@ public class Manager {
 
 		// read player 2's name
 		System.out.print("Player 2 enter your name: ");
-		_2 = new PlayerImpl(s.nextLine(), Player.BOTTOM, "minimax");
+		_2 = new PlayerImpl(s.nextLine(), Player.BOTTOM);
+		//_2 = new PlayerImpl(Player.BOTTOM, "minimax");
 
 		_1.setOpponent(_2);
 		_2.setOpponent(_1);
@@ -197,6 +234,7 @@ public class Manager {
 		File[] listOfFiles = folder.listFiles();
 		boolean exit = false;
 		String s;
+		Scanner in = new Scanner(System.in);
 		
 		//Print out a list of all the current saved game states
 		System.out.println("Saved game states:");
@@ -209,9 +247,7 @@ public class Manager {
 		//While loop for making sure they choose to load a game that already exists
 		while (!file.exists() && exit == false) {
 			System.out.println("Which game state would you like to load? Type bye to not load any.");
-			BufferedReader in = new BufferedReader(new InputStreamReader(
-					System.in));
-			if ((s = in.readLine()) != null) {
+			if ((s = in.nextLine()) != null) {
 				if (s.contains("bye")) {
 					exit = true;
 				} else {
@@ -244,17 +280,49 @@ public class Manager {
 	    String splitAt = " ";
 	    String[] moves = null;
 	    moves = fileMove.split(splitAt);
-	    //Creating the two players
-	    Pair<Player> players;
-	    Player _1 = new PlayerImpl(moves[0], Player.TOP);
-		Player _2 = new PlayerImpl(moves[1], Player.BOTTOM);
+	    createGame(moves);
+	}
+	
+	private static void createGame(String[] moves) {
+		Pair<Player> players;
+		String ai = moves[0];
+		Scanner in = new Scanner(System.in);
+		//BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+		String s;
+		Player _1 = null;
+		Player _2 = null;
+		if (ai.contains("HA")) {
+			_1 = new PlayerImpl(moves[1], Player.TOP);
+			_2 = new PlayerImpl(Player.BOTTOM, "minmax");
+		} else {
+			System.out.println("Players in this game are. Player1: " +moves[1] +" and Player2: " +moves[2]);
+			System.out.println("Would you like to change one player to AI?");
+			if ((s = in.nextLine()) != null) {
+				if (s.contains("no")) {
+					_1 = new PlayerImpl(moves[1], Player.TOP);
+					_2 = new PlayerImpl(moves[2], Player.BOTTOM);
+				} else {
+					System.out.println("Which player would you like to become the AI? player1 or player2?");
+					if ((s = in.nextLine()) != null) {
+						if (s.contains("player1")) {
+							_1 = new PlayerImpl(Player.TOP, "minmax");
+							_2 = new PlayerImpl(moves[2], Player.BOTTOM);
+						} else {
+							_1 = new PlayerImpl(moves[1], Player.TOP);
+							_2 = new PlayerImpl(Player.BOTTOM, "minmax");
+						}
+					}
+				}
+			}
+		}
+		
 		players = new PairImpl<Player>(_1, _2);
 		_1.setOpponent(_2);
 		_2.setOpponent(_1);
 		//Setting the list of moves to go through
-		String[] retVal = new String[moves.length-2];		
+		String[] retVal = new String[moves.length-3];		
 		int j = 0;
-		for (int i = 2; i < moves.length; i++) {
+		for (int i = 3; i < moves.length; i++) {
 			retVal[j] = moves[i];
 			j++;
 		}
@@ -265,15 +333,15 @@ public class Manager {
 		currentGame.loadGamePlay(retVal);
 	}
 
-	public static void saveGame()
-	//public static void saveGameState(String filename, String moves)
-			throws IOException {
-		BufferedReader in = new BufferedReader(new InputStreamReader(
-													System.in));
+	public static void saveGame() throws IOException {
+	//public static void saveGameState(String filename, String moves){
+		Scanner in = new Scanner(System.in);
+		//BufferedReader in = new BufferedReader(new InputStreamReader(
+			//										System.in));
 		String s;
 		String filename="";
 		System.out.println("What name would you like to save game as?");
-		if ((s = in.readLine()) != null) {
+		if ((s = in.nextLine()) != null) {
 			filename+=s;
 		}		
 		filename += ".quor";
@@ -281,20 +349,21 @@ public class Manager {
 		File newFile;
 		newFile = new File(filename);
 		boolean exit = false;
+		
 		//loop for if they choose to save a file as something that already exists
 		while (newFile.exists() && exit == false) {
 			System.out.println("File already exists with that name. Would you like to replace? Yes or no?");
-			if ((s = in.readLine()) != null) {
+			if ((s = in.nextLine()) != null) {
 				if (s.contains("no")) {
 					System.out.println("Please type a new name to save game as.");
-					newFile = new File(in.readLine() + ".quor");
+					newFile = new File(in.nextLine() + ".quor");
 				} else if (s.contains("yes")) {
 					exit = true;
 					newFile.delete();
 				}
 			}
 		}
-
+		
 		// create a new file with the filename
 		newFile.createNewFile();
 		// write the string of moves to the file

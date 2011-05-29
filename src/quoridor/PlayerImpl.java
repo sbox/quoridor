@@ -17,8 +17,8 @@ public class PlayerImpl implements Player {
 		strategy = "human";
 	}
 	
-	public PlayerImpl(String name, boolean goalEnd, String strategy) {
-		this.name = name;
+	public PlayerImpl(boolean goalEnd, String strategy) {
+		this.name = strategy;
 		wallCount = 10;
 		this.goalEnd = goalEnd;
 		human = false;

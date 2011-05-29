@@ -62,14 +62,12 @@ public class GameImpl implements Game {
 				System.out.println("Enter move "+current.getName()+ " (O): ");
 			}
 			String command;
-			
 			if (current.isHuman()) {
 				command = s.next();
 			} else {
 				State thinker = new StateImpl(gameBoard, current);
 				command = thinker.nextBestMove().toString();
 				System.out.println(command);
-			
 			}
 			token = inputParser.ensureString(command);
 			if (token == TOKEN_SAVE) {
@@ -86,12 +84,8 @@ public class GameImpl implements Game {
 				redoMove();
 				printBoard();
 				current = current.getOpponent();
-			} else{
-				
+			} else {	
 				nextMove = parser.loadMove(current, gameBoard, command);
-				
-				
-				
 				if (nextMove == null) {
 					System.out.println("Invalid input");
 				} else {
@@ -107,6 +101,8 @@ public class GameImpl implements Game {
 				}
 			}
 		}
+		System.out.println("Player " +current.getOpponent().getName()+ "has won. Congratulations!");
+		System.out.println("newgame or savegame?");
 	}
 	
 	public void printBoard() {
@@ -127,9 +123,13 @@ public class GameImpl implements Game {
 	
 	public String formatFile() {
 		String retVal = "";
-		retVal+=players._1().getName();
-		retVal+= " ";
-		retVal+=players._2().getName();
+		String ai;
+		if (current.getOpponent().isHuman() == true && current.isHuman() == true) {
+			ai = "HH";
+		} else {
+			ai = "HA";
+		}
+		retVal+= ai + " " + players._1().getName() + " " +players._2().getName();
 		int i = 0;
 		while(i < undoMoves.size()) {
 			retVal+= " ";
@@ -142,38 +142,63 @@ public class GameImpl implements Game {
 
 	@Override
 	public void undoMove() {
-		
 		if (undoMoves.size() >= 1) {
-			GenericMove lastMove = undoMoves.remove(undoMoves.size() -1);
-			if (lastMove.toString().length() == 3) {
-				gameBoard.removeWall(lastMove.asPlaceWall().getTentative());
-				current.getOpponent().addWallCount();
+			if (current.getOpponent().isHuman() == false) {
+				undoOnce();
+				current = current.getOpponent();
+				undoOnce();
 			} else {
-				GenericMove playerMoveBefore = undoMoves.get(undoMoves.size() -2);
-				playerMoveBefore.makeMove();
+				undoOnce();
 			}
-			redoMoves.add(lastMove);
 		} else {
 			System.out.println("No moves left to undo!");
 		}
 	}
 
+	/**
+	 * Private method to undo one move
+	 */
+	private void undoOnce() {
+		GenericMove lastMove = undoMoves.remove(undoMoves.size() -1);
+		if (lastMove.toString().length() == 3) {
+			gameBoard.removeWall(lastMove.asPlaceWall().getTentative());
+			current.getOpponent().addWallCount();
+		} else {
+			GenericMove playerMoveBefore = undoMoves.get(undoMoves.size() -2);
+			playerMoveBefore.makeMove();
+		}
+		redoMoves.add(lastMove);
+	}
+	
 	@Override
 	public void redoMove() {
 		if (redoMoves.size() >= 0) {
-			GenericMove lastMove = redoMoves.remove(redoMoves.size()-1);
-			if (lastMove.toString().length() == 3) {
-				gameBoard.addWall(lastMove.asPlaceWall().getTentative());
-				current.decreaseWallCount();
+			if (current.getOpponent().isHuman() == false) {
+				redoOnce();
+				current = current.getOpponent();
+				redoOnce();
 			} else {
-				lastMove.makeMove();
+				redoOnce();
 			}
-			undoMoves.add(lastMove);
 		} else {
 			System.out.println("No moves to redo!");
 		}
 	}
 
+	/**
+	 * private method to redo two moves
+	 */
+	private void redoOnce() {
+		GenericMove lastMove = redoMoves.remove(redoMoves.size()-1);
+		if (lastMove.toString().length() == 3) {
+			gameBoard.addWall(lastMove.asPlaceWall().getTentative());
+			current.decreaseWallCount();
+		} else {
+			lastMove.makeMove();
+		}
+		undoMoves.add(lastMove);
+	}
+	
 	@Override
 	public void loadGamePlay(String[] savedMoves) {
 		MoveParser parser = new MoveParserImpl();
