@@ -12,7 +12,6 @@ public class MovePawnImpl extends AbstractMove implements MovePawn {
 		start = setting.getPawn(owner, setting).getSquare();
 
     }
-<<<<<<< HEAD
 	
 	public MovePawnImpl(Square start, Square destination, Board setting) {
 		super(null, setting);
@@ -20,12 +19,6 @@ public class MovePawnImpl extends AbstractMove implements MovePawn {
 		this.destination = destination;
 	}
 	
-=======
-	/*
-	 * (non-Javadoc)
-	 * @see quoridor.MovePawn#getDestination()
-	 */
->>>>>>> 87a4731947bef2e7733eac6ca32dbacba90f0250
 	@Override
 	public Square getDestination() {
 		return destination;
@@ -157,6 +150,7 @@ public class MovePawnImpl extends AbstractMove implements MovePawn {
 		} else if(start_col - destination_col == 1 && destination_row - start_row == 1) {
 			temp  = new SquareImpl(destination_col, start_row);
 			temp2 = new SquareImpl(start_col, destination_row);
+			
 			if(temp.hasPawn(setting.getPawn(owner.getOpponent(),setting))) {
 				temp2 = new SquareImpl(destination_col - 1, start_row);
 				if(!setting.wallBetween(temp, temp2)) {
@@ -181,6 +175,11 @@ public class MovePawnImpl extends AbstractMove implements MovePawn {
 		} else {
 			valid = false;
 		}
+		
+		if (owner.hasWon(setting) || owner.getOpponent().hasWon(setting)) {
+			valid = false;
+		}
+		
 		return valid;
 	}
 
@@ -222,68 +221,33 @@ public class MovePawnImpl extends AbstractMove implements MovePawn {
 		return between;
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see quoridor.AbstractMove#type()
-	 */
 	@Override
 	public boolean type() {
 		return PAWN;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see quoridor.AbstractMove#makeMove()
-	 */
+
     @Override
     public void makeMove() {
         setting.getPawn(owner, setting).setSquare(destination);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see quoridor.GenericMove#getMessage()
-     */
 	@Override
 	public String getMessage() {
 		return "Invalid move";
 	}
 
-	/**
-	 * Returning a string of the pawn generic move
-	 */
 	public String toString() {
 		String retVal = "";
 		retVal+= (char)(destination.getCol() + (int) 'a');
 		retVal+= destination.getRow()+1;
 		return retVal;
 	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see quoridor.GenericMove#getPlayer()
-	 */
+
 	@Override
 	public Player getPlayer() {
 		return owner;
 	}
 	
-	public boolean myIsValid() {
-		
-		int dx = Math.abs(start.getCol() - destination.getCol());
-		int dy = Math.abs(start.getRow() - destination.getRow());
-		
-		if ((dx == 1 || dy == 1) && !(dx == 1 && dy == 1)) {
-			
-		} else if (dx == 0 || dy == 0) {
-			
-			
-			
-		} else {
-			
-		}
-		
-		return false;
-		
-	}
+
 }

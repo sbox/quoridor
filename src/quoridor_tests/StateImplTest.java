@@ -16,8 +16,8 @@ public class StateImplTest {
 	
 
 	
-	Pawn pn1 = new PawnImpl(new SquareImpl(4, 0), pl1);
-	Pawn pn2 = new PawnImpl(new SquareImpl(4, 8), pl2);	
+	Pawn pn1 = new PawnImpl(new SquareImpl(0, 0), pl1);
+	Pawn pn2 = new PawnImpl(new SquareImpl(8, 8), pl2);	
 
 	Pair <Pawn> pawns = new PairImpl<Pawn>(pn1, pn2);
 	Board testBoard = new BoardImpl(pawns);
@@ -48,16 +48,24 @@ public class StateImplTest {
 	
 	//@Test
 	public void scoreTest() {
-	
+		testBoard.addWall(new WallImpl(new SquareImpl(1, 7), Wall.HORIZONTAL));
+		testBoard.addWall(new WallImpl(new SquareImpl(3, 7), Wall.HORIZONTAL));
+		testBoard.addWall(new WallImpl(new SquareImpl(5, 7), Wall.HORIZONTAL));
+		testBoard.addWall(new WallImpl(new SquareImpl(7, 7), Wall.HORIZONTAL));
 		
+		System.out.println(testBoard);
+		System.out.println(test.pathLength(pl2));
+		System.out.println(test.bfs(pl2));
 		test.determineScore();
 		System.out.println(test.score);
 	}
 
 	@Test
 	public void minimaxTester() {
+		testBoard.addWall(new WallImpl(new SquareImpl(1, 7), Wall.HORIZONTAL));
+		testBoard.addWall(new WallImpl(new SquareImpl(3, 7), Wall.HORIZONTAL));
+		testBoard.addWall(new WallImpl(new SquareImpl(5, 7), Wall.HORIZONTAL));
 		
-
 		System.out.println(test.nextBestMove());
 		
 	}
