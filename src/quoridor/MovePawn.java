@@ -9,5 +9,9 @@ package quoridor;
  */
 
 public interface MovePawn extends GenericMove {
+	/**
+	 * Returns a pawns square destination
+	 * @return the pawns square destination
+	 */
 	public Square getDestination();
 }

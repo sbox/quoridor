@@ -56,6 +56,10 @@ public interface GenericMove {
 	 */
 	public String getMessage();
 	
+	/**
+	 * Return player who is making this move
+	 * @return the player who is making this move
+	 */
 	public Player getPlayer();
 	
 }

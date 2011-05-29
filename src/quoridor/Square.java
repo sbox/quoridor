@@ -21,6 +21,11 @@ public interface Square {
 	 */
 	public int getCol();
 
+	/**
+	 * 
+	 * @param pawn you are looking at
+	 * @return if there is a pawn on that square
+	 */
 	public boolean hasPawn(Pawn pawn);
 	
 

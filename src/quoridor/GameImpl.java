@@ -38,7 +38,10 @@ public class GameImpl implements Game {
 		undoMoves.add(new MovePawnImpl(4, 0, current.getOpponent(), gameBoard));		
 	}
 
-	
+	/*
+	 * (non-Javadoc)
+	 * @see quoridor.Game#play()
+	 */
 	@Override
 	public void play() {
 		String[] commands = { "savegame", "undo", "redo", "quit"};
@@ -62,14 +65,12 @@ public class GameImpl implements Game {
 				System.out.println("Enter move "+current.getName()+ " (O): ");
 			}
 			String command;
-			
 			if (current.isHuman()) {
 				command = s.next();
 			} else {
 				State thinker = new StateImpl(gameBoard, current);
 				command = thinker.nextBestMove().toString();
 				System.out.println(command);
-			
 			}
 			token = inputParser.ensureString(command);
 			if (token == TOKEN_SAVE) {
@@ -79,19 +80,17 @@ public class GameImpl implements Game {
 					e.printStackTrace();
 				}
 			} else if (token == TOKEN_UNDO) {
-				undoMove();
-				printBoard();
-				current = current.getOpponent();
+				if (undoMove() == true) {
+					printBoard();
+					current = current.getOpponent();
+				}
 			} else if (token == TOKEN_REDO) {
-				redoMove();
-				printBoard();
-				current = current.getOpponent();
-			} else{
-				
+				if (redoMove()) {
+					printBoard();
+					current = current.getOpponent();
+				}		
+			} else {	
 				nextMove = parser.loadMove(current, gameBoard, command);
-				
-				
-				
 				if (nextMove == null) {
 					System.out.println("Invalid input");
 				} else {
@@ -107,73 +106,14 @@ public class GameImpl implements Game {
 				}
 			}
 		}
+		System.out.println("Player " +current.getOpponent().getName()+ "has won. Congratulations!");
+		System.out.println("newgame or savegame?");
 	}
 	
-	public void printBoard() {
-		 System.out.println(gameBoard.toString());
-		 System.out.println(current.getName() +" walls left: " +current.wallCount());
-		 System.out.println(current.getOpponent().getName() +" walls left: " 
-				 				+current.getOpponent().wallCount());
-	}
-	
-	public boolean isOver() {
-		return players._1().hasWon(gameBoard) || players._2().hasWon(gameBoard);
-	}
-	
-	/** Builds and returns a string of the players names
-	 * and the current moves that have happened up to this game
-	 * @return a string of player names and moves so far
+	/*
+	 * (non-Javadoc)
+	 * @see quoridor.Game#loadGamePlay(java.lang.String[])
 	 */
-	
-	public String formatFile() {
-		String retVal = "";
-		retVal+=players._1().getName();
-		retVal+= " ";
-		retVal+=players._2().getName();
-		int i = 0;
-		while(i < undoMoves.size()) {
-			retVal+= " ";
-			retVal+= undoMoves.get(i);
-			i++;
-		}
-		System.out.println("string of moves"+retVal);	
-		return retVal;
-	}
-
-	@Override
-	public void undoMove() {
-		
-		if (undoMoves.size() >= 1) {
-			GenericMove lastMove = undoMoves.remove(undoMoves.size() -1);
-			if (lastMove.toString().length() == 3) {
-				gameBoard.removeWall(lastMove.asPlaceWall().getTentative());
-				current.getOpponent().addWallCount();
-			} else {
-				GenericMove playerMoveBefore = undoMoves.get(undoMoves.size() -2);
-				playerMoveBefore.makeMove();
-			}
-			redoMoves.add(lastMove);
-		} else {
-			System.out.println("No moves left to undo!");
-		}
-	}
-
-	@Override
-	public void redoMove() {
-		if (redoMoves.size() >= 0) {
-			GenericMove lastMove = redoMoves.remove(redoMoves.size()-1);
-			if (lastMove.toString().length() == 3) {
-				gameBoard.addWall(lastMove.asPlaceWall().getTentative());
-				current.decreaseWallCount();
-			} else {
-				lastMove.makeMove();
-			}
-			undoMoves.add(lastMove);
-		} else {
-			System.out.println("No moves to redo!");
-		}
-	}
-
 	@Override
 	public void loadGamePlay(String[] savedMoves) {
 		MoveParser parser = new MoveParserImpl();
@@ -185,6 +125,121 @@ public class GameImpl implements Game {
 			current = current.getOpponent();
 		}
 		play();
+	}
+	
+	/**
+	 * Prints the given board with how many walls each player has left underneath
+	 */
+	private void printBoard() {
+		 System.out.println(gameBoard.toString());
+		 System.out.println(current.getName() +" walls left: " +current.wallCount());
+		 System.out.println(current.getOpponent().getName() +" walls left: " 
+				 				+current.getOpponent().wallCount());
+	}
+	
+	/**
+	 * Returns if the current game is over
+	 * @return if the game is over
+	 */
+	private boolean isOver() {
+		return players._1().hasWon(gameBoard) || players._2().hasWon(gameBoard);
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see quoridor.Game#formatFile()
+	 */
+	public String formatFile() {
+		String retVal = "";
+		String ai;
+		if (current.getOpponent().isHuman() == true && current.isHuman() == true) {
+			ai = "HH";
+		} else {
+			ai = "HA";
+		}
+		retVal+= ai + " " + players._1().getName() + " " +players._2().getName();
+		int i = 0;
+		while(i < undoMoves.size()) {
+			retVal+= " ";
+			retVal+= undoMoves.get(i);
+			i++;
+		}
+		System.out.println("string of moves"+retVal);	
+		return retVal;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see quoridor.Game#undoMove()
+	 */
+	@Override
+	public boolean undoMove() {
+		boolean retVal = false;
+		if (undoMoves.size()-1 > 1) {
+			if (current.getOpponent().isHuman() == false) {
+				undoOnce();
+				current = current.getOpponent();
+				undoOnce();
+			} else {
+				undoOnce();
+			}
+			retVal = true;
+		} else {
+			System.out.println("No moves left to undo!");
+		}
+		return retVal;
+	}
+
+	/**
+	 * Private method to undo one move
+	 */
+	private void undoOnce() {
+		GenericMove lastMove = undoMoves.remove(undoMoves.size() -1);
+		if (lastMove.toString().length() == 3) {
+			gameBoard.removeWall(lastMove.asPlaceWall().getTentative());
+			current.getOpponent().addWallCount();
+		} else {
+			GenericMove playerMoveBefore = undoMoves.get(undoMoves.size() -2);
+			playerMoveBefore.makeMove();
+		}
+		redoMoves.add(lastMove);
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see quoridor.Game#redoMove()
+	 */
+	@Override
+	public boolean redoMove() {
+		boolean retVal = false;
+		System.out.println("redo move string is: " +redoMoves);
+		if (redoMoves.size()-1 > 0) {
+			if (current.getOpponent().isHuman() == false) {
+				redoOnce();
+				current = current.getOpponent();
+				redoOnce();
+			} else {
+				redoOnce();
+			}
+			retVal = true;
+		} else {
+			System.out.println("No moves to redo!");
+		}
+		return retVal;
+	}
+
+	/**
+	 * private method to redo two moves
+	 */
+	private void redoOnce() {
+		GenericMove lastMove = redoMoves.remove(redoMoves.size()-1);
+		if (lastMove.toString().length() == 3) {
+			gameBoard.addWall(lastMove.asPlaceWall().getTentative());
+			current.decreaseWallCount();
+		} else {
+			lastMove.makeMove();
+		}
+		undoMoves.add(lastMove);
 	}
 }
 

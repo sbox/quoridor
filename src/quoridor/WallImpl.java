@@ -40,17 +40,17 @@ public class WallImpl implements Wall {
 		this.direction = w.getDirection();
 	}
 	
-	/**
-	 * returns the direction of the wall
-	 * @return the direction of the wall
+	/*
+	 * (non-Javadoc)
+	 * @see quoridor.Wall#getDirection()
 	 */
 	public boolean getDirection() {
 		return direction;
 	}
 
-	/**
-	 * returns the top-left most square passed by the wall
-	 * @return the top-left most square passed by the wall
+	/*
+	 * (non-Javadoc)
+	 * @see quoridor.Wall#topLeft()
 	 */
 	public Square topLeft() {
 		return topLeft;
