@@ -74,6 +74,8 @@ public class GameImpl implements Game {
 					thinker = new StateImpl(gameBoard, current);
 				} else if (current.getStrategy().contains("logical")) {
 					thinker = new Logical(gameBoard, current);
+				} else if (current.getStrategy().contains("random")) {
+					thinker = new RandomAI(gameBoard, current);
 				}
 				command = thinker.nextBestMove().toString();
 			}
@@ -111,7 +113,7 @@ public class GameImpl implements Game {
 				}
 			}
 		}
-		System.out.println("Player " +current.getOpponent().getName()+ "has won. Congratulations!");
+		System.out.println("Player " +current.getOpponent().getName()+ " has won. Congratulations!");
 		System.out.println("newgame or savegame?");
 	}
 	
