@@ -20,7 +20,22 @@ public class MovePawnImpl extends AbstractMove implements MovePawn {
 		return destination;
 	}
 
-	/* (non-Javadoc)
+	/**
+	 * 
+	 * Checks whether a pawn move is valid,
+	 * it starts by assuming that the move is valid and eliminates invalid moves
+	 * 
+	 * - destination must not be the same as the start
+	 * - squares that are adjacent must not have walls between them
+	 * - squares that are adjacent must not have a pawn on the destination
+	 * - squares two apart must not have walls between them
+	 * - squares two apart must have a pawn between them
+	 * - squares diagonally must have a pawn on one of the squares adjacent to them both
+	 * - squares diagonally must have a wall on the other side of the opponents pawn
+	 * - squares diagonally must not have walls between the opponents pawn and the start
+	 * - squares diagonally must not have walls between the opponents pawn and the destination
+	 * - all other moves are false
+	 * 
 	 * @see quoridor.AbstractMove#isValid()
 	 */
 	@Override
@@ -178,7 +193,18 @@ public class MovePawnImpl extends AbstractMove implements MovePawn {
 		
 		return valid;
 	}
-
+	
+	
+	/**
+	 * checks if two squares are adjacent
+	 * 
+	 * @param a
+	 * 		first square
+	 * @param b
+	 * 		second square
+	 * @return
+	 * 		whether the squares are adjacent
+	 */
 	private boolean isAdjacent(Square a, Square b) {
 		boolean adjacent = false;
 		int aCol = a.getCol();
@@ -194,6 +220,16 @@ public class MovePawnImpl extends AbstractMove implements MovePawn {
 		return adjacent;
 	}
 	
+	/**
+	 * checks if two squares two apart in a straight line
+	 * 
+	 * @param a
+	 * 		first square
+	 * @param b
+	 * 		second square
+	 * @return
+	 * 		whether the squares are two apart
+	 */
 	private Square isTwoAway(Square a, Square b) {
 		Square between = null;
 		int aCol = a.getCol();

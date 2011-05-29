@@ -22,7 +22,6 @@ public class Logical implements State {
 		this.setting = setting;
 		this.currentTurn = currentTurn;
 		this.nextMove = nextMove;
-		
 	}
 	
 	@Override
@@ -32,6 +31,7 @@ public class Logical implements State {
 
 	@Override
 	public GenericMove nextBestMove() {
+		logicalPlay();
 		return nextMove;
 	}	
 	
@@ -120,10 +120,8 @@ public class Logical implements State {
 		Node current = new Node(setting.getPawn(player, setting).getSquare(), 0, null);
 		toVisit.add(current);
 		HashSet <Node> seen = new HashSet<Node>();
-		//System.out.println("current player?" +player.getName());
 		while (current.getSquare().getRow() != destRow(player.goalEnd()) ) {
 			current = toVisit.remove();
-			//System.out.println("current is? " +current.toString());
 			seen.add(current);
 			for (Node n : current) {
 				if (!seen.contains(n)) {
@@ -132,38 +130,29 @@ public class Logical implements State {
 			}
 		}
 		
-		//System.out.println("current is? " +current.toString());
-		
 		return current;
 	}
 	
 	public void logicalPlay() {
 		Node pathP1 = pathLength(currentTurn);
+		Node pathTaken;
 		int costP1 = pathP1.getCost();
-		//System.out.println("cost p1? "+costP1);
 		currentTurn = currentTurn.getOpponent();
 		Node pathP2 = pathLength(currentTurn);
 		int costP2 = pathP2.getCost();
-		//System.out.println("path of p2?" +costP2);
 		currentTurn = currentTurn.getOpponent();
-		/*Node pathP2 = pathLength(currentTurn.getOpponent());	
-		System.out.println("path of p2?");
-		int costP2 = pathP2.getCost();*/
+		pathTaken = findPathTaken(pathP1);
 		
-		//System.out.println("costP2 " +costP2);
 		if (costP1 < costP2) {
-			//System.out.println("cost is less?");
-			nextMove = new MovePawnImpl(pathP1.getSquare().getCol(), pathP1.getSquare().getRow(), 
+			nextMove = new MovePawnImpl(pathTaken.getSquare().getCol(), pathTaken.getSquare().getRow(), 
 											currentTurn, setting);
 		} else {
-			//System.out.println("making a move");
 			if (setting.getPawn(currentTurn, setting).getOwner().wallCount() <= 0) {
-				nextMove = new MovePawnImpl(pathP1.getSquare().getCol(), pathP1.getSquare().getRow(), 
+				nextMove = new MovePawnImpl(pathTaken.getSquare().getCol(), pathTaken.getSquare().getRow(), 
 						currentTurn, setting);
 			} else {
-				//System.out.println("I still have walls left");
 				if (wallMove() == false) {
-					nextMove = new MovePawnImpl(pathP1.getSquare().getCol(), pathP1.getSquare().getRow(), 
+					nextMove = new MovePawnImpl(pathP2.getSquare().getCol(), pathTaken.getSquare().getRow(), 
 													currentTurn, setting);
 				}
 			}
@@ -181,11 +170,13 @@ public class Logical implements State {
 		
 		if ((next = new PlaceWallImpl(tmp.getCol(), tmp.getRow()-1, Wall.HORIZONTAL, currentTurn, setting)).isValid()) {
 			nextMove = next;
+		} else if ((next = new PlaceWallImpl(tmp.getCol()-1, rightS.getRow()-1, Wall.HORIZONTAL, currentTurn, setting)).isValid()) {
+			nextMove = next;
 		} else if ((next = new PlaceWallImpl(tmp.getCol(), tmp.getRow(), Wall.VERTICAL, currentTurn, setting)).isValid()) {
 			nextMove = next;
 		} else if ((next = new PlaceWallImpl(rightS.getCol()-1, rightS.getRow(), Wall.VERTICAL, currentTurn, setting)).isValid()) {
 			nextMove = next;
-		} else {
+		}else {
 			for (int i = tmp.getCol()-3; i < tmp.getCol() +3 && exit == false; i++) {
 				for (int j = tmp.getRow()-3; j < tmp.getRow() +3 && exit == false; j++) {
 					tmp = new SquareImpl(i, j);
@@ -203,22 +194,22 @@ public class Logical implements State {
 		if (nextMove == null) {
 			retVal = false;
 		} 
-		System.out.println(nextMove.toString());
-		
 		return retVal;
 	}
 	
-	private Square findPathTaken(Node path) {
+	private Node findPathTaken(Node path) {
 		Square start = setting.getPawn(currentTurn, setting).getSquare();
 		Square current = path.getSquare();
 		Node curNode = path;
+		Node prev = null;
 		current = curNode.getParent().getSquare();
 		while (current.getRow() != start.getRow() || current.getCol() != start.getCol()) {
 			current = curNode.getParent().getSquare();
+			prev = curNode;
 			curNode = curNode.getParent();
 		}
 
-		return current;
+		return prev;
 	}
 	
 	private int destRow(boolean dest) {
