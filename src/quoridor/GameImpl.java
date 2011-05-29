@@ -80,13 +80,15 @@ public class GameImpl implements Game {
 					e.printStackTrace();
 				}
 			} else if (token == TOKEN_UNDO) {
-				undoMove();
-				printBoard();
-				current = current.getOpponent();
+				if (undoMove() == true) {
+					printBoard();
+					current = current.getOpponent();
+				}
 			} else if (token == TOKEN_REDO) {
-				redoMove();
-				printBoard();
-				current = current.getOpponent();
+				if (redoMove()) {
+					printBoard();
+					current = current.getOpponent();
+				}		
 			} else {	
 				nextMove = parser.loadMove(current, gameBoard, command);
 				if (nextMove == null) {
@@ -171,8 +173,9 @@ public class GameImpl implements Game {
 	 * @see quoridor.Game#undoMove()
 	 */
 	@Override
-	public void undoMove() {
-		if (undoMoves.size() >= 1) {
+	public boolean undoMove() {
+		boolean retVal = false;
+		if (undoMoves.size()-1 > 1) {
 			if (current.getOpponent().isHuman() == false) {
 				undoOnce();
 				current = current.getOpponent();
@@ -180,9 +183,11 @@ public class GameImpl implements Game {
 			} else {
 				undoOnce();
 			}
+			retVal = true;
 		} else {
 			System.out.println("No moves left to undo!");
 		}
+		return retVal;
 	}
 
 	/**
@@ -205,8 +210,10 @@ public class GameImpl implements Game {
 	 * @see quoridor.Game#redoMove()
 	 */
 	@Override
-	public void redoMove() {
-		if (redoMoves.size() >= 0) {
+	public boolean redoMove() {
+		boolean retVal = false;
+		System.out.println("redo move string is: " +redoMoves);
+		if (redoMoves.size()-1 > 0) {
 			if (current.getOpponent().isHuman() == false) {
 				redoOnce();
 				current = current.getOpponent();
@@ -214,9 +221,11 @@ public class GameImpl implements Game {
 			} else {
 				redoOnce();
 			}
+			retVal = true;
 		} else {
 			System.out.println("No moves to redo!");
 		}
+		return retVal;
 	}
 
 	/**
