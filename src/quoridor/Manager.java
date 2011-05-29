@@ -88,7 +88,6 @@ public class Manager {
 				Pair<Player> players;
 				players = initNewGame();
 				// initialise a game
-				System.out.println("initing the game?");
 				currentGame = new GameImpl(players);
 
 				// tell the user the game is starting
@@ -145,7 +144,6 @@ public class Manager {
 				_1 = new PlayerImpl(inputParser.nextArg(), Player.TOP);
 				_2 = new PlayerImpl(inputParser.nextArg(), Player.BOTTOM);
 			} else {
-				System.out.println("How did i break this?");
 				/*
 				 * Give the user an error if they tried to give arguments
 				 * but gave the wrong amount.
@@ -157,9 +155,8 @@ public class Manager {
 				// prompt for the user to enter player names
 				players = enterPlayers();
 			}
-			System.out.println("what about here?");
 		} else if (s.contains("2")) {
-			System.out.println("Player 1 eneter your name: ");
+			System.out.println("Player 1 enter your name: ");
 			if ((s = in.nextLine()) != null) {
 				_1 = new PlayerImpl(s, Player.TOP);
 			}
@@ -179,7 +176,8 @@ public class Manager {
 			players = new PairImpl<Player>(_1, _2);
 			_1.setOpponent(_2);
 			_2.setOpponent(_1);	
-		}	
+		}
+		
 		
 		return players;
 	}
@@ -202,7 +200,6 @@ public class Manager {
 				exit = false;
 			}
 		} 
-		System.out.println("string is: " +retVal);
 		
 		return retVal;
 	}
@@ -223,7 +220,6 @@ public class Manager {
 		// read player 1's name
 		System.out.print("Player 1 enter your name: ");
 		_1 = new PlayerImpl(s.nextLine(), Player.TOP);
-		System.out.println("_1 players name is: " +_1.getName());
 
 		// read player 2's name
 		System.out.print("Player 2 enter your name: ");
