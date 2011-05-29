@@ -73,13 +73,9 @@ public class GameImpl implements Game {
 				if (current.getStrategy().contains("minmax")) {
 					thinker = new StateImpl(gameBoard, current);
 				} else if (current.getStrategy().contains("logical")) {
-					System.out.println("in logical command?");
 					thinker = new Logical(gameBoard, current);
 				}
-				System.out.println("here?");
 				command = thinker.nextBestMove().toString();
-				
-				System.out.println("logical command is: " +command.toString());
 			}
 			token = inputParser.ensureString(command);
 			if (token == TOKEN_SAVE) {
