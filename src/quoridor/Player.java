@@ -75,4 +75,6 @@ public interface Player {
 	 * @return if the player is human or AI
 	 */
 	public boolean isHuman();
+	
+	public String getStrategy();
 }

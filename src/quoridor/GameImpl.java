@@ -68,7 +68,15 @@ public class GameImpl implements Game {
 			if (current.isHuman()) {
 				command = s.next();
 			} else {
-				State thinker = new StateImpl(gameBoard, current);
+				State thinker = null;
+				System.out.println(current.getStrategy());
+				if (current.getStrategy().contains("minmax")) {
+					thinker = new StateImpl(gameBoard, current);
+				} else if (current.getStrategy().contains("logical")) {
+
+					thinker = new Logical(gameBoard, current);
+				}
+				
 				command = thinker.nextBestMove().toString();
 				System.out.println(command);
 			}

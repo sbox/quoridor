@@ -82,5 +82,39 @@ public class BoardImplTest {
 		assertTrue(test.pathToGoal(pn2));
 	}
 	
+	@Test
+	public void testPathToGoal3() {
+		
+		Player pl1 = new PlayerImpl("steve", Player.TOP);
+		Player pl2 = new PlayerImpl("bec", Player.BOTTOM);
+		
+		pn1 = new PawnImpl(new SquareImpl(4, 0), pl1);
+		pn2 = new PawnImpl(new SquareImpl(4, 8), pl2);	
+	
+		Pair <Pawn> pawns = new PairImpl<Pawn>(pn1, pn2);
+		
+		test = new BoardImpl(pawns);
+		
+		
+		assertTrue(test.pathToGoal(pn1));
+		assertTrue(test.pathToGoal(pn2));
+		
+		test.addWall(new WallImpl(new SquareImpl(3, 0), Wall.VERTICAL));
+		test.addWall(new WallImpl(new SquareImpl(4, 1), Wall.HORIZONTAL));
+		MoveParser parser = new MoveParserImpl();
+		GenericMove place = parser.loadMove(pl1, test, "f1v");
+		
+		assertFalse(place.isValid());
+		
+		//assertFalse(test.pathToGoal(pn1));
+		assertTrue(test.pathToGoal(pn2));
+		
+		System.out.println(test);
+	
+	}
+	
+	
+	
+	
 	
 }

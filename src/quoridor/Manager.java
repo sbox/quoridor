@@ -196,6 +196,8 @@ public class Manager {
 				retVal = "minmax";
 			} else if (s.contains("2") || s.contains("random")){
 				retVal = "random";
+			} else if (s.contains("3") || s.contains("logical")){
+				retVal = "logical";
 			} else {
 				exit = false;
 			}

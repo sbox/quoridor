@@ -40,6 +40,10 @@ public class PlayerImpl implements Player {
 		return human;
 	}
 	
+	public String getStrategy() {
+		return strategy;
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * @see quoridor.Player#getName()

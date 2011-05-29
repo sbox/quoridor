@@ -38,14 +38,7 @@ public class StateImplTest {
 		
 	}
 	
-	
-	//@Test
-	public void validTest() {
-		
-		MovePawn a = new MovePawnImpl(new SquareImpl(4, 4), new SquareImpl(4, 5), testBoard);
-		assertTrue(a.isValid());
-	}
-	
+
 	//@Test
 	public void scoreTest() {
 		testBoard.addWall(new WallImpl(new SquareImpl(1, 7), Wall.HORIZONTAL));

@@ -187,10 +187,10 @@ public class StateImpl implements State {
 		for (StateImpl s : this) {
 			s.nextMove.makeMove(); //apply the move
 			
-			System.out.println("start:");
+			//System.out.println("start:");
 			tmp = s.alphabetaNum(Integer.MIN_VALUE, Integer.MAX_VALUE, DEPTH);
 			//System.out.println(s.setting + ":" + tmp);
-			System.out.println("\nend.\n\n");
+			//System.out.println("\nend.\n\n");
 			
 			if (best == null) {
 				best = s;
@@ -225,7 +225,7 @@ public class StateImpl implements State {
 		
 		
 		if (depth == 0 || setting.getPawn(currentTurn, setting).getSquare().getRow() == destRow(currentTurn.goalEnd())) {
-			System.out.print("+");
+			//System.out.print("+");
 			determineScore();
 			
 			return score;
@@ -288,7 +288,7 @@ public class StateImpl implements State {
 		return 0;
 	}
 	
-	static List <StateImpl> wallBackerList = new LinkedList <StateImpl>();
+	List <StateImpl> wallBackerList = new LinkedList <StateImpl>();
 	
 	private class MoveGenerator implements Iterator <StateImpl> {
 
