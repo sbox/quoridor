@@ -81,6 +81,7 @@ public class WallImpl implements Wall {
 			key++;
 		}
 		
+		
 		//now return the key for this wall
 		return key;
 	}

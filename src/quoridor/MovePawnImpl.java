@@ -13,6 +13,12 @@ public class MovePawnImpl extends AbstractMove implements MovePawn {
 
     }
 	
+	public MovePawnImpl(Square start, Square destination, Board setting) {
+		super(null, setting);
+		this.start = start;
+		this.destination = destination;
+	}
+	
 	@Override
 	public Square getDestination() {
 		return destination;
@@ -236,5 +242,24 @@ public class MovePawnImpl extends AbstractMove implements MovePawn {
 	@Override
 	public Player getPlayer() {
 		return owner;
+	}
+	
+	public boolean myIsValid() {
+		
+		int dx = Math.abs(start.getCol() - destination.getCol());
+		int dy = Math.abs(start.getRow() - destination.getRow());
+		
+		if ((dx == 1 || dy == 1) && !(dx == 1 && dy == 1)) {
+			
+		} else if (dx == 0 || dy == 0) {
+			
+			
+			
+		} else {
+			
+		}
+		
+		return false;
+		
 	}
 }

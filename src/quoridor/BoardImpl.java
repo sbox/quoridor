@@ -68,8 +68,6 @@ public class BoardImpl implements Board {
 				} else {
 					//checking if there is a horizontal wall between two squares
 					if (wallBelow){ //sbox: replaced condition with flag
-						System.out.println("<<" + i/2 + ", " + j + ">>");
-						System.out.println(wallBetween(new SquareImpl(j, i/2), new SquareImpl(j, i/2+1)));
 						board+= " * ";
 					} else {
 						board+= " - "; //sbox; changed the _'s to -'s
@@ -320,7 +318,7 @@ public class BoardImpl implements Board {
     	//will store the potential walls
     	Pair <Wall> candidateWalls;
     	
-    	//will hold the return value
+    	//will hold the return valueCcCcCc
      	boolean result = false;
     	
     	//if the squares are on the same row
@@ -383,14 +381,24 @@ public class BoardImpl implements Board {
 
    
     	
-    	if (topLeftCandidate._1().getRow() >= 0 && 
-    		topLeftCandidate._1().getCol() >= 0 &&
-    		topLeftCandidate._2().getRow() >= 0 && 
-    		topLeftCandidate._2().getCol() >= 0 ) {
+    	if (topLeftCandidate._1().getCol() >= 0 &&
+    		topLeftCandidate._1().getRow() >= 0 &&
+    		topLeftCandidate._1().getCol() < 8 &&
+    		topLeftCandidate._1().getRow() < 8) {
     		
-    		result = walls.contains(candidateWalls._1()) || 
-    		   walls.contains(candidateWalls._2());
+    	
+    		result = walls.contains(candidateWalls._1());
     	}
+    	
+      	if (result == false && 
+      			topLeftCandidate._2().getCol() >= 0 &&
+        		topLeftCandidate._2().getRow() >= 0 &&
+        		topLeftCandidate._2().getCol() < 8 &&
+        		topLeftCandidate._2().getRow() < 8) {
+        		
+      	
+        		result = walls.contains(candidateWalls._2());
+        	}
     	
     	//return true if either candidate is on the board
     	return result ;
@@ -411,6 +419,9 @@ public class BoardImpl implements Board {
     	}
     	return value;
     }
+    
+    
+    
     
 
 }

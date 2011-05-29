@@ -83,15 +83,15 @@ public class BoardImplTest {
 	@Test
 	public void testPrint2() {
 		
-		Wall w0 = new WallImpl(new SquareImpl(7, 5), Wall.HORIZONTAL);	
+		Wall w0 = new WallImpl(new SquareImpl(0, 5), Wall.HORIZONTAL);	
 		
 		
 		test.addWall(w0);
 		
 
 		
-		assertFalse(test.wallBetween(new SquareImpl(0, 6), new SquareImpl(0, 7)));
-    	
+		//assertTrue(test.wallBetween(new SquareImpl(0, 6), new SquareImpl(0, 5)));
+		assertFalse(test.wallBetween(new SquareImpl(8, 4), new SquareImpl(8, 5)));
 		
 		System.out.println(test);
 		

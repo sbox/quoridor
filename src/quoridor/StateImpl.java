@@ -1,38 +1,63 @@
 package quoridor;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
+
+
 
 public class StateImpl implements State {
 
 	private static final boolean MAX = true;
 	private static final boolean MIN = false;
-	private static final int DEPTH = 2;
+	private static final int DEPTH = 3;
 	
 	protected Board setting;
 	protected Player currentTurn;
 	protected GenericMove nextMove;
-	protected int score;
+	public int score;
 	
-	private void determineScore() {
-		int myScore = setting.getPawn(currentTurn, setting).getSquare().getRow();
-		int opScore = setting.getPawn(currentTurn.getOpponent(), setting).getSquare().getRow();
-		
-		score = myScore + opScore;
-	
-	}
-	
-	private class Node {
-		Square square;
-		int cost;
-		
-		public Node(Square s, int n) {
-			square = s;
-			cost = n;
+	private Player getMax() {
+		if (playerType(currentTurn) == MAX) {
+			return currentTurn;
+		} else {
+			return currentTurn.getOpponent();
 		}
 	}
 	
+	public void determineScore() {
+		score = pathLength(getMax().getOpponent()) - pathLength(getMax());
+	}
+	
+	public int pathLength(Player player) {
+		
+		Queue <Node> toVisit = new LinkedList <Node> ();
+		
+		Node current = new Node(setting.getPawn(player, setting).getSquare(), 0);
+		
+		toVisit.add(current);
+		
+		HashSet <Node> seen = new HashSet<Node>();
+		
+		while (current.getSquare().getRow() != destRow(player.goalEnd()) ) {
+			current = toVisit.remove();
+			
+			seen.add(current);
+			
+			for (Node n : current) {
+				if (!seen.contains(n)) {
+					
+					toVisit.add(n);
+				}
+			}
+		}
+		
+		return current.getCost();
+	}
+	
+
 	public StateImpl(Board setting, Player currentTurn) {
 		this.setting = setting;
 		this.currentTurn = currentTurn;
@@ -317,5 +342,98 @@ public class StateImpl implements State {
 		
 		
 	}
+	
+	private class Node implements Comparable<Node>, Iterable<Node> {
+		protected Square square;
+		protected int cost;
+		
+		public Node(Square s, int n) {
+			square = s;
+			cost = n;
+		}
+		
+		public Square getSquare() {
+			return square;
+		}
+		
+		public int getCost() {
+			return cost;
+		}
+		
+		public void setCost(int cost) {
+			this.cost  = cost;
+		}
+
+		@Override
+		public int compareTo(Node o) {
+			return o.cost - cost;
+		}
+		
+		@Override
+		public boolean equals(Object o) {
+			return ((Node)o).square.equals(square);
+		}
+		
+		@Override
+		public int hashCode() {
+			return square.hashCode();
+		}
+
+		@Override
+		public Iterator<Node> iterator() {
+			return new NodeIterator(this, cost);
+		}
+		
+		private class NodeIterator implements Iterator<Node> {
+			List <Node> nextList = new LinkedList <Node>();
+			Iterator <Node> backer;
+			
+			public NodeIterator(Node start, int n) {
+				
+				for (int i = -2; i <= 2 ; i ++) {
+					for (int j = -2;j<=2;j++) {
+						if (i != 0 || j != 0) {
+							
+							
+							Board settingClone = new BoardImpl((BoardImpl)setting);
+							Player moverClone = new PlayerImpl(currentTurn);
+							
+							settingClone.getPawn(moverClone, settingClone).setSquare(square);
+							
+							MovePawn tentative = new MovePawnImpl(square.getCol() + j, square.getRow() + i, moverClone, settingClone );
+							
+							
+							if (tentative.isValid()) {
+								
+								nextList.add(new Node(new SquareImpl(square.getCol()+j, square.getRow() + i), n + 1));
+							}
+						}
+					}
+				}
+				
+				backer = nextList.iterator();
+				
+			}
+			
+			@Override
+			public boolean hasNext() {
+				return backer.hasNext();
+			}
+
+			@Override
+			public Node next() {
+				return backer.next();
+			}
+
+			@Override
+			public void remove() {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		}
+		
+	}
+	
 	
 }
