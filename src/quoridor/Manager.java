@@ -88,6 +88,7 @@ public class Manager {
 				Pair<Player> players;
 				players = initNewGame();
 				// initialise a game
+				System.out.println("initing the game?");
 				currentGame = new GameImpl(players);
 
 				// tell the user the game is starting
@@ -158,27 +159,23 @@ public class Manager {
 			}
 			System.out.println("what about here?");
 		} else if (s.contains("2")) {
-			if (inputParser.hasRequiredArgs()) {
-				_1 = new PlayerImpl(inputParser.nextArg(), Player.TOP);
-			} else {
-				System.out.println("Player 1 eneter your name: ");
-				if ((s = in.nextLine()) != null) {
-					_1 = new PlayerImpl(s, Player.TOP);
-				}
+			System.out.println("Player 1 eneter your name: ");
+			if ((s = in.nextLine()) != null) {
+				_1 = new PlayerImpl(s, Player.TOP);
 			}
 			System.out.println("Which AI would you like to play against? \n 1. MinMax \n 2. Random");
 			tmp = chooseAI();
 			_2 = new PlayerImpl(Player.BOTTOM, tmp);
+			players = new PairImpl<Player>(_1, _2);
+			_1.setOpponent(_2);
+			_2.setOpponent(_1);	
 		} else {
 			System.out.println("Which AI would you like to play against? \n 1. MinMax \n 2. Random");
 			tmp = chooseAI();
 			_1 = new PlayerImpl(Player.TOP, tmp);
 			System.out.println("Which AI would you like to play against? \n 1. MinMax \n 2. Random");
 			tmp = chooseAI();
-			_2 = new PlayerImpl(Player.BOTTOM, tmp);		
-		}
-
-		if (s.contains("2") || s.contains("3")) {
+			_2 = new PlayerImpl(Player.BOTTOM, tmp);	
 			players = new PairImpl<Player>(_1, _2);
 			_1.setOpponent(_2);
 			_2.setOpponent(_1);	
@@ -195,11 +192,14 @@ public class Manager {
 		String retVal = "";
 		Scanner in = new Scanner(System.in);
 		String s;
-		if ((s = in.nextLine()) != null) {
+		boolean exit = true;
+		if ((s = in.nextLine()) != null && exit) {
 			if (s.contains("1") || s.contains("minmax")) {
 				retVal = "minmax";
 			} else if (s.contains("2") || s.contains("random")){
 				retVal = "random";
+			} else {
+				exit = false;
 			}
 		} 
 		System.out.println("string is: " +retVal);
