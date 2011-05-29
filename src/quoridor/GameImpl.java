@@ -49,7 +49,7 @@ public class GameImpl implements Game {
 		short[] argCount = { 0, 0, 0, 0 };
 		short invalid = -1;
 		inputParser = new ParserImpl(commands, tokens, argCount, invalid);
-		
+		boolean exit = false;
 		MoveParser parser = new MoveParserImpl();
 		Scanner s = new Scanner(System.in);
 		short token; // holds the token of the command just read
@@ -58,7 +58,7 @@ public class GameImpl implements Game {
 		GenericMove nextMove;
 		printBoard();
 		
-		while (!isOver()) {
+		while (!isOver() && !exit) {
 			if (current.equals(players._1())) {
 				System.out.println("Enter move " +current.getName()+ " (X): ");
 			} else {
@@ -69,7 +69,6 @@ public class GameImpl implements Game {
 				command = s.next();
 			} else {
 				State thinker = null;
-				System.out.println(current.getStrategy());
 				if (current.getStrategy().contains("minmax")) {
 					thinker = new StateImpl(gameBoard, current);
 				} else if (current.getStrategy().contains("logical")) {
@@ -95,7 +94,9 @@ public class GameImpl implements Game {
 				if (redoMove()) {
 					printBoard();
 					current = current.getOpponent();
-				}		
+				}	
+			} else if (token == TOKEN_QUIT) {
+				exit = true;
 			} else {	
 				nextMove = parser.loadMove(current, gameBoard, command);
 				if (nextMove == null) {
@@ -113,8 +114,10 @@ public class GameImpl implements Game {
 				}
 			}
 		}
-		System.out.println("Player " +current.getOpponent().getName()+ " has won. Congratulations!");
-		System.out.println("newgame or savegame?");
+		if (!exit) {
+			System.out.println("Player " +current.getOpponent().getName()+ " has won. Congratulations!");
+		}
+		System.out.println("newgame or loadgame?");
 	}
 	
 	/*

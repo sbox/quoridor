@@ -1,11 +1,9 @@
 package quoridor;
 
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.PriorityQueue;
 import java.util.Queue;
 
 
@@ -24,13 +22,7 @@ public class StateImpl implements State {
 	static List <Node> bestMin;
 	static List <Node> bestMax;
 	
-	private Player getMax() {
-		if (playerType(currentTurn) == MAX) {
-			return currentTurn;
-		} else {
-			return currentTurn.getOpponent();
-		}
-	}
+	
 	
 	public void determineScore() {
 		score = pathLengthMin() - pathLengthMax();
@@ -301,7 +293,7 @@ public class StateImpl implements State {
 		
 		
 		if (depth == 0 || setting.getPawn(currentTurn, setting).getSquare().getRow() == destRow(currentTurn.goalEnd())) {
-			//System.out.print("+");
+			
 			determineScore();
 			
 			return score;
@@ -329,7 +321,7 @@ public class StateImpl implements State {
 				}
 				
 				tmp = s.alphabetaNum(alpha, beta, depth - 1);
-				//System.out.println(s.setting + ":" + tmp);
+				
 				if (tmp > alpha) {
 					alpha = tmp;
 				}
@@ -358,7 +350,7 @@ public class StateImpl implements State {
 				
 				tmp = s.alphabetaNum(alpha, beta, depth - 1);
 				
-				//System.out.println(s.setting + ":" + tmp);
+				
 				if (tmp < beta) {
 					beta = tmp;
 				}
@@ -414,7 +406,7 @@ public class StateImpl implements State {
 					
 					if (tentative.isValid()) {
 						
-						//System.out.println(tentative);
+						
 						
 						pawnBackerList.add(new StateImpl(settingClone, moverClone, tentative));
 					}
@@ -489,10 +481,9 @@ public class StateImpl implements State {
 		
 	}
 	
-	private class Node implements Comparable<Node>, Iterable<Node> {
+	private class Node implements Iterable<Node> {
 		protected Square square;
 		protected int cost;
-		protected int heuristic;
 		protected Player owner;
 		
 		protected Node parent;
@@ -502,7 +493,6 @@ public class StateImpl implements State {
 			cost = n;
 			owner  = p;
 			this.parent = parent;
-			heuristic = Math.abs(destRow(p.goalEnd()) - s.getRow());
 		}
 		
 		public Node getParent() {
@@ -511,23 +501,6 @@ public class StateImpl implements State {
 		
 		public Square getSquare() {
 			return square;
-		}
-		
-		public int getHeuristic() {
-			return heuristic + cost;
-		}
-		
-		public int getCost() {
-			return cost;
-		}
-		
-		public void setCost(int cost) {
-			this.cost  = cost;
-		}
-
-		@Override
-		public int compareTo(Node o) {
-			return getHeuristic() - o.getHeuristic();
 		}
 		
 		@Override
@@ -558,7 +531,7 @@ public class StateImpl implements State {
 						Board settingClone = new BoardImpl((BoardImpl)setting);
 						Player moverClone = new PlayerImpl(owner);
 						
-						//System.out.println(settingClone);
+						
 						
 						settingClone.getPawn(moverClone, settingClone).setSquare(square);
 						

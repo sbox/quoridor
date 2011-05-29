@@ -207,11 +207,11 @@ public class ParserImpl implements Parser {
 		} else if (hasNextToken()){
 			progressToken();
 		}
-		//System.out.println("String is: " +arg);
+		
 		if (!hasNextToken()) {
-			//System.out.println("String is: " +arg);
+			
 			if (scanString(arg)) {
-				//System.out.println("String is: " +arg);
+				
 				token = currentToken();
 			}
 		}
@@ -250,10 +250,10 @@ public class ParserImpl implements Parser {
 		
 		CommandEntry tmp = new CommandEntry(arg);
 		
-		//System.out.println("get command:" +tmp.getCommand());
+		
 		if (syntax.containsKey(tmp.getCommand())) {
 			commandBuffer.add(tmp);
-			//System.out.println("in here");
+		
 			success = true;
 		} else {
 			success = false;
@@ -371,7 +371,7 @@ public class ParserImpl implements Parser {
 			
 			//if there is a first word, store it as the command
 			if (broken.length > 0) {
-				//System.out.println("heree" +broken[0]);
+				
 				command  = broken[0];
 			}
 			

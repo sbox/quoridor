@@ -1,9 +1,7 @@
 package quoridor;
 
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 
 public class Validator {
 
@@ -44,24 +42,11 @@ public class Validator {
 		
 		MoveParser parser = new MoveParserImpl();
 		
-		Player first = null;
-		
-
-		GenericMove p1Move = parser.parseMove(moves.get(0), p1, setting);
-		GenericMove p2Move = parser.parseMove(moves.get(0), p2, setting);
-		
-		//Figure out who  moves first
-		if (p1Move.isValid()) {
-			first = p1;
-		} else if (p2Move.isValid()) {
-			first = p2;
-		} else {
-			valid = false;
-		}
-		
+	
 		Board localBoard = new BoardImpl((BoardImpl)setting);
 		
 		if (valid) {
+			//assuming p2 will move first
 			Player current = p2;	
 			
 			Iterator <String> it = moves.iterator();
@@ -73,8 +58,7 @@ public class Validator {
 				
 				move = parser.parseMove(moveStr, current, localBoard);
 				
-				System.out.println(localBoard);
-				System.out.println(move);
+			
 				
 				
 				
