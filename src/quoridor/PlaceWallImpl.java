@@ -51,6 +51,10 @@ public class PlaceWallImpl extends AbstractMove implements PlaceWall{
 			setting.removeWall(tentative);
 		}
 
+		if (owner.hasWon(setting) || owner.getOpponent().hasWon(setting)) {
+			valid = false;
+		}
+		
 		return valid;
 	}
 

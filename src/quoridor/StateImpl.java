@@ -1,9 +1,11 @@
 package quoridor;
 
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.PriorityQueue;
 import java.util.Queue;
 
 
@@ -12,7 +14,7 @@ public class StateImpl implements State {
 
 	private static final boolean MAX = true;
 	private static final boolean MIN = false;
-	private static final int DEPTH = 3;
+	private static final int DEPTH =0;
 	
 	protected Board setting;
 	protected Player currentTurn;
@@ -31,11 +33,12 @@ public class StateImpl implements State {
 		score = pathLength(getMax().getOpponent()) - pathLength(getMax());
 	}
 	
-	public int pathLength(Player player) {
+	
+	public int bfs(Player player) {
 		
 		Queue <Node> toVisit = new LinkedList <Node> ();
 		
-		Node current = new Node(setting.getPawn(player, setting).getSquare(), 0);
+		Node current = new Node(setting.getPawn(player, setting).getSquare(), 0, player);
 		
 		toVisit.add(current);
 		
@@ -52,6 +55,77 @@ public class StateImpl implements State {
 					toVisit.add(n);
 				}
 			}
+		}
+		
+		return current.getCost();
+	}
+	
+	
+	public int bfsPri(Player player) {
+		
+		PriorityQueue <Node> toVisit = new PriorityQueue <Node> ();
+		
+		Node current = new Node(setting.getPawn(player, setting).getSquare(), 0, player);
+		
+		toVisit.add(current);
+		
+		HashSet <Node> seen = new HashSet<Node>();
+		
+		while (current.getSquare().getRow() != destRow(player.goalEnd()) ) {
+			current = toVisit.remove();
+			
+			seen.add(current);
+			
+			for (Node n : current) {
+				if (!seen.contains(n)) {
+					
+					toVisit.add(n);
+				}
+			}
+		}
+		
+		return current.getCost();
+	}
+	
+	public int pathLength(Player player) {
+		
+		PriorityQueue <Node> unVisited = new PriorityQueue <Node> ();
+		Hashtable <Integer, Node> lookup = new Hashtable <Integer, Node>();
+		
+		Node current = new Node(setting.getPawn(player, setting).getSquare(), 0, player);
+		
+		
+		unVisited.add(current);
+		lookup.put(new Integer(current.hashCode()), current);
+		
+		HashSet <Node> visited = new HashSet<Node>();
+		
+		while (current.getSquare().getRow() != destRow(player.goalEnd()) ) {
+			current = unVisited.remove();
+			
+			visited.add(current);
+			
+			for (Node n : current) {
+				
+				if (!visited.contains(n)) {
+					Node tent = lookup.get(new Integer(n.hashCode()));
+					
+					if (tent == null) {
+						lookup.put(new Integer(n.hashCode()), n);
+						unVisited.add(n);
+						
+					} else {
+						if (tent.getHeuristic() > n.getHeuristic()) {
+							tent.setCost(n.getCost());
+						}
+					}
+					
+					
+				}
+				
+			}
+			
+			visited.add(current);
 		}
 		
 		return current.getCost();
@@ -102,67 +176,6 @@ public class StateImpl implements State {
 		return result;
 	}
 	
-	
-	public StateImpl alphabeta(StateImpl current, StateImpl alpha, StateImpl beta, int depth) {
-		StateImpl result = null;
-		
-		if (current.nextMove != null) {
-			current.nextMove.makeMove();
-		}
-		
-		//System.out.println(current.setting);
-		//System.out.println(alpha.score + ", " + beta.score + "\n\n");
-		if (depth == 0){ 
-			current.determineScore();
-			result = current;
-		} else {
-			StateImpl tmp = null;
-			
-			Iterator <StateImpl> nextMoves = iterator();
-			StateImpl s = null;
-			
-			if (current.playerType(current.currentTurn) == MAX) {
-				
-				while (nextMoves.hasNext() && alpha.score < beta.score) {
-					s = nextMoves.next();
-					
-					tmp = s.alphabeta(s, alpha, beta, depth - 1);
-					
-					if (tmp.score > alpha.score) {
-						alpha = tmp;
-					}
-				}
-				result = alpha;
-				
-				
-			} else {
-				
-				
-				while (nextMoves.hasNext() && alpha.score < beta.score) {
-					
-					s = nextMoves.next();
-
-					
-					
-					tmp = s.alphabeta(s, alpha, beta, depth - 1);
-					
-					if (tmp.score < beta.score) {
-						beta = tmp;
-					}
-				}
-				result = beta;
-				
-			}
-			
-			
-		}
-		
-		
-		
-		
-		
-		return result;
-	}
 
 	
 	public StateImpl bestNextState() {
@@ -174,9 +187,10 @@ public class StateImpl implements State {
 		for (StateImpl s : this) {
 			s.nextMove.makeMove(); //apply the move
 			
+			System.out.println("start:");
 			tmp = s.alphabetaNum(Integer.MIN_VALUE, Integer.MAX_VALUE, DEPTH);
 			//System.out.println(s.setting + ":" + tmp);
-			
+			System.out.println("\nend.\n\n");
 			
 			if (best == null) {
 				best = s;
@@ -211,13 +225,18 @@ public class StateImpl implements State {
 		
 		
 		if (depth == 0 || setting.getPawn(currentTurn, setting).getSquare().getRow() == destRow(currentTurn.goalEnd())) {
+			System.out.print("+");
 			determineScore();
+			
 			return score;
 		}
 		
 		int tmp;
 		
+		
 		Iterator <StateImpl> nextMoves = swapIterator();
+		
+		
 		StateImpl s = null;
 		
 		if (playerType(currentTurn) == MIN) {
@@ -230,7 +249,11 @@ public class StateImpl implements State {
 				tmp = s.alphabetaNum(alpha, beta, depth - 1);
 				//System.out.println(s.setting + ":" + tmp);
 				if (tmp > alpha) {
-					alpha = tmp;;
+					alpha = tmp;
+				}
+				
+				if (alpha >= beta) {
+				
 				}
 			}
 			
@@ -245,10 +268,16 @@ public class StateImpl implements State {
 				s = nextMoves.next(); //get a new state
 				s.nextMove.makeMove(); //apply the current move
 				
+				
 				tmp = s.alphabetaNum(alpha, beta, depth - 1);
+				
 				//System.out.println(s.setting + ":" + tmp);
 				if (tmp < beta) {
-					beta = tmp;;
+					beta = tmp;
+				}
+				
+				if (alpha >= beta) {
+					
 				}
 			}
 			
@@ -259,20 +288,29 @@ public class StateImpl implements State {
 		return 0;
 	}
 	
+	static List <StateImpl> wallBackerList = new LinkedList <StateImpl>();
 	
 	private class MoveGenerator implements Iterator <StateImpl> {
 
-		List <StateImpl> backerList;
-		Iterator <StateImpl> backer;
+		List <StateImpl> pawnBackerList;
+		Iterator <StateImpl> pawnBacker;
+		
+		
+		Iterator <StateImpl> wallBacker;
+		
 		Player mover;
 		Board setting;
 		
 		public MoveGenerator(Player mover, Board setting) {
-			backerList = new LinkedList <StateImpl>();
+			pawnBackerList = new LinkedList <StateImpl>();
+			
 			this.mover = mover;
 			this.setting = setting;
+			
 			populate();
-			backer = backerList.iterator();
+			
+			pawnBacker = pawnBackerList.iterator();
+			wallBacker = null;
 		}
 		
 		private void populate() {
@@ -290,46 +328,67 @@ public class StateImpl implements State {
 						
 						//System.out.println(tentative);
 						
-						backerList.add(new StateImpl(settingClone, moverClone, tentative));
+						pawnBackerList.add(new StateImpl(settingClone, moverClone, tentative));
 					}
 				}
 			}
 			
 			//populate with PlaceWalls
-			/*
-			for (int i = 0; i <= 8; i++) {
-				for (int j = 0; j <= 8;j++) {
-					Board settingClone = new BoardImpl((BoardImpl)setting);
-					Player moverClone = new PlayerImpl(mover);
-					
-					PlaceWall vTentative = new PlaceWallImpl(i, j, Wall.VERTICAL, moverClone, settingClone);
-					
-					settingClone = new BoardImpl((BoardImpl)setting);
-					moverClone = new PlayerImpl(mover);
-					
-					PlaceWall hTentative = new PlaceWallImpl(i, j, Wall.HORIZONTAL, moverClone, settingClone);
-					
-					if(vTentative.isValid()) {
-						backerList.add(new StateImpl(settingClone, moverClone, vTentative));
-					}
-					
-					if(hTentative.isValid()) {
-						backerList.add(new StateImpl(settingClone, moverClone, hTentative));
+			if (wallBackerList.isEmpty()) {
+				for (int i = 0; i <= 8; i++) {
+					for (int j = 0; j <= 8;j++) {
+						Board settingClone = new BoardImpl((BoardImpl)setting);
+						Player moverClone = new PlayerImpl(mover);
+						
+						PlaceWall vTentative = new PlaceWallImpl(i, j, Wall.VERTICAL, moverClone, settingClone);
+						
+						settingClone = new BoardImpl((BoardImpl)setting);
+						moverClone = new PlayerImpl(mover);
+						
+						PlaceWall hTentative = new PlaceWallImpl(i, j, Wall.HORIZONTAL, moverClone, settingClone);
+						
+						if(vTentative.isValid()) {
+							wallBackerList.add(new StateImpl(settingClone, moverClone, vTentative));
+						}
+						
+						if(hTentative.isValid()) {
+							wallBackerList.add(new StateImpl(settingClone, moverClone, hTentative));
+						}
 					}
 				}
 			}
-			*/
+			
+			
 			
 		}
 		
 		@Override
 		public boolean hasNext() {
-			return backer.hasNext();
+			
+			boolean result;
+			
+			if (wallBacker == null) {
+				result = true;
+			} else {
+				result = wallBacker.hasNext();
+			}
+			
+			return result;
 		}
 
 		@Override
 		public StateImpl next() {
-			return backer.next();
+			StateImpl result;
+			
+			if (pawnBacker.hasNext()) {
+				result = pawnBacker.next();
+			} else {
+				if (wallBacker == null) {
+					wallBacker = wallBackerList.iterator();
+				}
+				result = wallBacker.next();
+			}
+			return result;
 		}
 
 		@Override
@@ -346,14 +405,21 @@ public class StateImpl implements State {
 	private class Node implements Comparable<Node>, Iterable<Node> {
 		protected Square square;
 		protected int cost;
+		protected int heuristic;
 		
-		public Node(Square s, int n) {
+		public Node(Square s, int n, Player p) {
 			square = s;
 			cost = n;
+			
+			heuristic = Math.abs(destRow(p.goalEnd()) - s.getRow());
 		}
 		
 		public Square getSquare() {
 			return square;
+		}
+		
+		public int getHeuristic() {
+			return heuristic + cost;
 		}
 		
 		public int getCost() {
@@ -366,7 +432,7 @@ public class StateImpl implements State {
 
 		@Override
 		public int compareTo(Node o) {
-			return o.cost - cost;
+			return getHeuristic() - o.getHeuristic();
 		}
 		
 		@Override
@@ -398,14 +464,15 @@ public class StateImpl implements State {
 							Board settingClone = new BoardImpl((BoardImpl)setting);
 							Player moverClone = new PlayerImpl(currentTurn);
 							
+							//System.out.println(settingClone);
+							
 							settingClone.getPawn(moverClone, settingClone).setSquare(square);
 							
 							MovePawn tentative = new MovePawnImpl(square.getCol() + j, square.getRow() + i, moverClone, settingClone );
 							
 							
 							if (tentative.isValid()) {
-								
-								nextList.add(new Node(new SquareImpl(square.getCol()+j, square.getRow() + i), n + 1));
+								nextList.add(new Node(new SquareImpl(square.getCol()+j, square.getRow() + i), n + 1, moverClone));
 							}
 						}
 					}
