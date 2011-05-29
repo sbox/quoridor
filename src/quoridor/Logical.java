@@ -32,7 +32,7 @@ public class Logical implements State {
 	@Override
 	public GenericMove nextBestMove() {
 		logicalPlay();
-		System.out.println("move is: " +nextMove);
+		//System.out.println("move is: " +nextMove);
 		return nextMove;
 	}	
 	
