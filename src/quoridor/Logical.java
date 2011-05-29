@@ -12,12 +12,28 @@ public class Logical implements State {
 	protected GenericMove nextMove;
 	public int score;
 	
+	/**
+	 * Constructor to create a logical AI
+	 * @param setting
+	 * 			the current gameboard state
+	 * @param currentTurn
+	 * 			the current player
+	 */
 	public Logical(Board setting, Player currentTurn) {
 		this.setting = setting;
 		this.currentTurn = currentTurn;
 		nextMove = null;
 	}
 	
+	/**
+	 * Constructor to create a logical AI
+	 * @param setting
+	 * 			the current gameBoard state
+	 * @param currentTurn
+	 * 			the current player
+	 * @param nextMove
+	 * 			the next generic move to make
+	 */
 	public Logical(Board setting, Player currentTurn, GenericMove nextMove) {
 		this.setting = setting;
 		this.currentTurn = currentTurn;
@@ -26,15 +42,21 @@ public class Logical implements State {
 	
 	@Override
 	public Iterator<StateImpl> iterator() {
-		return new MoveGenerator(currentTurn, setting);
+		return null;
+		//return new MoveGenerator(currentTurn, setting);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see quoridor.State#nextBestMove()
+	 */
 	@Override
 	public GenericMove nextBestMove() {
 		logicalPlay();
 		//System.out.println("move is: " +nextMove);
 		return nextMove;
 	}	
+
 	
 	private class Node implements Comparable<Node>, Iterable<Node> {
 		protected Square square;
@@ -116,13 +138,18 @@ public class Logical implements State {
 		}	
 	}
 	
+	/**
+	 * Finds the shortest path on the current board
+	 * @param player
+	 * 			the current player
+	 * @return the node that had the shortest path
+	 */
 	public Node pathLength(Player player) {	
 		Queue <Node> toVisit = new LinkedList <Node> ();
 		Node current = new Node(setting.getPawn(player, setting).getSquare(), 0, null);
 		toVisit.add(current);
 		HashSet <Node> seen = new HashSet<Node>();
 		while (current.getSquare().getRow() != destRow(player.goalEnd()) ) {
-			//System.out.println("in pathLenght while loop?");
 			current = toVisit.remove();
 			seen.add(current);
 			for (Node n : current) {
@@ -135,6 +162,9 @@ public class Logical implements State {
 		return current;
 	}
 	
+	/**
+	 * Dertimes what the next best logical move is
+	 */
 	public void logicalPlay() {
 		Node pathP1 = pathLength(currentTurn);
 		Node pathTaken;
@@ -145,19 +175,18 @@ public class Logical implements State {
 		currentTurn = currentTurn.getOpponent();
 		pathTaken = findPathTaken(pathP1);
 		
+		//if the AI cost is less than the other players cost move the piece along the shortest path
 		if (costP1 < costP2) {
-			//System.out.println("cost is less");
 			nextMove = new MovePawnImpl(pathTaken.getSquare().getCol(), pathTaken.getSquare().getRow(), 
 											currentTurn, setting);
 		} else {
-			//System.out.println("cost is more");
+			//if the AI has no walls left to place, move the piece along the shortest path
 			if (setting.getPawn(currentTurn, setting).getOwner().wallCount() <= 0) {
 				nextMove = new MovePawnImpl(pathTaken.getSquare().getCol(), pathTaken.getSquare().getRow(), 
 						currentTurn, setting);
 			} else {
-				//System.out.println("cost is more but place wall?");
+				//if you cant place a wall, move the piece
 				if (wallMove() == false) {
-					//System.out.println("wall move is false?");
 					nextMove = new MovePawnImpl(pathTaken.getSquare().getCol(), pathTaken.getSquare().getRow(), 
 													currentTurn, setting);
 				}
@@ -166,15 +195,19 @@ public class Logical implements State {
 		findPathTaken(pathP1);
 	}
 	
+	/**
+	 * Determines whether a wall should be placed
+	 * @return if a wall has been placed
+	 */
 	private boolean wallMove() {
 		Player p2 = currentTurn.getOpponent();
 		Square tmp = setting.getPawn(p2, setting).getSquare();
-		Square tmp2;
 		Square rightS = new SquareImpl(tmp.getCol()-1, tmp.getRow());
 		PlaceWallImpl next = null;
 		boolean exit = false;
 		boolean retVal = true;
 		
+		//try placing the obvious four walls around the other player
 		if ((next = new PlaceWallImpl(tmp.getCol(), tmp.getRow()-1, Wall.HORIZONTAL, currentTurn, setting)).isValid()) {
 			nextMove = next;
 		} else if ((next = new PlaceWallImpl(tmp.getCol()-1, rightS.getRow()-1, Wall.HORIZONTAL, currentTurn, setting)).isValid()) {
@@ -186,12 +219,9 @@ public class Logical implements State {
 		} else if ((next = new PlaceWallImpl(rightS.getCol()-1, rightS.getRow(), Wall.VERTICAL, currentTurn, setting)).isValid()) {
 			nextMove = next;
 		}else {
-			//System.out.println("getting into else?");
+			//otherwise try and see if you can place any walls close to the other player
 			for (int i = tmp.getCol()-2; i < tmp.getCol()+2 || exit == true; i++) {
-				//System.out.println("getting int first for");
 				for (int j = tmp.getRow()-2; j < tmp.getRow() +2 || exit == true; j++) {
-					
-					//tmp2 = new SquareImpl(i, j);
 					if ((next = new PlaceWallImpl(tmp.getCol()+i, tmp.getRow()+j, Wall.HORIZONTAL, currentTurn, setting)).isValid()) {
 						nextMove = next;
 						exit = true;
@@ -201,19 +231,21 @@ public class Logical implements State {
 					}
 				}
 			}
-			System.out.println("exited?");
-			
 		}
 		
 		if (nextMove == null) {
-			//System.out.println("move is false:");
 			retVal = false;
 		} 
-		//System.out.println("going back to main");
 		
 		return retVal;
 	}
 	
+	/**
+	 * Return the start position that leads to the shortest path
+	 * @param path 
+	 * 			The end node that had the shortest path
+	 * @return the start position that leads to the shortest path
+	 */
 	private Node findPathTaken(Node path) {
 		Square start = setting.getPawn(currentTurn, setting).getSquare();
 		Square current = path.getSquare();
@@ -224,10 +256,7 @@ public class Logical implements State {
 			current = curNode.getParent().getSquare();
 			prev = curNode;
 			curNode = curNode.getParent();
-			//System.out.println("stuck in here?");
 		}
-
-		//System.out.println("outside of stuck in here?");
 		return prev;
 	}
 	
@@ -239,7 +268,7 @@ public class Logical implements State {
 		}
 	}
 	
-	private class MoveGenerator implements Iterator <StateImpl> {
+	/*private class MoveGenerator implements Iterator <StateImpl> {
 		List <StateImpl> backerList;
 		Iterator <StateImpl> backer;
 		Player mover;
@@ -283,6 +312,6 @@ public class Logical implements State {
 		public void remove() {
 			// TODO Auto-generated method stub
 		}
-	}
+	}*/
 
 }

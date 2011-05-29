@@ -115,6 +115,10 @@ public class Manager {
 
 	}
 
+	/**
+	 * Initialises the game based on HH, HA, AA
+	 * @return a pair of players for the game
+	 */
 	private static Pair<Player> initNewGame(){
 		Pair<Player> players = null;
 		Player _1 = null;
@@ -227,7 +231,6 @@ public class Manager {
 		System.out.print("Player 2 enter your name: ");
 		_2 = new PlayerImpl(s.nextLine(), Player.BOTTOM);
 		System.out.println("player 2 name? " +_2.getName());
-		//_2 = new PlayerImpl(Player.BOTTOM, "minimax");
 
 		_1.setOpponent(_2);
 		_2.setOpponent(_1);
@@ -339,7 +342,6 @@ public class Manager {
 		players = new PairImpl<Player>(_1, _2);
 		_1.setOpponent(_2);
 		_2.setOpponent(_1);
-		//System.out.println("printing here?");
 		//Setting the list of moves to go through
 		String[] retVal = new String[moves.length-3];		
 		int j = 0;
@@ -359,10 +361,7 @@ public class Manager {
 	 * @throws IOException
 	 */
 	public static void saveGame() throws IOException {
-	//public static void saveGameState(String filename, String moves){
 		Scanner in = new Scanner(System.in);
-		//BufferedReader in = new BufferedReader(new InputStreamReader(
-			//										System.in));
 		String s;
 		String filename="";
 		System.out.println("What name would you like to save game as?");

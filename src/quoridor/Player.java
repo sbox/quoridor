@@ -76,5 +76,8 @@ public interface Player {
 	 */
 	public boolean isHuman();
 	
+	/**
+	 * @return the AI stratergy 
+	 */
 	public String getStrategy();
 }

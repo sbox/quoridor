@@ -35,6 +35,11 @@ public class WallImpl implements Wall {
 		this.direction = direction;
 	}
 	
+	/**
+	 * Constructor that takes a Wall and breaks it down into topLeft Square and direction
+	 * @param w 
+	 * 			any given wall you are looking at
+	 */
 	public WallImpl(Wall w) {
 		this.topLeft = new SquareImpl(w.topLeft());
 		this.direction = w.getDirection();
@@ -86,12 +91,18 @@ public class WallImpl implements Wall {
 		return key;
 	}
 	
+	/**
+	 * Return if two walls are equal
+	 */
 	@Override
 	public boolean equals(Object w) {
 		boolean wIsWall = w instanceof Wall;
 		return wIsWall && hashCode() == w.hashCode();
 	}
 	
+	/**
+	 * String version of where the wall is on the board
+	 */
 	@Override
 	public String toString() {
 		String result = "" + this.topLeft.getCol() + ", " + topLeft.getRow();

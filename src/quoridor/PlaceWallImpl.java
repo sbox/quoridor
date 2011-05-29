@@ -4,13 +4,28 @@ public class PlaceWallImpl extends AbstractMove implements PlaceWall{
 
 	Wall tentative;
 	
-	
-	
+	/**
+	 * Constructor for placing a wall on the board
+	 * @param col
+	 * 			column to place wall
+	 * @param row
+	 * 			row to place wall
+	 * @param direction
+	 * 			of the wall
+	 * @param owner
+	 * 			of the wall
+	 * @param setting
+	 * 			current board state
+	 */
 	public PlaceWallImpl(int col, int row, boolean direction, Player owner, Board setting) {
 		super(owner, setting);
 		tentative = new WallImpl(new SquareImpl(col, row), direction);
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see quoridor.AbstractMove#isValid()
+	 */
 	@Override
 	public boolean isValid() {
 		boolean valid = true;
@@ -119,6 +134,9 @@ public class PlaceWallImpl extends AbstractMove implements PlaceWall{
 		return retVal;
 	}
 	
+	/**
+	 * Returns the string verson of a wall placement
+	 */
 	public String toString() {
 		String retVal = "";
 		

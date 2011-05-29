@@ -219,7 +219,6 @@ public class GameImpl implements Game {
 	@Override
 	public boolean redoMove() {
 		boolean retVal = false;
-		System.out.println("redo move string is: " +redoMoves);
 		if (redoMoves.size()-1 > 0) {
 			if (current.getOpponent().isHuman() == false) {
 				redoOnce();
