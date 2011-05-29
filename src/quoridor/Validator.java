@@ -62,7 +62,7 @@ public class Validator {
 		Board localBoard = new BoardImpl((BoardImpl)setting);
 		
 		if (valid) {
-			Player current = first;	
+			Player current = p2;	
 			
 			Iterator <String> it = moves.iterator();
 			String moveStr;
@@ -73,13 +73,20 @@ public class Validator {
 				
 				move = parser.parseMove(moveStr, current, localBoard);
 				
+				System.out.println(localBoard);
+				System.out.println(move);
+				
+				
+				
 				if (move.isValid()) {
+					
+					
 					move.makeMove();
-					current = current.getOpponent();
+					
 				} else {
 					valid = false;
 				}
-				
+				current = current.getOpponent();
 			}
 			
 		}

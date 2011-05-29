@@ -20,6 +20,12 @@ public class PlaceWallImpl extends AbstractMove implements PlaceWall{
 									tentative.getDirection());
 		Wall right = new WallImpl(new SquareImpl(tentative.topLeft().getCol()+1, tentative.topLeft().getRow()),
 									tentative.getDirection());
+		
+		Wall up = new WallImpl(new SquareImpl(tentative.topLeft().getCol(), tentative.topLeft().getRow()-1),
+				tentative.getDirection());
+		Wall down = new WallImpl(new SquareImpl(tentative.topLeft().getCol(), tentative.topLeft().getRow()+1),
+				tentative.getDirection());
+		
 		//Wall opWall
 		boolean opDirection = tentative.getDirection();
 		if (opDirection == Wall.HORIZONTAL) {
@@ -44,9 +50,13 @@ public class PlaceWallImpl extends AbstractMove implements PlaceWall{
 			valid = false;
 		} else if (setting.containsWall(opposite) == true) {
 			valid = false;
-		} else if (setting.containsWall(right) == true) {
+		} else if (setting.containsWall(right) == true && tentative.getDirection() == Wall.HORIZONTAL && right.topLeft().getCol() < 8) {
 			valid = false;
-		} else if(setting.containsWall(left) == true) {
+		} else if(setting.containsWall(left) == true && tentative.getDirection() == Wall.HORIZONTAL && left.topLeft().getCol() > 0) {
+			valid = false;
+		} else if(setting.containsWall(up) == true && tentative.getDirection() == Wall.VERTICAL && up .topLeft().getRow () > 0) {
+			valid = false;
+		} else if (setting.containsWall(down) == true && tentative.getDirection() == Wall.VERTICAL && down.topLeft().getRow() < 8) {
 			valid = false;
 		} else {
 			setting.addWall(tentative);
