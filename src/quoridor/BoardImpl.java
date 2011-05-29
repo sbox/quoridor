@@ -185,7 +185,7 @@ public class BoardImpl implements Board {
         int goalRow;
         
         //set the goal row to the appropriate end
-        if (pawn.getOwner().goalEnd() == Player.BOTTOM) {
+        if (pawn.getOwner().goalEnd() == Player.TOP) {
         	goalRow = 0;
         } else {
         	goalRow = Board.ROWS - 1;
