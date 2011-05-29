@@ -1,5 +1,10 @@
 package quoridor;
 
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+
 public class Validator {
 
 
@@ -9,8 +14,19 @@ public class Validator {
 	// you may add extra fields and methods to this class
 	// but the ProvidedTests code will only call the specified methods
 	
+	Board setting;
+	Player p1, p2;
+	
 	public Validator() {
-		// TODO
+		p1 = new PlayerImpl("herp", Player.BOTTOM);
+		p2 = new PlayerImpl("derp", Player.TOP);
+		
+		p1.setOpponent(p2);
+		p2.setOpponent(p1);
+		
+		Pair <Pawn> pawns = new PairImpl <Pawn> (new PawnImpl(new SquareImpl(4, 0), p1), new PawnImpl(new SquareImpl(4, 8), p2));
+		
+		setting = new BoardImpl(pawns);
 	}
 
 	/**
@@ -22,10 +38,61 @@ public class Validator {
 	 * @param moves a list of successive moves
 	 * @return validity of the list of moves
 	 */
-	public boolean check(String moves) {
-		// TODO
-		return false;
+	public boolean check(List <String> moves) {
+
+		boolean valid = true;
+		
+		MoveParser parser = new MoveParserImpl();
+		
+		Player first = null;
+		
+
+		GenericMove p1Move = parser.parseMove(moves.get(0), p1, setting);
+		GenericMove p2Move = parser.parseMove(moves.get(0), p2, setting);
+		
+		//Figure out who  moves first
+		if (p1Move.isValid()) {
+			first = p1;
+		} else if (p2Move.isValid()) {
+			first = p2;
+		} else {
+			valid = false;
+		}
+		
+		Board localBoard = new BoardImpl((BoardImpl)setting);
+		
+		if (valid) {
+			Player current = p2;	
+			
+			Iterator <String> it = moves.iterator();
+			String moveStr;
+			GenericMove move;
+			
+			while (it.hasNext() && valid) {
+				moveStr = it.next();
+				
+				move = parser.parseMove(moveStr, current, localBoard);
+				
+				System.out.println(localBoard);
+				System.out.println(move);
+				
+				
+				
+				if (move.isValid()) {
+					
+					
+					move.makeMove();
+					
+				} else {
+					valid = false;
+				}
+				current = current.getOpponent();
+			}
+			
+		}
+		
+		return valid;
 	}
 	
-	
+
 }
