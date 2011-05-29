@@ -130,16 +130,22 @@ public class Logical implements State {
 	public void logicalPlay() {
 		Node pathP1 = pathLength(currentTurn);
 		int costP1 = pathP1.getCost();
+		System.out.println("cost p1? "+costP1);
+		
 		Node pathP2 = pathLength(currentTurn.getOpponent());	
 		int costP2 = pathP2.getCost();
+		System.out.println("costP2 " +costP2);
 		if (costP1 < costP2) {
+			System.out.println("cost is less?");
 			nextMove = new MovePawnImpl(pathP1.getSquare().getCol(), pathP1.getSquare().getRow(), 
 											currentTurn, setting);
 		} else {
+			System.out.println("making a move");
 			if (setting.getPawn(currentTurn, setting).getOwner().wallCount() <= 0) {
 				nextMove = new MovePawnImpl(pathP1.getSquare().getCol(), pathP1.getSquare().getRow(), 
 						currentTurn, setting);
 			} else {
+				System.out.println("I still have walls left");
 				if (wallMove() == false) {
 					nextMove = new MovePawnImpl(pathP1.getSquare().getCol(), pathP1.getSquare().getRow(), 
 													currentTurn, setting);
@@ -157,11 +163,11 @@ public class Logical implements State {
 		boolean exit = false;
 		boolean retVal = true;
 		
-		if ((next = new PlaceWallImpl(tmp.getCol(), tmp.getRow(), Wall.HORIZONTAL, currentTurn, setting)).isValid()) {
+		if ((next = new PlaceWallImpl(tmp.getCol(), tmp.getRow()-1, Wall.HORIZONTAL, currentTurn, setting)).isValid()) {
 			nextMove = next;
 		} else if ((next = new PlaceWallImpl(tmp.getCol(), tmp.getRow(), Wall.VERTICAL, currentTurn, setting)).isValid()) {
 			nextMove = next;
-		} else if ((next = new PlaceWallImpl(rightS.getCol(), rightS.getRow(), Wall.HORIZONTAL, currentTurn, setting)).isValid()) {
+		} else if ((next = new PlaceWallImpl(rightS.getCol()-1, rightS.getRow(), Wall.VERTICAL, currentTurn, setting)).isValid()) {
 			nextMove = next;
 		} else {
 			for (int i = tmp.getCol()-3; i < tmp.getCol() +3 && exit == false; i++) {

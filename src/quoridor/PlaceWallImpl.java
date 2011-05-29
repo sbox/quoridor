@@ -31,9 +31,11 @@ public class PlaceWallImpl extends AbstractMove implements PlaceWall{
 			valid = false;
 		} else if(tentative.topLeft().getRow() < 0) {
 			valid = false;
-		} else if(tentative.topLeft().getCol() > 8) {
+		} else if (tentative.topLeft().getRow() > 7) { 
 			valid = false;
-		} else if(tentative.topLeft().getRow() > 8) {
+		}else if(tentative.topLeft().getCol() > 7) {
+			valid = false;
+		} else if(tentative.topLeft().getRow() > 7) {
 			valid = false;
 		} else if (setting.containsWall(test) == true) {
 				valid = false;
