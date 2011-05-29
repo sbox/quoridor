@@ -28,6 +28,11 @@ public class SquareImpl implements Square {
 		this.col = col;
 	}
 	
+	public SquareImpl(Square s) {
+		this.row = s.getRow();
+		this.col = s.getCol();
+	}
+	
 	/**
 	 * returns the row of the square
 	 * @return the row of the square

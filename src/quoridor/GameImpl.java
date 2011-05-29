@@ -61,7 +61,16 @@ public class GameImpl implements Game {
 			} else {
 				System.out.println("Enter move "+current.getName()+ " (O): ");
 			}
-			String command = s.next();
+			String command;
+			
+			if (current.isHuman()) {
+				command = s.next();
+			} else {
+				State thinker = new StateImpl(gameBoard, current);
+				command = thinker.nextBestMove().toString();
+				System.out.println(command);
+			
+			}
 			token = inputParser.ensureString(command);
 			if (token == TOKEN_SAVE) {
 				try {
@@ -78,7 +87,11 @@ public class GameImpl implements Game {
 				printBoard();
 				current = current.getOpponent();
 			} else{
+				
 				nextMove = parser.loadMove(current, gameBoard, command);
+				
+				
+				
 				if (nextMove == null) {
 					System.out.println("Invalid input");
 				} else {

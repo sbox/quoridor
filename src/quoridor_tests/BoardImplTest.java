@@ -19,7 +19,7 @@ public class BoardImplTest {
 		test = new BoardImpl(pawns);
 	}
 	
-	@Test
+	//@Test
 	public void testWallBetween() {
 		Square s1 = new SquareImpl(1, 1);
 		Square s2 = new SquareImpl(2, 1);
@@ -43,7 +43,7 @@ public class BoardImplTest {
 		assertTrue(test.wallBetween(s1, s3));
 	}
 	
-	@Test
+	//@Test
 	public void testPrint() {
 	
 		Wall w0 = new WallImpl(new SquareImpl(1, 0), Wall.HORIZONTAL);	
@@ -79,5 +79,23 @@ public class BoardImplTest {
 		System.out.println(test);
 		
 	}
+	
+	@Test
+	public void testPrint2() {
+		
+		Wall w0 = new WallImpl(new SquareImpl(7, 5), Wall.HORIZONTAL);	
+		
+		
+		test.addWall(w0);
+		
+
+		
+		assertFalse(test.wallBetween(new SquareImpl(0, 6), new SquareImpl(0, 7)));
+    	
+		
+		System.out.println(test);
+		
+	}
+
 
 }

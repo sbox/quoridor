@@ -14,11 +14,26 @@ import java.util.HashSet;
 public class BoardImpl implements Board {
     
     protected Pair <Pawn> pawns;
-    protected HashSet <Wall> walls;
+    public HashSet <Wall> walls;
     
     public BoardImpl(Pair<Pawn> pawns) {
     	this.pawns = pawns;
     	walls = new HashSet<Wall>();
+    }
+    
+    /**
+     * Clone constructor
+     * @param b
+     * 		the board we are cloning
+     */
+    public BoardImpl(BoardImpl b) {
+    	pawns = new PairImpl<Pawn>(new PawnImpl(b.pawns._1()), new PawnImpl(b.pawns._2()));
+    	walls = new HashSet<Wall>();
+    	
+    	for (Wall w : b.walls) {
+    		walls.add(new WallImpl(w));
+    	}
+    	
     }
 
     //bec can you write this please
@@ -53,6 +68,8 @@ public class BoardImpl implements Board {
 				} else {
 					//checking if there is a horizontal wall between two squares
 					if (wallBelow){ //sbox: replaced condition with flag
+						System.out.println("<<" + i/2 + ", " + j + ">>");
+						System.out.println(wallBetween(new SquareImpl(j, i/2), new SquareImpl(j, i/2+1)));
 						board+= " * ";
 					} else {
 						board+= " - "; //sbox; changed the _'s to -'s
@@ -303,6 +320,9 @@ public class BoardImpl implements Board {
     	//will store the potential walls
     	Pair <Wall> candidateWalls;
     	
+    	//will hold the return value
+     	boolean result = false;
+    	
     	//if the squares are on the same row
     	if (a.getRow() == b.getRow()) {
     		//they must be adjacent
@@ -322,6 +342,7 @@ public class BoardImpl implements Board {
 					                      topLeftMost.getRow()-1);
     		
     	} else {
+    		
     	//if the squares are in the same column
     		//they must be adjacent
     		assert(Math.abs(a.getRow() - b.getRow()) == 1);
@@ -360,9 +381,19 @@ public class BoardImpl implements Board {
     	
 
 
-    	//return true if either candidate is on the board
-    	return walls.contains(candidateWalls._1()) || 
+   
+    	
+    	if (topLeftCandidate._1().getRow() >= 0 && 
+    		topLeftCandidate._1().getCol() >= 0 &&
+    		topLeftCandidate._2().getRow() >= 0 && 
+    		topLeftCandidate._2().getCol() >= 0 ) {
+    		
+    		result = walls.contains(candidateWalls._1()) || 
     		   walls.contains(candidateWalls._2());
+    	}
+    	
+    	//return true if either candidate is on the board
+    	return result ;
     	
     }
     
@@ -373,7 +404,7 @@ public class BoardImpl implements Board {
     
     public Pawn getPawn(Player subject, Board setting) {
     	Pawn value;
-    	if(pawns._1().getOwner() == subject) {
+    	if(pawns._1().getOwner().equals(subject)) {
     		value = pawns._1();
     	} else {
     		value = pawns._2();

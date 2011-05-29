@@ -11,13 +11,13 @@ import quoridor.*;
 public class StateImplTest {
 
 	StateImpl test;
-	Player pl1 = new PlayerImpl("steve", Player.TOP);
-	Player pl2 = new PlayerImpl("bec", Player.BOTTOM);
+	Player pl1 = new PlayerImpl("steve", Player.BOTTOM);
+	Player pl2 = new PlayerImpl("bec", Player.TOP);
 	
 
 	
-	Pawn pn1 = new PawnImpl(new SquareImpl(4, 4), pl1);
-	Pawn pn2 = new PawnImpl(new SquareImpl(4, 5), pl2);	
+	Pawn pn1 = new PawnImpl(new SquareImpl(4, 0), pl1);
+	Pawn pn2 = new PawnImpl(new SquareImpl(4, 8), pl2);	
 
 	Pair <Pawn> pawns = new PairImpl<Pawn>(pn1, pn2);
 	Board testBoard = new BoardImpl(pawns);

@@ -70,4 +70,5 @@ public interface Player {
 	 */
 	public void addWallCount();
 	
+	public boolean isHuman();
 }

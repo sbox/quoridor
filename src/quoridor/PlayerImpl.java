@@ -6,11 +6,35 @@ public class PlayerImpl implements Player {
 	protected Player opponent;
 	protected int wallCount;
 	protected boolean goalEnd;
+	protected String strategy;
+	protected boolean human;
 	
 	public PlayerImpl(String name, boolean goalEnd) {
 		this.name = name;
 		wallCount = 10;
 		this.goalEnd = goalEnd;
+		human = true;
+		strategy = "human";
+	}
+	
+	public PlayerImpl(String name, boolean goalEnd, String strategy) {
+		this.name = name;
+		wallCount = 10;
+		this.goalEnd = goalEnd;
+		human = false;
+		this.strategy = strategy;	
+	}
+	
+	public PlayerImpl(Player p) {
+		this.name = p.getName();
+		this.opponent = p.getOpponent();
+		this.wallCount = p.wallCount();
+		this.goalEnd = p.goalEnd();
+	}
+	
+	
+	public boolean isHuman() {
+		return human;
 	}
 	
 	@Override
@@ -65,5 +89,10 @@ public class PlayerImpl implements Player {
 		wallCount++;
 	}
 	
+	@Override
+	public boolean equals(Object o) {
+		Player p = (Player) o;
+		return p.goalEnd() == goalEnd();
+	}
 
 }

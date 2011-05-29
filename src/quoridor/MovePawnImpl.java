@@ -10,6 +10,7 @@ public class MovePawnImpl extends AbstractMove implements MovePawn {
 		super(owner, setting);
 		destination = new SquareImpl(col, row);
 		start = setting.getPawn(owner, setting).getSquare();
+
     }
 	
 	@Override

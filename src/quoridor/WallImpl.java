@@ -35,6 +35,11 @@ public class WallImpl implements Wall {
 		this.direction = direction;
 	}
 	
+	public WallImpl(Wall w) {
+		this.topLeft = new SquareImpl(w.topLeft());
+		this.direction = w.getDirection();
+	}
+	
 	/**
 	 * returns the direction of the wall
 	 * @return the direction of the wall
@@ -86,5 +91,15 @@ public class WallImpl implements Wall {
 		return wIsWall && hashCode() == w.hashCode();
 	}
 	
-
+	@Override
+	public String toString() {
+		String result = "" + this.topLeft.getCol() + ", " + topLeft.getRow();
+		if (direction == HORIZONTAL) {
+			result += "h";
+		} else {
+			result += "v";
+		}
+		return result;
+	}
+	
 }

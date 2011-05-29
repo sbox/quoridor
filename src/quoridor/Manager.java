@@ -179,7 +179,7 @@ public class Manager {
 
 		// read player 2's name
 		System.out.print("Player 2 enter your name: ");
-		_2 = new PlayerImpl(s.nextLine(), Player.BOTTOM);
+		_2 = new PlayerImpl(s.nextLine(), Player.BOTTOM, "minimax");
 
 		_1.setOpponent(_2);
 		_2.setOpponent(_1);
