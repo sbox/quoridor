@@ -38,7 +38,10 @@ public class GameImpl implements Game {
 		undoMoves.add(new MovePawnImpl(4, 0, current.getOpponent(), gameBoard));		
 	}
 
-	
+	/*
+	 * (non-Javadoc)
+	 * @see quoridor.Game#play()
+	 */
 	@Override
 	public void play() {
 		String[] commands = { "savegame", "undo", "redo", "quit"};
@@ -105,22 +108,45 @@ public class GameImpl implements Game {
 		System.out.println("newgame or savegame?");
 	}
 	
-	public void printBoard() {
+	/*
+	 * (non-Javadoc)
+	 * @see quoridor.Game#loadGamePlay(java.lang.String[])
+	 */
+	@Override
+	public void loadGamePlay(String[] savedMoves) {
+		MoveParser parser = new MoveParserImpl();
+		GenericMove nextMove;
+		for (int i = 0; i < savedMoves.length; i++) {
+			nextMove = parser.loadMove(current, gameBoard, savedMoves[i]);
+			nextMove.makeMove();
+			undoMoves.add(nextMove);
+			current = current.getOpponent();
+		}
+		play();
+	}
+	
+	/**
+	 * Prints the given board with how many walls each player has left underneath
+	 */
+	private void printBoard() {
 		 System.out.println(gameBoard.toString());
 		 System.out.println(current.getName() +" walls left: " +current.wallCount());
 		 System.out.println(current.getOpponent().getName() +" walls left: " 
 				 				+current.getOpponent().wallCount());
 	}
 	
-	public boolean isOver() {
+	/**
+	 * Returns if the current game is over
+	 * @return if the game is over
+	 */
+	private boolean isOver() {
 		return players._1().hasWon(gameBoard) || players._2().hasWon(gameBoard);
 	}
 	
-	/** Builds and returns a string of the players names
-	 * and the current moves that have happened up to this game
-	 * @return a string of player names and moves so far
+	/*
+	 * (non-Javadoc)
+	 * @see quoridor.Game#formatFile()
 	 */
-	
 	public String formatFile() {
 		String retVal = "";
 		String ai;
@@ -140,6 +166,10 @@ public class GameImpl implements Game {
 		return retVal;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see quoridor.Game#undoMove()
+	 */
 	@Override
 	public void undoMove() {
 		if (undoMoves.size() >= 1) {
@@ -170,6 +200,10 @@ public class GameImpl implements Game {
 		redoMoves.add(lastMove);
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see quoridor.Game#redoMove()
+	 */
 	@Override
 	public void redoMove() {
 		if (redoMoves.size() >= 0) {
@@ -197,19 +231,6 @@ public class GameImpl implements Game {
 			lastMove.makeMove();
 		}
 		undoMoves.add(lastMove);
-	}
-	
-	@Override
-	public void loadGamePlay(String[] savedMoves) {
-		MoveParser parser = new MoveParserImpl();
-		GenericMove nextMove;
-		for (int i = 0; i < savedMoves.length; i++) {
-			nextMove = parser.loadMove(current, gameBoard, savedMoves[i]);
-			nextMove.makeMove();
-			undoMoves.add(nextMove);
-			current = current.getOpponent();
-		}
-		play();
 	}
 }
 

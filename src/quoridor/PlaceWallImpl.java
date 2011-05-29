@@ -44,34 +44,46 @@ public class PlaceWallImpl extends AbstractMove implements PlaceWall{
 			if (setting.pathToGoal(setting.getPawn(owner, setting)) == false) {
 				valid = false;
 			} else if (setting.pathToGoal(setting.getPawn(owner.getOpponent(), setting)) == false) {
-				//System.out.println("op name" +owner.getOpponent().getName());
-				//System.out.println("place a wall by op is not val");
 				valid = false;
 			}
 			setting.removeWall(tentative);
 		}
-		
-		
-		
+
 		return valid;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see quoridor.PlaceWall#getTentative()
+	 */
 	@Override
 	public Wall getTentative() {
 		return tentative;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see quoridor.AbstractMove#type()
+	 */
 	@Override
 	public boolean type() {
 		return WALL;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see quoridor.AbstractMove#makeMove()
+	 */
     @Override
     public void makeMove() {
     	setting.addWall(tentative);
     	setting.getPawn(owner, setting).getOwner().decreaseWallCount();
     }
 
+    /*
+     * (non-Javadoc)
+     * @see quoridor.GenericMove#getMessage()
+     */
 	@Override
 	public String getMessage() {
 		String retVal;
@@ -98,9 +110,12 @@ public class PlaceWallImpl extends AbstractMove implements PlaceWall{
 		return retVal;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see quoridor.GenericMove#getPlayer()
+	 */
 	@Override
 	public Player getPlayer() {
-		// TODO Auto-generated method stub
 		return owner;
 	}
 

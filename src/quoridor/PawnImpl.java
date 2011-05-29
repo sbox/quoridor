@@ -17,17 +17,28 @@ public class PawnImpl implements Pawn {
 		this.owner = new PlayerImpl(p.getOwner());
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see quoridor.Pawn#getSquare()
+	 */
 	@Override
 	public Square getSquare() {
 		return pawnSquare;
 	}
 
-
+	/*
+	 * (non-Javadoc)
+	 * @see quoridor.Pawn#getOwner()
+	 */
 	@Override
 	public Player getOwner() {
 		return owner;
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see quoridor.Pawn#setSquare(quoridor.Square)
+	 */
 	public void setSquare(Square newSquare) {
 		pawnSquare = newSquare;
 	}

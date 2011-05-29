@@ -9,7 +9,7 @@ package quoridor;
 public interface Game {
 	
 	/**
-	 * Begin the game.
+	 * Play the game.
 	 */
 	public void play();
 	
@@ -20,6 +20,7 @@ public interface Game {
 	
 	/**
 	 * Return the string of moves made in the current game
+	 * With the type of game and two player names at the beginning
 	 * @return string of moves made in the current game
 	 */
 	public String formatFile();

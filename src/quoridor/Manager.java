@@ -120,72 +120,83 @@ public class Manager {
 		Player _1 = null;
 		Player _2 = null;
 		String tmp;
-		System.out.println("What type of game would you like to play? \n 1. Human vs Human \n" +
-								" 2. Human vs Computer\n 3. Computer vs Computer \n (type number choice)");
-		
+		boolean exit  = false;		
 		
 		Scanner in = new Scanner(System.in);
-		//BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-		String s;
-		if ((s = in.nextLine()) != null) {
-			if (s.contains("1")) {
-				/*
-				 * If the user gave arguments, we can create the players without
-				 * prompting for more input
-				 */
-				if (inputParser.hasRequiredArgs()) {
-					_1 = new PlayerImpl(inputParser.nextArg(), Player.TOP);
-					_2 = new PlayerImpl(inputParser.nextArg(), Player.BOTTOM);
-				} else {
-					/*
-					 * Give the user an error if they tried to give arguments
-					 * but gave the wrong amount.
-					 */
-					if (inputParser.hasErroneousArgs()) {
-						System.out
-								.println("Warning: Incorrect number of arguments");
-					}
-					// prompt for the user to enter player names
-					players = enterPlayers();
+		String s = "";
+		while (!exit) {
+			System.out.println("What type of game would you like to play? \n 1. Human vs Human \n" +
+									" 2. Human vs Computer\n 3. Computer vs Computer \n (type number choice)");
+			if ((s = in.nextLine()) != null) {
+				if (s.contains("1") || s.contains("2") || s.contains("3")) {
+					exit = true;
 				}
-			} else if (s.contains("2")) {
-				
-				if (inputParser.hasRequiredArgs()) {
-					_1 = new PlayerImpl(inputParser.nextArg(), Player.TOP);
-				} else {
-					System.out.println("Player 1 eneter your name: ");
-					if ((s = in.nextLine()) != null) {
-						_1 = new PlayerImpl(s, Player.TOP);
-					}
-				}
-				System.out.println("Which AI would you like to play against? \n 1. MinMax \n 2. Random");
-				tmp = chooseAI();
-				_2 = new PlayerImpl(Player.BOTTOM, tmp);
-			} else if (s.contains("3")) {
-				System.out.println("Which AI would you like to play against? \n 1. MinMax \n 2. Random");
-				tmp = chooseAI();
-				_1 = new PlayerImpl(Player.BOTTOM, tmp);
-				System.out.println("Which AI would you like to play against? \n 1. MinMax \n 2. Random");
-				tmp = chooseAI();
-				_2 = new PlayerImpl(Player.BOTTOM, tmp);		
+					
 			}
 		}
 		
-		players = new PairImpl<Player>(_1, _2);
-		_1.setOpponent(_2);
-		_2.setOpponent(_1);	
+		if (s.contains("1")) {
+			/*
+			 * If the user gave arguments, we can create the players without
+			 * prompting for more input
+			 */
+			if (inputParser.hasRequiredArgs()) {
+				_1 = new PlayerImpl(inputParser.nextArg(), Player.TOP);
+				_2 = new PlayerImpl(inputParser.nextArg(), Player.BOTTOM);
+			} else {
+				System.out.println("How did i break this?");
+				/*
+				 * Give the user an error if they tried to give arguments
+				 * but gave the wrong amount.
+				 */
+				if (inputParser.hasErroneousArgs()) {
+					System.out
+							.println("Warning: Incorrect number of arguments");
+				}
+				// prompt for the user to enter player names
+				players = enterPlayers();
+			}
+			System.out.println("what about here?");
+		} else if (s.contains("2")) {
+			if (inputParser.hasRequiredArgs()) {
+				_1 = new PlayerImpl(inputParser.nextArg(), Player.TOP);
+			} else {
+				System.out.println("Player 1 eneter your name: ");
+				if ((s = in.nextLine()) != null) {
+					_1 = new PlayerImpl(s, Player.TOP);
+				}
+			}
+			System.out.println("Which AI would you like to play against? \n 1. MinMax \n 2. Random");
+			tmp = chooseAI();
+			_2 = new PlayerImpl(Player.BOTTOM, tmp);
+		} else {
+			System.out.println("Which AI would you like to play against? \n 1. MinMax \n 2. Random");
+			tmp = chooseAI();
+			_1 = new PlayerImpl(Player.TOP, tmp);
+			System.out.println("Which AI would you like to play against? \n 1. MinMax \n 2. Random");
+			tmp = chooseAI();
+			_2 = new PlayerImpl(Player.BOTTOM, tmp);		
+		}
+
+		if (s.contains("2") || s.contains("3")) {
+			players = new PairImpl<Player>(_1, _2);
+			_1.setOpponent(_2);
+			_2.setOpponent(_1);	
+		}	
 		
 		return players;
 	}
 	
+	/**
+	 * User input to chose which AI to play against
+	 * @return string name for the AI chosen
+	 */
 	private static String chooseAI() {
 		String retVal = "";
-		
 		Scanner in = new Scanner(System.in);
 		String s;
 		if ((s = in.nextLine()) != null) {
 			if (s.contains("1") || s.contains("minmax")) {
-				System.out.println("in here?");
 				retVal = "minmax";
 			} else if (s.contains("2") || s.contains("random")){
 				retVal = "random";
@@ -212,10 +223,12 @@ public class Manager {
 		// read player 1's name
 		System.out.print("Player 1 enter your name: ");
 		_1 = new PlayerImpl(s.nextLine(), Player.TOP);
+		System.out.println("_1 players name is: " +_1.getName());
 
 		// read player 2's name
 		System.out.print("Player 2 enter your name: ");
 		_2 = new PlayerImpl(s.nextLine(), Player.BOTTOM);
+		System.out.println("player 2 name? " +_2.getName());
 		//_2 = new PlayerImpl(Player.BOTTOM, "minimax");
 
 		_1.setOpponent(_2);
@@ -225,6 +238,10 @@ public class Manager {
 		return new PairImpl<Player>(_1, _2);
 	}
 
+	/**
+	 * Loads any given file
+	 * @throws IOException
+	 */
 	public static void loadFile( ) throws IOException {
 		String fileMove = "";
 		String fileName = "";
@@ -273,7 +290,6 @@ public class Manager {
 				fileMove+=moves; 
 			}
 			datain.close();
-			System.out.println(fileMove);
 		}
 		
 		//splitting the string into an array of moves
@@ -283,11 +299,14 @@ public class Manager {
 	    createGame(moves);
 	}
 	
+	/**
+	 * Creates a game from a given file.
+	 * @param moves string taken from the saved file
+	 */
 	private static void createGame(String[] moves) {
 		Pair<Player> players;
 		String ai = moves[0];
 		Scanner in = new Scanner(System.in);
-		//BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		String s;
 		Player _1 = null;
 		Player _2 = null;
@@ -295,13 +314,12 @@ public class Manager {
 			_1 = new PlayerImpl(moves[1], Player.TOP);
 			_2 = new PlayerImpl(Player.BOTTOM, "minmax");
 		} else {
+			//if the game to be loaded was human vs human, give them the option to change it to human vs computer
 			System.out.println("Players in this game are. Player1: " +moves[1] +" and Player2: " +moves[2]);
 			System.out.println("Would you like to change one player to AI?");
 			if ((s = in.nextLine()) != null) {
-				if (s.contains("no")) {
-					_1 = new PlayerImpl(moves[1], Player.TOP);
-					_2 = new PlayerImpl(moves[2], Player.BOTTOM);
-				} else {
+				if (s.contains("yes")){
+					//determine which user to become the AI if they said yes
 					System.out.println("Which player would you like to become the AI? player1 or player2?");
 					if ((s = in.nextLine()) != null) {
 						if (s.contains("player1")) {
@@ -312,13 +330,18 @@ public class Manager {
 							_2 = new PlayerImpl(Player.BOTTOM, "minmax");
 						}
 					}
+				} else {
+					_1 = new PlayerImpl(moves[1], Player.TOP);
+					_2 = new PlayerImpl(moves[2], Player.BOTTOM);
 				}
 			}
 		}
 		
+		//creates the two players
 		players = new PairImpl<Player>(_1, _2);
 		_1.setOpponent(_2);
 		_2.setOpponent(_1);
+		//System.out.println("printing here?");
 		//Setting the list of moves to go through
 		String[] retVal = new String[moves.length-3];		
 		int j = 0;
@@ -333,6 +356,10 @@ public class Manager {
 		currentGame.loadGamePlay(retVal);
 	}
 
+	/**
+	 * Saves a gameState
+	 * @throws IOException
+	 */
 	public static void saveGame() throws IOException {
 	//public static void saveGameState(String filename, String moves){
 		Scanner in = new Scanner(System.in);

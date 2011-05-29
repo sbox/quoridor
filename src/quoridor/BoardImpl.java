@@ -36,17 +36,11 @@ public class BoardImpl implements Board {
     	
     }
 
-    //bec can you write this please
     @Override 
     public String toString() {
     	String board = "  ";
 
-	    //Adding numbers to the top of the board
-		/*for (int i = 0; i < 9; i++) {
-			board+= "  "+(i+1)+" "; //sbox: added +1 as per requirements
-		}*/
-    	board+= "  a   b   c   d   e   f   g   h   i";
-    	
+    	board+= "  a   b   c   d   e   f   g   h   i";  	
 		board+= "\n  ";
 		board = addBoarder(board);
 		
@@ -86,15 +80,30 @@ public class BoardImpl implements Board {
         return board;
     }
     
+    /**
+     * Adds a boarder to the current boardString
+     * @param 
+     * 		board current board you are looking at
+     * @return edited string
+     */
      private String addBoarder(String board) {
     	for (int i = 0; i < 9; i++) {
     		board+= "| - ";
     	}
     	board+="|\n";
-    	return board;
-    	
+    	return board;	
     }
      
+     /**
+      * Adds horizontal walls to the boardString
+      * @param board 
+      * 		string for the board you are looking at
+      * @param i 
+      * 		col position
+      * @param j 
+      * 		row position
+      * @return Edited boardString
+      */
      private String addWallHorizontal(String board, int i, int j) {
     	    //checking whether there is a vertical wall between two squares
 			//sbox: introducing this flags since this information is needed in multiple places now
@@ -120,6 +129,16 @@ public class BoardImpl implements Board {
     	 return board;
      }
     
+     /**
+      * Adds pawns to the boardString
+      * @param board 
+      * 		string for the board you are looking at
+      * @param i 
+      * 		col position
+      * @param j 
+      * 		row position
+      * @return edited boardString
+      */
      private String addPawn(String board, int row, int col) {
     	int pawn1Row = pawns._1().getSquare().getRow();
     	int pawn1Col = pawns._1().getSquare().getCol();
@@ -137,28 +156,25 @@ public class BoardImpl implements Board {
     	return board;
     }
     
-     /**
-      * Removes a wall from the hashSet
+     /*
+      * (non-Javadoc)
+      * @see quoridor.Board#removeWall(quoridor.Wall)
       */
      public void removeWall(Wall wall) {
     	 walls.remove(wall);
      }
      
-    /**
-     * Adds a wall to the hashSet of walls
+    /*
+     * (non-Javadoc)
+     * @see quoridor.Board#addWall(quoridor.Wall)
      */
     public void addWall(Wall wall) {
     	walls.add(wall);
     }
     
-    /**
-     * 
-     * Searches for a path from a pawn to said pawn's goal.
-     * 
-     * @param pawn
-     * the pawn from which to search for a path to a goal
-     * 
-     * @return True iff there is a path from the pawn to its goal
+    /*
+     * (non-Javadoc)
+     * @see quoridor.Board#pathToGoal(quoridor.Pawn)
      */
     public boolean pathToGoal(Pawn pawn) {
         //make sure the pawn is on the board
@@ -287,15 +303,9 @@ public class BoardImpl implements Board {
     }
     
     
-    /**
-     * 
-     * Checks if there is a wall between two given adjacent squares
-     * 
-     * @param a
-     * 			one of the squares
-     * @param b
-     * 			the other square
-     * @return True if there is a wall between the two squares
+    /*
+     * (non-Javadoc)
+     * @see quoridor.Board#wallBetween(quoridor.Square, quoridor.Square)
      */
 
     public boolean wallBetween(Square a, Square b) {
@@ -397,11 +407,18 @@ public class BoardImpl implements Board {
     	
     }
     
-
+    /*
+     * (non-Javadoc)
+     * @see quoridor.Board#containsWall(quoridor.Wall)
+     */
     public boolean containsWall(Wall wall) {
     	return walls.contains(wall);
     }
     
+    /*
+     * (non-Javadoc)
+     * @see quoridor.Board#getPawn(quoridor.Player, quoridor.Board)
+     */
     public Pawn getPawn(Player subject, Board setting) {
     	Pawn value;
     	if(pawns._1().getOwner().equals(subject)) {

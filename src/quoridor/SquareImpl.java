@@ -33,17 +33,17 @@ public class SquareImpl implements Square {
 		this.col = s.getCol();
 	}
 	
-	/**
-	 * returns the row of the square
-	 * @return the row of the square
+	/*
+	 * (non-Javadoc)
+	 * @see quoridor.Square#getRow()
 	 */
 	public int getRow() {
 		return row;
 	}
 
-	/**
-	 * returns the column of the square
-	 * @return the column of the square
+	/*
+	 * (non-Javadoc)
+	 * @see quoridor.Square#getCol()
 	 */
 	public int getCol() {
 		return col;
@@ -79,9 +79,11 @@ public class SquareImpl implements Square {
 		return key;
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see quoridor.Square#hasPawn(quoridor.Pawn)
+	 */
 	public boolean hasPawn(Pawn pawn) {
-		//System.out.println("pawn sqaure row is: " +pawn.getSquare().getRow() +"and col is: " +pawn.getSquare().getCol());
-		//System.out.println("this sqaure row is: " +row +"and col is: " +col);
 		if (pawn.getSquare().getRow() == row && pawn.getSquare().getCol() == col) {
 			return true;
 		} else {

@@ -70,5 +70,9 @@ public interface Player {
 	 */
 	public void addWallCount();
 	
+	/**
+	 * Return if the play is human or AI
+	 * @return if the player is human or AI
+	 */
 	public boolean isHuman();
 }

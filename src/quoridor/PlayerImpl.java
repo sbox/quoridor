@@ -32,31 +32,54 @@ public class PlayerImpl implements Player {
 		this.goalEnd = p.goalEnd();
 	}
 	
-	
+	/*
+	 * (non-Javadoc)
+	 * @see quoridor.Player#isHuman()
+	 */
 	public boolean isHuman() {
 		return human;
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see quoridor.Player#getName()
+	 */
 	@Override
 	public String getName() {
 		return name;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see quoridor.Player#goalEnd()
+	 */
 	@Override
 	public boolean goalEnd() {
 		return goalEnd;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see quoridor.Player#getOpponent()
+	 */
 	@Override
 	public Player getOpponent() {
 		return opponent;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see quoridor.Player#setOpponent(quoridor.Player)
+	 */
 	@Override
 	public void setOpponent(Player opponent) {		
 		this.opponent = opponent;		
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see quoridor.Player#hasWon(quoridor.Board)
+	 */
 	@Override
 	public boolean hasWon(Board board) {
 		int curRow = board.getPawn(this, board).getSquare().getRow();
@@ -74,21 +97,37 @@ public class PlayerImpl implements Player {
 		return retVal;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see quoridor.Player#wallCount()
+	 */
 	@Override
 	public int wallCount() {
 		return wallCount;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see quoridor.Player#decreaseWallCount()
+	 */
 	@Override
 	public void decreaseWallCount() {
 		wallCount--;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see quoridor.Player#addWallCount()
+	 */
 	@Override
 	public void addWallCount() {
 		wallCount++;
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(Object o) {
 		Player p = (Player) o;
