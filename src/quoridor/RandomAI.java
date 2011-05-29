@@ -34,12 +34,12 @@ public class RandomAI implements State {
 	 * @param nextMove
 	 * 					the next genericMove
 	 */
-	/*public RandomAI(Board setting, Player currentTurn, GenericMove nextMove) {
+	public RandomAI(Board setting, Player currentTurn, GenericMove nextMove) {
 		this.setting = setting;
 		this.currentTurn = currentTurn;
 		this.nextMove = nextMove;
 		
-	}*/
+	}
 	
 
 	@Override
@@ -107,13 +107,13 @@ public class RandomAI implements State {
 		float f = generator.nextFloat() * 100;
 		if ((int) f < 50 && currentTurn.wallCount() > 0) {
 			wall();
-			int wall = (int) generator.nextFloat() *wallBackerList.size()-1;
-			PlaceWall tmp = wallBackerList.get(wall);
+			float wall = generator.nextFloat() *(wallBackerList.size()-1);
+			PlaceWall tmp = wallBackerList.get((int)wall);
 			nextMove = tmp;
 		} else {
 			pawn();
-			int move = (int) generator.nextFloat()*pawnBackerList.size()-1;
-			MovePawn tmp = pawnBackerList.get(move);
+			float move = generator.nextFloat()* (pawnBackerList.size()-1);
+			MovePawn tmp = pawnBackerList.get((int) move);
 			nextMove = tmp;
 		}
 	}
