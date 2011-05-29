@@ -12,7 +12,7 @@ public class MovePawnImpl extends AbstractMove implements MovePawn {
 		start = setting.getPawn(owner, setting).getSquare();
 
     }
-<<<<<<< HEAD
+
 	
 	public MovePawnImpl(Square start, Square destination, Board setting) {
 		super(null, setting);
@@ -20,12 +20,12 @@ public class MovePawnImpl extends AbstractMove implements MovePawn {
 		this.destination = destination;
 	}
 	
-=======
+
 	/*
 	 * (non-Javadoc)
 	 * @see quoridor.MovePawn#getDestination()
 	 */
->>>>>>> 87a4731947bef2e7733eac6ca32dbacba90f0250
+
 	@Override
 	public Square getDestination() {
 		return destination;
