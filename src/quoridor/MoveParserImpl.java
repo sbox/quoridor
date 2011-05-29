@@ -105,7 +105,7 @@ public class MoveParserImpl implements MoveParser {
 		if (validInput) {
 			if (type == GenericMove.PAWN) {
 				result = new MovePawnImpl(col, row, current, board);
-				System.out.println(len);
+				
 			} else if (type == GenericMove.WALL){ 
 				result = new PlaceWallImpl(col, row, dir, current, board);
 			}
