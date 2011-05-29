@@ -68,12 +68,17 @@ public class BoardImpl implements Board {
 					}
 				}
 			}
-			board+="|\n";
+			if (i%2 == 0) {
+				board+="| " + (i/2+1)+"\n";
+			} else {
+				board+="|\n"
+;			}
 		}
 		
 		//Adding the bottom of the board
 		board+="  ";
 		board = addBoarder(board);
+		board+= "    a   b   c   d   e   f   g   h   i\n";  
     	
         return board;
     }

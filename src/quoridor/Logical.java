@@ -32,6 +32,7 @@ public class Logical implements State {
 	@Override
 	public GenericMove nextBestMove() {
 		logicalPlay();
+		System.out.println("move is: " +nextMove);
 		return nextMove;
 	}	
 	
@@ -121,6 +122,7 @@ public class Logical implements State {
 		toVisit.add(current);
 		HashSet <Node> seen = new HashSet<Node>();
 		while (current.getSquare().getRow() != destRow(player.goalEnd()) ) {
+			//System.out.println("in pathLenght while loop?");
 			current = toVisit.remove();
 			seen.add(current);
 			for (Node n : current) {
@@ -144,15 +146,19 @@ public class Logical implements State {
 		pathTaken = findPathTaken(pathP1);
 		
 		if (costP1 < costP2) {
+			//System.out.println("cost is less");
 			nextMove = new MovePawnImpl(pathTaken.getSquare().getCol(), pathTaken.getSquare().getRow(), 
 											currentTurn, setting);
 		} else {
+			//System.out.println("cost is more");
 			if (setting.getPawn(currentTurn, setting).getOwner().wallCount() <= 0) {
 				nextMove = new MovePawnImpl(pathTaken.getSquare().getCol(), pathTaken.getSquare().getRow(), 
 						currentTurn, setting);
 			} else {
+				//System.out.println("cost is more but place wall?");
 				if (wallMove() == false) {
-					nextMove = new MovePawnImpl(pathP2.getSquare().getCol(), pathTaken.getSquare().getRow(), 
+					//System.out.println("wall move is false?");
+					nextMove = new MovePawnImpl(pathTaken.getSquare().getCol(), pathTaken.getSquare().getRow(), 
 													currentTurn, setting);
 				}
 			}
@@ -163,6 +169,7 @@ public class Logical implements State {
 	private boolean wallMove() {
 		Player p2 = currentTurn.getOpponent();
 		Square tmp = setting.getPawn(p2, setting).getSquare();
+		Square tmp2;
 		Square rightS = new SquareImpl(tmp.getCol()-1, tmp.getRow());
 		PlaceWallImpl next = null;
 		boolean exit = false;
@@ -172,28 +179,38 @@ public class Logical implements State {
 			nextMove = next;
 		} else if ((next = new PlaceWallImpl(tmp.getCol()-1, rightS.getRow()-1, Wall.HORIZONTAL, currentTurn, setting)).isValid()) {
 			nextMove = next;
+		} else if ((next = new PlaceWallImpl(tmp.getCol()+1, tmp.getRow()-1, Wall.HORIZONTAL, currentTurn, setting)).isValid())  {
+			nextMove = next;
 		} else if ((next = new PlaceWallImpl(tmp.getCol(), tmp.getRow(), Wall.VERTICAL, currentTurn, setting)).isValid()) {
 			nextMove = next;
 		} else if ((next = new PlaceWallImpl(rightS.getCol()-1, rightS.getRow(), Wall.VERTICAL, currentTurn, setting)).isValid()) {
 			nextMove = next;
 		}else {
-			for (int i = tmp.getCol()-3; i < tmp.getCol() +3 && exit == false; i++) {
-				for (int j = tmp.getRow()-3; j < tmp.getRow() +3 && exit == false; j++) {
-					tmp = new SquareImpl(i, j);
-					if ((next = new PlaceWallImpl(tmp.getCol(), tmp.getRow(), Wall.HORIZONTAL, currentTurn, setting)).isValid()) {
+			//System.out.println("getting into else?");
+			for (int i = tmp.getCol()-2; i < tmp.getCol()+2 || exit == true; i++) {
+				//System.out.println("getting int first for");
+				for (int j = tmp.getRow()-2; j < tmp.getRow() +2 || exit == true; j++) {
+					
+					//tmp2 = new SquareImpl(i, j);
+					if ((next = new PlaceWallImpl(tmp.getCol()+i, tmp.getRow()+j, Wall.HORIZONTAL, currentTurn, setting)).isValid()) {
 						nextMove = next;
 						exit = true;
-					} else if ((next = new PlaceWallImpl(tmp.getCol(), tmp.getRow(), Wall.VERTICAL, currentTurn, setting)).isValid()) {
+					} else if ((next = new PlaceWallImpl(tmp.getCol()+i, tmp.getRow()+j, Wall.VERTICAL, currentTurn, setting)).isValid()) {
 						nextMove = next;
 						exit = true;
 					}
 				}
 			}
+			System.out.println("exited?");
+			
 		}
 		
 		if (nextMove == null) {
+			//System.out.println("move is false:");
 			retVal = false;
 		} 
+		//System.out.println("going back to main");
+		
 		return retVal;
 	}
 	
@@ -207,8 +224,10 @@ public class Logical implements State {
 			current = curNode.getParent().getSquare();
 			prev = curNode;
 			curNode = curNode.getParent();
+			//System.out.println("stuck in here?");
 		}
 
+		//System.out.println("outside of stuck in here?");
 		return prev;
 	}
 	
