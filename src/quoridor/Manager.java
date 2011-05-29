@@ -160,17 +160,17 @@ public class Manager {
 			if ((s = in.nextLine()) != null) {
 				_1 = new PlayerImpl(s, Player.TOP);
 			}
-			System.out.println("Which AI would you like to play against? \n 1. MinMax \n 2. Random");
+			System.out.println("Which AI would you like to play against? \n 1. minMax \n 2. random \n 3. logical");
 			tmp = chooseAI();
 			_2 = new PlayerImpl(Player.BOTTOM, tmp);
 			players = new PairImpl<Player>(_1, _2);
 			_1.setOpponent(_2);
 			_2.setOpponent(_1);	
 		} else {
-			System.out.println("Which AI would you like to play against? \n 1. MinMax \n 2. Random");
+			System.out.println("Which AI would you like to play against? \n 1. minMax \n 2. random \n 3. logical");
 			tmp = chooseAI();
 			_1 = new PlayerImpl(Player.TOP, tmp);
-			System.out.println("Which AI would you like to play against? \n 1. MinMax \n 2. Random");
+			System.out.println("Which AI would you like to play against? \n 1. minMax \n 2. random \n 3. logical");
 			tmp = chooseAI();
 			_2 = new PlayerImpl(Player.BOTTOM, tmp);	
 			players = new PairImpl<Player>(_1, _2);
