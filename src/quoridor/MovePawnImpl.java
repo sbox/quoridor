@@ -5,7 +5,17 @@ public class MovePawnImpl extends AbstractMove implements MovePawn {
 	Square destination;
 	Square start;
 
-	
+	/**
+	 * Constructor to Move a pawn on the board
+	 * @param col
+	 * 			column to move the pawn to
+	 * @param row
+	 * 			row to move the pawn to
+	 * @param owner
+	 * 			of the pawn
+	 * @param setting
+	 * 			current gameboard state
+	 */
 	public MovePawnImpl(int col, int row, Player owner, Board setting) {
 		super(owner, setting);
 		destination = new SquareImpl(col, row);
@@ -13,8 +23,10 @@ public class MovePawnImpl extends AbstractMove implements MovePawn {
 
     }
 
-	
-
+	/*
+	 * (non-Javadoc)
+	 * @see quoridor.MovePawn#getDestination()
+	 */
 	@Override
 	public Square getDestination() {
 		return destination;
@@ -253,22 +265,37 @@ public class MovePawnImpl extends AbstractMove implements MovePawn {
 		return between;
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see quoridor.AbstractMove#type()
+	 */
 	@Override
 	public boolean type() {
 		return PAWN;
 	}
 
-
+	/*
+	 * (non-Javadoc)
+	 * @see quoridor.AbstractMove#makeMove()
+	 */
     @Override
     public void makeMove() {
         setting.getPawn(owner, setting).setSquare(destination);
     }
 
+    /*
+     * (non-Javadoc)
+     * @see quoridor.GenericMove#getMessage()
+     */
 	@Override
 	public String getMessage() {
 		return "Invalid move";
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	public String toString() {
 		String retVal = "";
 		retVal+= (char)(destination.getCol() + (int) 'a');
@@ -276,6 +303,10 @@ public class MovePawnImpl extends AbstractMove implements MovePawn {
 		return retVal;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see quoridor.GenericMove#getPlayer()
+	 */
 	@Override
 	public Player getPlayer() {
 		return owner;

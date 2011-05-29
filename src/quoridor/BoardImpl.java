@@ -16,6 +16,11 @@ public class BoardImpl implements Board {
     protected Pair <Pawn> pawns;
     public HashSet <Wall> walls;
     
+    /**
+     * Constructor for creating a board
+     * @param pawns
+     * 			pair of pawns on the board
+     */
     public BoardImpl(Pair<Pawn> pawns) {
     	this.pawns = pawns;
     	walls = new HashSet<Wall>();
@@ -48,7 +53,7 @@ public class BoardImpl implements Board {
 			//Placing numbers at the beginning of every row
 			//Mod to so that the number only gets printed once
 			if (i%2 == 0) {
-				board+= (i/2+1)+" "; //sbox: added +1 as per requirements
+				board+= (i/2+1)+" ";
 			} else {
 				board+="  ";
 			}
@@ -61,19 +66,24 @@ public class BoardImpl implements Board {
 					board = addPawn(board, i, j);
 				} else {
 					//checking if there is a horizontal wall between two squares
-					if (wallBelow){ //sbox: replaced condition with flag
+					if (wallBelow){
 						board+= " * ";
 					} else {
-						board+= " - "; //sbox; changed the _'s to -'s
+						board+= " - ";
 					}
 				}
 			}
-			board+="|\n";
+			if (i%2 == 0) {
+				board+="| " + (i/2+1)+"\n";
+			} else {
+				board+="|\n"
+;			}
 		}
 		
 		//Adding the bottom of the board
 		board+="  ";
 		board = addBoarder(board);
+		board+= "    a   b   c   d   e   f   g   h   i\n";  
     	
         return board;
     }
@@ -104,20 +114,10 @@ public class BoardImpl implements Board {
       */
      private String addWallHorizontal(String board, int i, int j) {
     	    //checking whether there is a vertical wall between two squares
-			//sbox: introducing this flags since this information is needed in multiple places now
 			boolean wallBelow = wallBetween(new SquareImpl(j, i/2), new SquareImpl(j, i/2+1));
-			boolean wallBelowPrev = j > 0 && wallBetween(new SquareImpl(j-1, i/2), new SquareImpl(j-1, i/2+1));
-			
+			boolean wallBelowPrev = j > 0 && wallBetween(new SquareImpl(j-1, i/2), new SquareImpl(j-1, i/2+1));		
 			boolean wallLeft = j > 0 && wallBetween(new SquareImpl(j-1, i/2), new SquareImpl(j, i/2));
 			boolean wallLeftBelow = j > 0 && wallBetween(new SquareImpl(j-1, i/2+1), new SquareImpl(j, i/2+1));
-
-			/*
-			 * sbox:
-			 * changed mod signs to divide signs
-			 * the first square is now the square to the left, and the second square is the current square
-			 * we must now include the condition j > 0 since there cannot be a wall on the left of column 0
-			 */
-			
 			if (wallLeft || (i%2 == 1 && (wallBelow || wallBelowPrev || wallLeftBelow))) {
 				board+= "*";
 			} else {
@@ -233,9 +233,7 @@ public class BoardImpl implements Board {
 	    	Square down  = possibleSquare(col, row - 1);
 	    	
 	    	//found is false here
-	    	
-	   
-	    	
+
 	    	//start checking neighbors that are on the board, not yet
 	        //  visited and not separated from current by a wall
 	    	if (left != null && !seen.contains(left) && 
@@ -294,8 +292,7 @@ public class BoardImpl implements Board {
     	if (row >= 0 && row < ROWS && col >= 0 && col < COLS) {
     			result = new SquareImpl(col, row);
     	}
-    	
-    	
+  	
     	
     	return result;
     }
@@ -374,11 +371,7 @@ public class BoardImpl implements Board {
     	
     	//make a pair for topLeftCandidate
 		topLeftCandidate = new PairImpl<Square>(topLeftMost, other);
-    	
-		//for (Square s : topLeftCandidate) {
-		//	System.out.println(s.getCol() +", "+ s.getRow());
-		//}
-		
+
 		//make a pair of walls to test
     	candidateWalls = 
     	new PairImpl<Wall>(new WallImpl(topLeftCandidate._1(),
@@ -388,9 +381,6 @@ public class BoardImpl implements Board {
     	                   );
     	
 
-
-   
-    	
     	if (topLeftCandidate._1().getCol() >= 0 &&
     		topLeftCandidate._1().getRow() >= 0 &&
     		topLeftCandidate._1().getCol() < 8 &&

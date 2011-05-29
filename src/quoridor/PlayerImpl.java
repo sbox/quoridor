@@ -9,6 +9,13 @@ public class PlayerImpl implements Player {
 	protected String strategy;
 	protected boolean human;
 	
+	/**
+	 * Constructor for a Player given the name and goalEnd
+	 * @param name
+	 * 			of the player
+	 * @param goalEnd
+	 * 			End of the board the player is trying to reach
+	 */
 	public PlayerImpl(String name, boolean goalEnd) {
 		this.name = name;
 		wallCount = 10;
@@ -17,6 +24,13 @@ public class PlayerImpl implements Player {
 		strategy = "human";
 	}
 	
+	/**
+	 * Constructor for an AI player
+	 * @param goalEnd
+	 * 				End of the board the player is trying to reach
+	 * @param strategy
+	 * 				Type of AI player
+	 */
 	public PlayerImpl(boolean goalEnd, String strategy) {
 		this.name = strategy;
 		wallCount = 10;
@@ -25,6 +39,11 @@ public class PlayerImpl implements Player {
 		this.strategy = strategy;	
 	}
 	
+	/**
+	 * Constructor for a player
+	 * @param p 
+	 * 			Current player
+	 */
 	public PlayerImpl(Player p) {
 		this.name = p.getName();
 		this.opponent = p.getOpponent();
@@ -40,6 +59,10 @@ public class PlayerImpl implements Player {
 		return human;
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see quoridor.Player#getStrategy()
+	 */
 	public String getStrategy() {
 		return strategy;
 	}

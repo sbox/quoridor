@@ -28,6 +28,11 @@ public class SquareImpl implements Square {
 		this.col = col;
 	}
 	
+	/**
+	 * Constructor for SquareImpl that takes in a Square and seperates it into row and col
+	 * @param s 
+	 *			any given square
+	 */
 	public SquareImpl(Square s) {
 		this.row = s.getRow();
 		this.col = s.getCol();
@@ -63,6 +68,9 @@ public class SquareImpl implements Square {
 			   this.getCol() == s.getCol();
 	}
 	
+	/**
+	 * String of the row and column
+	 */
 	public String toString() {
 		return col + ", " + row;
 	}

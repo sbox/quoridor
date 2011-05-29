@@ -1,4 +1,4 @@
-package quoridor;
+	package quoridor;
 
 /**
  * 
@@ -30,7 +30,5 @@ public interface Wall {
 	 * @return the top left square of the wall
 	 */
 	public Square topLeft();
-
-
 
 }
