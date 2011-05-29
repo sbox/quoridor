@@ -46,9 +46,12 @@ public class StateImplTest {
 		testBoard.addWall(new WallImpl(new SquareImpl(5, 7), Wall.HORIZONTAL));
 		testBoard.addWall(new WallImpl(new SquareImpl(7, 7), Wall.HORIZONTAL));
 		
-		System.out.println(testBoard);
-		System.out.println(test.pathLength(pl2));
-		System.out.println(test.bfs(pl2));
+		
+		
+		//System.out.println(testBoard);
+		System.out.println(test.pathLengthMin());
+		System.out.println(test.pathLengthMax());
+		
 		test.determineScore();
 		System.out.println(test.score);
 	}

@@ -14,12 +14,15 @@ public class StateImpl implements State {
 
 	private static final boolean MAX = true;
 	private static final boolean MIN = false;
-	private static final int DEPTH = 0;
+	private static final int ONE_FREQ = 16;
 	
 	protected Board setting;
 	protected Player currentTurn;
 	protected GenericMove nextMove;
 	public int score;
+	
+	static List <Node> bestMin;
+	static List <Node> bestMax;
 	
 	private Player getMax() {
 		if (playerType(currentTurn) == MAX) {
@@ -30,106 +33,101 @@ public class StateImpl implements State {
 	}
 	
 	public void determineScore() {
-		score = pathLength(getMax().getOpponent()) - pathLength(getMax());
+		score = pathLengthMin() - pathLengthMax();
 	}
 	
 	
-	public int bfs(Player player) {
+	
+	
+	public int pathLengthMax() {
 		
-		Queue <Node> toVisit = new LinkedList <Node> ();
+		Player player;
 		
-		Node current = new Node(setting.getPawn(player, setting).getSquare(), 0, player);
-		
-		toVisit.add(current);
-		
-		HashSet <Node> seen = new HashSet<Node>();
-		
-		while (current.getSquare().getRow() != destRow(player.goalEnd()) ) {
-			current = toVisit.remove();
-			
-			seen.add(current);
-			
-			for (Node n : current) {
-				if (!seen.contains(n)) {
-					
-					toVisit.add(n);
-				}
-			}
+		if (playerType(currentTurn) == MAX) {
+			player = currentTurn;
+		} else {
+			player = currentTurn.getOpponent();
 		}
 		
-		return current.getCost();
-	}
-	
-	
-	public int bfsPri(Player player) {
-		
-		PriorityQueue <Node> toVisit = new PriorityQueue <Node> ();
-		
-		Node current = new Node(setting.getPawn(player, setting).getSquare(), 0, player);
-		
-		toVisit.add(current);
-		
-		HashSet <Node> seen = new HashSet<Node>();
-		
-		while (current.getSquare().getRow() != destRow(player.goalEnd()) ) {
-			current = toVisit.remove();
+		if (bestMax == null) {
+			Queue <Node> toVisit = new LinkedList <Node> ();
 			
-			seen.add(current);
+			Node current = new Node(setting.getPawn(player, setting).getSquare(), 0, player, null);
 			
-			for (Node n : current) {
-				if (!seen.contains(n)) {
-					
-					toVisit.add(n);
-				}
-			}
-		}
-		
-		return current.getCost();
-	}
-	
-	public int pathLength(Player player) {
-		
-		PriorityQueue <Node> unVisited = new PriorityQueue <Node> ();
-		Hashtable <Integer, Node> lookup = new Hashtable <Integer, Node>();
-		
-		Node current = new Node(setting.getPawn(player, setting).getSquare(), 0, player);
-		
-		
-		unVisited.add(current);
-		lookup.put(new Integer(current.hashCode()), current);
-		
-		HashSet <Node> visited = new HashSet<Node>();
-		
-		while (current.getSquare().getRow() != destRow(player.goalEnd()) ) {
-			current = unVisited.remove();
+			toVisit.add(current);
 			
-			visited.add(current);
+			HashSet <Node> seen = new HashSet<Node>();
 			
-			for (Node n : current) {
+			while (current.getSquare().getRow() != destRow(player.goalEnd()) ) {
+				current = toVisit.remove();
 				
-				if (!visited.contains(n)) {
-					Node tent = lookup.get(new Integer(n.hashCode()));
-					
-					if (tent == null) {
-						lookup.put(new Integer(n.hashCode()), n);
-						unVisited.add(n);
+				seen.add(current);
+				
+				for (Node n : current) {
+					if (!seen.contains(n)) {
 						
-					} else {
-						if (tent.getHeuristic() > n.getHeuristic()) {
-							tent.setCost(n.getCost());
-						}
+						toVisit.add(n);
 					}
-					
-					
 				}
-				
 			}
 			
-			visited.add(current);
+			bestMax = new LinkedList <Node>();
+			
+			while (current != null) {
+				bestMax.add(current);
+				current = current.getParent();
+			}
 		}
 		
-		return current.getCost();
+		return bestMax.size();
 	}
+	
+	
+	public int pathLengthMin() {
+		
+		Player player;
+		
+		if (playerType(currentTurn) == MIN) {
+			player = currentTurn;
+		} else {
+			player = currentTurn.getOpponent();
+		}
+		
+		if (bestMin == null) {
+			Queue <Node> toVisit = new LinkedList <Node> ();
+			
+			Node current = new Node(setting.getPawn(player, setting).getSquare(), 0, player, null);
+			
+			toVisit.add(current);
+			
+			HashSet <Node> seen = new HashSet<Node>();
+			
+			while (current.getSquare().getRow() != destRow(player.goalEnd()) ) {
+				current = toVisit.remove();
+				
+				seen.add(current);
+				
+				for (Node n : current) {
+					if (!seen.contains(n)) {
+						
+						toVisit.add(n);
+					}
+				}
+			}
+			
+			bestMin = new LinkedList <Node>();
+			
+			while (current != null) {
+				bestMin.add(current);
+				current = current.getParent();
+			}
+		}
+		
+		return bestMin.size();
+	}
+	
+	
+
 	
 
 	public StateImpl(Board setting, Player currentTurn) {
@@ -158,9 +156,9 @@ public class StateImpl implements State {
 
 	@Override
 	public GenericMove nextBestMove() {
-		
+		bestMin = null;
+		bestMax = null;
 		StateImpl best = bestNextState();
-		//System.out.println(best.nextMove);
 		return best.nextMove;
 	}
 	
@@ -182,15 +180,34 @@ public class StateImpl implements State {
 		
 		StateImpl best = null;
 		int tmp;
-		
+		int tracker = 0;
 		//for each next state
 		for (StateImpl s : this) {
 			s.nextMove.makeMove(); //apply the move
 			
-			//System.out.println("start:");
-			tmp = s.alphabetaNum(Integer.MIN_VALUE, Integer.MAX_VALUE, DEPTH);
-			//System.out.println(s.setting + ":" + tmp);
-			//System.out.println("\nend.\n\n");
+			if (playerType(currentTurn) == MAX) {
+				if (s.nextMove.type() == GenericMove.PAWN) {
+					bestMax = null;
+				} else {
+					clearBest(s.setting);
+				}
+			} else {
+				if (s.nextMove.type() == GenericMove.PAWN) {
+					bestMin = null;
+				} else {
+					clearBest(s.setting);
+				}
+			}
+			
+			int depth;
+			
+			if (tracker % ONE_FREQ == 0) {
+				depth = 1;
+			} else {
+				depth = 0;
+			}
+			tmp = s.alphabetaNum(Integer.MIN_VALUE, Integer.MAX_VALUE, depth);
+			
 			
 			if (best == null) {
 				best = s;
@@ -207,6 +224,8 @@ public class StateImpl implements State {
 					}
 				}
 			}
+			
+			tracker++;
 		}
 		
 		return best;
@@ -219,6 +238,63 @@ public class StateImpl implements State {
 		} else {
 			return 8;
 		}
+	}
+	
+	private void clearBestMin(Board b) {
+		if (bestMin != null) {
+			Iterator <Node> it = bestMin.iterator();
+			if (it.hasNext()) {
+				Node prev = it.next();
+				Node current;
+				
+				boolean broken = false;
+				
+				while (it.hasNext() && !broken) {
+					current = it.next();
+					
+					if (b.wallBetween(current.getSquare(), prev.getSquare())) {
+						broken = true;
+					}
+					
+					prev = current;
+				}
+				
+				if (broken) {
+					bestMin = null;
+				}
+			}
+		}
+	}
+	
+	private void clearBestMax(Board b) {
+		if (bestMax != null) {
+			Iterator <Node> it = bestMax.iterator();
+			if (it.hasNext()) {
+				Node prev = it.next();
+				Node current;
+				
+				boolean broken = false;
+				
+				while (it.hasNext() && !broken) {
+					current = it.next();
+					
+					if (b.wallBetween(current.getSquare(), prev.getSquare())) {
+						broken = true;
+					}
+					
+					prev = current;
+				}
+				
+				if (broken) {
+					bestMax = null;
+				}
+			}
+		}
+	}
+	
+	private void clearBest(Board b) {
+		clearBestMax(b);
+		clearBestMin(b);
 	}
 	
 	public int alphabetaNum(int alpha, int beta, int depth) {
@@ -246,6 +322,12 @@ public class StateImpl implements State {
 				s = nextMoves.next(); //get a new state
 				s.nextMove.makeMove(); //apply the current move
 				
+				if (s.nextMove.type() == GenericMove.PAWN) {
+					bestMin = null;
+				} else {
+					clearBestMin(s.setting);
+				}
+				
 				tmp = s.alphabetaNum(alpha, beta, depth - 1);
 				//System.out.println(s.setting + ":" + tmp);
 				if (tmp > alpha) {
@@ -268,6 +350,11 @@ public class StateImpl implements State {
 				s = nextMoves.next(); //get a new state
 				s.nextMove.makeMove(); //apply the current move
 				
+				if (s.nextMove.type() == GenericMove.PAWN) {
+					bestMax = null;
+				} else {
+					clearBestMax(s.setting);
+				}
 				
 				tmp = s.alphabetaNum(alpha, beta, depth - 1);
 				
@@ -288,10 +375,11 @@ public class StateImpl implements State {
 		return 0;
 	}
 	
-	List <StateImpl> wallBackerList = new LinkedList <StateImpl>();
+	
 	
 	private class MoveGenerator implements Iterator <StateImpl> {
 
+		List <StateImpl> wallBackerList = new LinkedList <StateImpl>();
 		List <StateImpl> pawnBackerList;
 		Iterator <StateImpl> pawnBacker;
 		
@@ -333,30 +421,29 @@ public class StateImpl implements State {
 				}
 			}
 			
-			//populate with PlaceWalls
-			if (wallBackerList.isEmpty()) {
-				for (int i = 0; i <= 8; i++) {
-					for (int j = 0; j <= 8;j++) {
-						Board settingClone = new BoardImpl((BoardImpl)setting);
-						Player moverClone = new PlayerImpl(mover);
-						
-						PlaceWall vTentative = new PlaceWallImpl(i, j, Wall.VERTICAL, moverClone, settingClone);
-						
-						settingClone = new BoardImpl((BoardImpl)setting);
-						moverClone = new PlayerImpl(mover);
-						
-						PlaceWall hTentative = new PlaceWallImpl(i, j, Wall.HORIZONTAL, moverClone, settingClone);
-						
-						if(vTentative.isValid()) {
-							wallBackerList.add(new StateImpl(settingClone, moverClone, vTentative));
-						}
-						
-						if(hTentative.isValid()) {
-							wallBackerList.add(new StateImpl(settingClone, moverClone, hTentative));
-						}
+		
+			for (int i = 0; i < 8; i++) {
+				for (int j = 0; j < 8;j++) {
+					Board settingClone = new BoardImpl((BoardImpl)setting);
+					Player moverClone = new PlayerImpl(mover);
+					
+					PlaceWall vTentative = new PlaceWallImpl(i, j, Wall.VERTICAL, moverClone, settingClone);
+					
+					settingClone = new BoardImpl((BoardImpl)setting);
+					moverClone = new PlayerImpl(mover);
+					
+					PlaceWall hTentative = new PlaceWallImpl(i, j, Wall.HORIZONTAL, moverClone, settingClone);
+					
+					if(vTentative.isValid()) {
+						wallBackerList.add(new StateImpl(settingClone, moverClone, vTentative));
+					}
+					
+					if(hTentative.isValid()) {
+						wallBackerList.add(new StateImpl(settingClone, moverClone, hTentative));
 					}
 				}
 			}
+			
 			
 			
 			
@@ -406,12 +493,20 @@ public class StateImpl implements State {
 		protected Square square;
 		protected int cost;
 		protected int heuristic;
+		protected Player owner;
 		
-		public Node(Square s, int n, Player p) {
+		protected Node parent;
+		
+		public Node(Square s, int n, Player p, Node parent) {
 			square = s;
 			cost = n;
-			
+			owner  = p;
+			this.parent = parent;
 			heuristic = Math.abs(destRow(p.goalEnd()) - s.getRow());
+		}
+		
+		public Node getParent() {
+			return parent;
 		}
 		
 		public Square getSquare() {
@@ -458,23 +553,24 @@ public class StateImpl implements State {
 				
 				for (int i = -2; i <= 2 ; i ++) {
 					for (int j = -2;j<=2;j++) {
-						if (i != 0 || j != 0) {
 							
 							
-							Board settingClone = new BoardImpl((BoardImpl)setting);
-							Player moverClone = new PlayerImpl(currentTurn);
+						Board settingClone = new BoardImpl((BoardImpl)setting);
+						Player moverClone = new PlayerImpl(owner);
+						
+						//System.out.println(settingClone);
+						
+						settingClone.getPawn(moverClone, settingClone).setSquare(square);
+						
+						MovePawn tentative = new MovePawnImpl(square.getCol() + j, square.getRow() + i, moverClone, settingClone );
+						
+						
+						
+						if (tentative.isValid()) {
 							
-							//System.out.println(settingClone);
-							
-							settingClone.getPawn(moverClone, settingClone).setSquare(square);
-							
-							MovePawn tentative = new MovePawnImpl(square.getCol() + j, square.getRow() + i, moverClone, settingClone );
-							
-							
-							if (tentative.isValid()) {
-								nextList.add(new Node(new SquareImpl(square.getCol()+j, square.getRow() + i), n + 1, moverClone));
-							}
+							nextList.add(new Node(new SquareImpl(square.getCol()+j, square.getRow() + i), n + 1, moverClone, start));
 						}
+					
 					}
 				}
 				
